@@ -18,12 +18,13 @@ function Nav() {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              <Button variant="primary">Hoá đơn</Button>
+              <Link to="/history">
+                <Button variant="primary">Hoá đơn</Button>
+              </Link>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      
     </div>
   );
 }

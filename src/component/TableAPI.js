@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -14,15 +12,19 @@ function TableList() {
 
   useEffect(() => {
     // Lấy dữ liệu từ API
-    axios.get(`${LinkAPI}table`)
+    axios
+      .get(`${LinkAPI}table`)
       .then((res) => {
         // Lấy dữ liệu từ localStorage
-        const storedProductsByTable = JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
+        const storedProductsByTable =
+          JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
 
         // Cập nhật trạng thái của mỗi bàn dựa trên sản phẩm được lưu trong localStorage
-        const updatedTables = res.data.map(table => ({
+        const updatedTables = res.data.map((table) => ({
           ...table,
-          status: storedProductsByTable[table.id] && storedProductsByTable[table.id].length > 0
+          status:
+            storedProductsByTable[table.id] &&
+            storedProductsByTable[table.id].length > 0,
         }));
 
         setTables(updatedTables);
@@ -40,14 +42,28 @@ function TableList() {
       <Row>
         {tables.map((table) => (
           <Col key={table.id} lg="4" className="mt-4">
-            <Link to="/productlist" className="table" onClick={() => handleTableClick(table.id)}>
-              <Card className="cardList" style={{ width: "100%", height: "12rem" }}>
+            <Link
+              to="/productlist"
+              className="tableOder"
+              onClick={() => handleTableClick(table.id)}
+            >
+              <Card
+                className="cardList"
+                style={{ width: "100%", height: "12rem" }}
+              >
                 <Card.Body className=" d-flex flex-column justify-content-between">
                   <Card.Title className="cardList">Bàn {table.id}</Card.Title>
                   <Card.Text className="cardList">
                     Trạng thái
                     <BsArrowRight className="ms-1" size={"18px"} />{" "}
-                    <span style={{ color: table.status ? "#a72a56" : "#2d5f37", fontWeight: 'bold' }}>{table.status === true ? "Có khách" : "Trống"}</span>
+                    <span
+                      style={{
+                        color: table.status ? "#a72a56" : "#2d5f37",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {table.status === true ? "Có khách" : "Trống"}
+                    </span>
                   </Card.Text>
                 </Card.Body>
               </Card>

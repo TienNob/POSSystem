@@ -1,27 +1,24 @@
 .margin-space {
   margin-top: 80px;
 }
-.app{
+.app {
   background-color: #090e28;
-
 }
 .fillter,
-.table {
+.tableOder {
   cursor: pointer;
   text-decoration: none;
   opacity: 1;
   transition: all ease-in-out 0.2s;
 }
 .fillter:hover,
-.table:hover{
+.tableOder:hover {
   opacity: 0.6;
 }
-.cardList{
+.cardList {
   background-color: #212a75 !important;
   color: white !important;
-  
 }
-.fillter{
-  backdrop-filter:brightness(0.7);
-  
+.fillter {
+  backdrop-filter: brightness(0.7);
 }
