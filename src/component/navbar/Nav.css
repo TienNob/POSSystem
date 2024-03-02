@@ -1,0 +1,10 @@
+.navBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.Nav{
+  background-color: #050a19 !important
+}

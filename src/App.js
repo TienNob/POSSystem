@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import "./App.css";
+
+
+import Nab from "./component/navbar/Nav.js";
+import TableList from "./component/TableAPI.js";
+import ProductList from "./component/ProductAPI.js";
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Nab></Nab>
+      <Row className="margin-space">
+        <Col>
+          <Routes>
+            <Route path="/" element={<TableList/>}/>
+            <Route path="/productlist" element={<ProductList/>} />
+          </Routes>
+        </Col>
+
+        <Col xs lg="3"></Col>
+      </Row>
+      
     </div>
   );
 }
