@@ -15,27 +15,50 @@ function Total({ totalPrice, products, tableID }) {
       JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
     const productsForTable = storedProductsByTable[tableID];
     // sned API to backend
-    const invoiceData = {
-      ban: { id: tableID },
-      orderDate: new Date(),
-      totalAmount: totalPrice,
-    };
-    // const orderItem = {
-    //   order: { id: tableID },
-    //   product: products,
-    //   quantity: products.quantity,
-    // };
-    console.log(invoiceData);
-    axios
-      .post(`${LinkAPI}orders`, invoiceData)
-      .then((response) => {
-        console.log("Invoice data sent successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error sending invoice data:", error);
-      });
+      // Gửi API tới backend
+      const invoiceData = {
+          ban: { id: tableID },
+          orderDate: new Date(),
+          totalAmount: totalPrice,
+      };
 
-    if (productsForTable) {
+      console.log(invoiceData);
+
+      axios.post(`${LinkAPI}orders`, invoiceData)
+          .then((response) => {
+              console.log("Invoice data sent successfully:", response.data);
+
+              axios.get(`${LinkAPI}orders/max`)
+                  .then((response) => {
+                      const maxOrderId = response.data;
+
+                      for (let i = 0; i < products.length; i++) {
+                          const orderItem = {
+                              order: {id: maxOrderId},
+                              product: {id: products[i].id},
+                              quantity:  products[i].quantity,
+                          };
+
+                          console.log(orderItem);
+
+                          // Gửi dữ liệu order item
+                          axios.post(`${LinkAPI}order-items`, orderItem)
+                              .then((response) => {
+                                  console.log("Order item data sent successfully:", response.data);
+                              })
+                              .catch((error) => {
+                                  console.error("Error sending order item data:", error);
+                              });
+                      }
+                  })
+                  .catch((error) => {
+                      console.error("Error fetching max order id:", error);
+                  });
+          }
+          )
+
+
+      if (productsForTable) {
       const updatedProducts = [];
       // Cập nhật mảng trong local storage
       storedProductsByTable[tableID] = updatedProducts;
