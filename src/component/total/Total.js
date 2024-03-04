@@ -31,7 +31,7 @@ function Total({ totalPrice, products, tableID }) {
               axios.get(`${LinkAPI}orders/max`)
                   .then((response) => {
                       const maxOrderId = response.data;
-
+                        console.log(maxOrderId.value);
                       for (let i = 0; i < products.length; i++) {
                           const orderItem = {
                               order: {id: maxOrderId},
