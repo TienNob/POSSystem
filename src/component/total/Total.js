@@ -68,7 +68,6 @@ function Total({ totalPrice, products, tableID }) {
       );
       setShowModal(false);
 
-      // Chuyển hướng đến trang chủ
       navigate("/");
     }
   };

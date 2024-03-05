@@ -5,6 +5,7 @@ import "./App.css";
 import Nab from "./component/navbar/Nav.js";
 import TableList from "./component/TableAPI.js";
 import ProductList from "./component/ProductAPI.js";
+import OrderDetail from "./component/history/OrderDetail.js";
 import History from "./component/history/History.js";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       </Row>
       <Routes>
         <Route path="/history" element={<History />} />
+        <Route path="/orderdetail" element={<OrderDetail />} />
       </Routes>
     </div>
   );

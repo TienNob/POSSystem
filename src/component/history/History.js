@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { Container, Table } from "react-bootstrap";
 import { LinkAPI } from "../../LinkAPI";
 import "./history.css";
@@ -10,6 +11,15 @@ function History() {
   const date = new Date(isoString);
   const formattedDate = date.toISOString().slice(0, 19).replace("T", " "); // Lấy ngày giờ rút gọn
   console.log("Ngày giờ rút gọn:", formattedDate);
+
+  const handleClick = (id) => {
+    if (id !== null && id !== undefined) {
+      localStorage.setItem("selectedOrderID", JSON.stringify(id));
+    } else {
+      console.error("Invalid id:", id);
+    }
+  };
+
   useEffect(() => {
     axios
       .get(`${LinkAPI}orders`)
@@ -28,9 +38,9 @@ function History() {
         <thead>
           <tr>
             <th className="setHistoryColor">#</th>
-            <th className="setHistoryColor">Order ID</th>
-            <th className="setHistoryColor">Order Date</th>
-            <th className="setHistoryColor">Total Amount</th>
+            <th className="setHistoryColor">Ngày thanh toán</th>
+            <th className="setHistoryColor">Tổng thành tiền</th>
+            <th className="setHistoryColor">Chi tiết hoá đơn</th>
             {/* Add more table headers if needed */}
           </tr>
         </thead>
@@ -38,7 +48,6 @@ function History() {
           {history.map((item, index) => (
             <tr key={item.id}>
               <td className="setHistoryColor">{index + 1}</td>
-              <td className="setHistoryColor">{item.id}</td>
               <td className="setHistoryColor">
                 {new Date(item.orderDate)
                   .toISOString()
@@ -47,7 +56,11 @@ function History() {
                   .replace(" ", ", ")}
               </td>
               <td className="setHistoryColor">{item.totalAmount}</td>
-              {/* Render more table cells if needed */}
+              <td className="setHistoryColor">
+                <Link onClick={() => handleClick(item.id)} to="/orderdetail">
+                  Xem thêm
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
