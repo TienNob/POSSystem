@@ -19,7 +19,7 @@ function OrderDetail() {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, []);
+  }, [storedOrderID]);
   return (
     <Container>
       <Table className="history">
