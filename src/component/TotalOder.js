@@ -1,23 +1,25 @@
-
 import React, { useEffect, useState } from "react";
 import { Navbar, Container } from "react-bootstrap";
 import { IoIosArrowDown } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import axios from "axios";
+import { FaUser } from "react-icons/fa";
+
 import OrderContent from "./total/OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../LinkAPI";
-
-function TotalOder( ) {
-  const [tableID, setTableID] = useState(null); // State to store the selected table ID
-  const [tableList, setTableList] = useState([]); // State to store the list of tables
-  const [showTableList, setShowTableList] = useState(false); // State to control the visibility of the table list
-  const [iconRotated, setIconRotated] = useState(false); // State to control the rotation of the icon
-  
+function TotalOder() {
+  const [tableID, setTableID] = useState(null);
+  const [tableList, setTableList] = useState([]);
+  const [showTableList, setShowTableList] = useState(false);
+  const [iconRotated, setIconRotated] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState(null);
+  const [customerName, setCustomerName] = useState("");
+  const customerInfoArray =
+    JSON.parse(localStorage.getItem("customerInfoArray")) || {};
 
   useEffect(() => {
     const fetchTableIDFromLocalStorage = () => {
-      // Get the table ID from localStorage when the component mounts
       const storedTableID = localStorage.getItem("selectedTableID");
       if (storedTableID) {
         setTableID(storedTableID);
@@ -42,48 +44,104 @@ function TotalOder( ) {
     fetchTableList();
   }, []);
 
+  useEffect(() => {
+    const storedTableID = localStorage.getItem("selectedTableID");
+    const customerInfoArray =
+      JSON.parse(localStorage.getItem("customerInfoArray")) || {};
+    if (customerInfoArray && customerInfoArray[storedTableID]) {
+      const latestCustomerInfo =
+        customerInfoArray[storedTableID][
+          customerInfoArray[storedTableID].length - 1
+        ];
+      setCustomerInfo(latestCustomerInfo);
+      if (latestCustomerInfo && latestCustomerInfo.customerName) {
+        setCustomerName(latestCustomerInfo.customerName);
+      }
+    }
+  }, []);
+
   const handleIconClick = () => {
-    setIconRotated(!iconRotated)
+    setIconRotated(!iconRotated);
     setShowTableList(!showTableList);
   };
- 
+
   const handleTableSelect = (selectedTableID) => {
-    // Set the selected table ID and hide the table list when a table is selected
     setTableID(selectedTableID);
     localStorage.setItem("selectedTableID", selectedTableID); // Update selectedTableID in localStorage
 
     setShowTableList(false);
-  };
 
+    // Retrieve customer info from localStorage based on the selected table ID
+    const storedCustomerInfo = JSON.parse(
+      localStorage.getItem("customerInfoArray")
+    );
+    if (storedCustomerInfo && storedCustomerInfo[selectedTableID]) {
+      const latestCustomerInfo =
+        storedCustomerInfo[selectedTableID][
+          storedCustomerInfo[selectedTableID].length - 1
+        ];
+      setCustomerInfo(latestCustomerInfo);
+      if (latestCustomerInfo && latestCustomerInfo.customerName) {
+        setCustomerName(latestCustomerInfo.customerName);
+      }
+    }
+  };
 
   return (
     <div className="totalOder">
       <Navbar className="totalNav">
         <Container>
-          <Navbar>Bàn</Navbar>
-          <span className="ms-1">{tableID}</span>
+          <div>
+            <Navbar className="pt-0 pb-0">
+              Bàn <span className="ms-1">{tableID}</span>
+            </Navbar>
+
+            {customerInfo && (
+              <span className="d-flex align-items-center">
+                <FaUser className="me-1" size={"12px"} />
+                {customerName}
+              </span>
+            )}
+          </div>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              <IoIosArrowDown className="totalIconArrow" size={"18px"}style={{ transform: iconRotated ? 'rotate(360deg)' : 'rotate(0deg)' }}  onClick={handleIconClick} />
+              <IoIosArrowDown
+                className="totalIconArrow"
+                size={"18px"}
+                style={{
+                  transform: iconRotated ? "rotate(360deg)" : "rotate(0deg)",
+                }}
+                onClick={handleIconClick}
+              />
               <CiEdit className="ms-2" size={"18px"} />
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {/* Render the table list when showTableList state is true */}
       {showTableList && (
         <ul className="totalTableList">
-          {tableList.map((table) => (
-            <li className="totalTableItem" key={table.id} onClick={() => handleTableSelect(table.id)}>
-              Bàn {table.id}
-            </li>
-          ))}
+          {tableList
+            .filter((table) => {
+              return (
+                customerInfoArray[table.id] &&
+                customerInfoArray[table.id].length > 0
+              );
+            })
+            .map((table) => (
+              <li
+                className="totalTableItem"
+                key={table.id}
+                onClick={() => handleTableSelect(table.id)}
+              >
+                Bàn {table.id}
+              </li>
+            ))}
         </ul>
       )}
-      <OrderContent tableID={tableID}/>
+
+      <OrderContent tableID={tableID} />
     </div>
   );
 }
 
 export default TotalOder;
-

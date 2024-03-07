@@ -7,10 +7,6 @@ import "./history.css";
 
 function History() {
   const [history, setHistory] = useState([]);
-  const isoString = "2024-02-27T01:36:56.767+00:00";
-  const date = new Date(isoString);
-  const formattedDate = date.toISOString().slice(0, 19).replace("T", " "); // Lấy ngày giờ rút gọn
-  console.log("Ngày giờ rút gọn:", formattedDate);
 
   const handleClick = (id) => {
     if (id !== null && id !== undefined) {
@@ -38,6 +34,7 @@ function History() {
         <thead>
           <tr>
             <th className="setHistoryColor">#</th>
+            <th className="setHistoryColor">Số điện thoại</th>
             <th className="setHistoryColor">Ngày thanh toán</th>
             <th className="setHistoryColor">Tổng thành tiền</th>
             <th className="setHistoryColor">Chi tiết hoá đơn</th>
@@ -48,6 +45,10 @@ function History() {
           {history.map((item, index) => (
             <tr key={item.id}>
               <td className="setHistoryColor">{index + 1}</td>
+              <td className="setHistoryColor">
+                {item.phoneNumber !== null ? item.phoneNumber : "Khách lẻ"}
+              </td>
+
               <td className="setHistoryColor">
                 {new Date(item.orderDate)
                   .toISOString()

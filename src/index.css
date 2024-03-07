@@ -11,15 +11,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
 }
-html{
+html {
   background-color: #090e28;
 }
-button{
+button {
   background-color: #634fbb !important;
   border-radius: 50px !important;
   padding: 6px 18px !important;
   border: none !important;
-
+}
+.buttonDisible {
+  background-color: #7d769c !important;
+  border-radius: 50px !important;
+  padding: 6px 18px !important;
+  border: none !important;
 }
