@@ -1,6 +1,6 @@
 # website quản lý bán hàng
 
-- Chức năng
+# Chức năng
 
 + Thêm bàn
 + Thêm sản phẩm dựa trên số bàn
@@ -9,8 +9,11 @@
 + xử lý hoá đơn thanh toán
 + hiển thị lịch sử thanh toán
 
-- Công nghệ sử dụng
+# Công nghệ sử dụng
 
 + ReactJs
 + Bootstrap
 + SpringBoot
+
+#link API Backend
+https://github.com/PhuocVinh308/APIPOS.git
