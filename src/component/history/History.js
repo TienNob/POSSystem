@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Container, Table } from "react-bootstrap";
+import {Button, Container, Table} from "react-bootstrap";
 import { LinkAPI } from "../../LinkAPI";
 import "./history.css";
 
@@ -66,7 +66,10 @@ function History() {
           ))}
         </tbody>
       </Table>
+
     </Container>
+
+
   );
 }
 

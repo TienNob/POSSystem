@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Table } from "react-bootstrap";
+import {Button, Container, Table} from "react-bootstrap";
 
 import { LinkAPI } from "../../LinkAPI";
 import "./history.css";
