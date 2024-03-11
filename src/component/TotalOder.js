@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, Container } from "react-bootstrap";
+import { Navbar, Container, Modal, Button, Form } from "react-bootstrap";
 import { IoIosArrowDown } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import axios from "axios";
 import { FaUser } from "react-icons/fa";
-
 import OrderContent from "./total/OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../LinkAPI";
+
 function TotalOder() {
   const [tableID, setTableID] = useState(null);
   const [tableList, setTableList] = useState([]);
@@ -15,8 +15,12 @@ function TotalOder() {
   const [iconRotated, setIconRotated] = useState(false);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [customerName, setCustomerName] = useState("");
+  const [newTable, setNewTable] = useState("");
+  const [showFormModal, setShowFormModal] = useState(false);
+
   const customerInfoArray =
     JSON.parse(localStorage.getItem("customerInfoArray")) || {};
+  console.log(customerInfoArray);
 
   useEffect(() => {
     const fetchTableIDFromLocalStorage = () => {
@@ -87,6 +91,70 @@ function TotalOder() {
     }
   };
 
+  const handleIconEditClick = () => {
+    setShowFormModal(true);
+  };
+
+  const handleCloseFormModal = () => {
+    setShowFormModal(false);
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    // Kiểm tra xem bàn mới có tồn tại không
+    const tableExists = newTable <= tableList.length;
+    if (!tableExists) {
+      alert("Bàn mới không tồn tại trong danh sách!");
+      return;
+    }
+
+    const isTableOccupied =
+      customerInfoArray[parseInt(newTable)] &&
+      customerInfoArray[parseInt(newTable)].length > 0;
+
+    if (isTableOccupied) {
+      // Nếu không có thông tin khách hàng, hiển thị cảnh báo
+      alert("Không thể chuyển bàn khi bàn đã có khách!");
+      return;
+    }
+
+    const storedProductsByTable =
+      JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
+    const productsForTable = storedProductsByTable[tableID];
+
+    // Lấy thông tin khách hàng và sản phẩm đã đặt hàng từ localStorage
+    const customerInfoForNewTable = customerInfoArray[newTable] || [];
+    const productsForNewTable = storedProductsByTable[newTable] || [];
+
+    // Cập nhật thông tin khách hàng và sản phẩm đã đặt hàng cho bàn mới
+    customerInfoArray[newTable] = [...customerInfoForNewTable, customerInfo];
+    storedProductsByTable[newTable] = [
+      ...productsForNewTable,
+      ...productsForTable,
+    ];
+
+    // Xóa thông tin khách hàng và sản phẩm đã đặt hàng của bàn cũ
+    delete customerInfoArray[tableID];
+    delete storedProductsByTable[tableID];
+
+    // Lưu các thay đổi vào localStorage
+    localStorage.setItem(
+      "customerInfoArray",
+      JSON.stringify(customerInfoArray)
+    );
+    localStorage.setItem(
+      "selectedProductsByTable",
+      JSON.stringify(storedProductsByTable)
+    );
+
+    // Cập nhật tableID mới
+    setTableID(newTable);
+    localStorage.setItem("selectedTableID", newTable);
+
+    // Đóng modal sau khi xử lý
+    setShowFormModal(false);
+  };
+
   return (
     <div className="totalOder">
       <Navbar className="totalNav">
@@ -113,7 +181,11 @@ function TotalOder() {
                 }}
                 onClick={handleIconClick}
               />
-              <CiEdit className="ms-2" size={"18px"} />
+              <CiEdit
+                className="ms-2"
+                size={"18px"}
+                onClick={handleIconEditClick}
+              />
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
@@ -140,6 +212,28 @@ function TotalOder() {
       )}
 
       <OrderContent tableID={tableID} />
+
+      <Modal show={showFormModal} onHide={handleCloseFormModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Chuyển Bàn</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleFormSubmit}>
+            <Form.Group controlId="formNewTable">
+              <Form.Label>Chọn bàn mới:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Nhập số bàn mới"
+                value={newTable}
+                onChange={(e) => setNewTable(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Chuyển bàn
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
