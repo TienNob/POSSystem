@@ -2,13 +2,8 @@
 
 # Mô Tả
 
-+ Thêm bàn
-+ Thêm sản phẩm dựa trên số bàn
-+ Xoá sản phẩm
-+ Chuyển đổi trạng thái bàn
-+ xử lý hoá đơn thanh toán
-+ hiển thị lịch sử thanh toán
-
++ UI cung cấp các chức năng như Thêm bàn, Thêm sản phẩm dựa trên số bàn, Xoá sản phẩm, Chuyển đổi trạng thái bàn, Xử lý hoá đơn thanh toán, Hiển thị lịch sử thanh toán
+  
 # Công nghệ sử dụng
 
 + ReactJs
