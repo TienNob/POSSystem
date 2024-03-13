@@ -2,7 +2,7 @@
 
 ## Mô Tả
 + Hệ Thống Quản Lý Bán Hàng Quán Cà Phê là một ứng dụng dành cho quản lý và vận hành quán cà phê. Ứng dụng này cung cấp một giao diện người dùng có các chức năng như Thêm bàn, Thêm sản phẩm dựa trên số bàn, Xoá sản phẩm, Chuyển đổi trạng thái bàn, Xử lý hoá đơn thanh toán, Hiển thị lịch sử thanh toán.
-+ Công nghệ sử dụng:  ReactJs, Bootstrap, SpringBoot
++ Công nghệ sử dụng:  ReactJs, React Bootstrap, SpringBoot, Axios, Css.
 ## Hướng Dẫn Sử Dụng
 ### Cài Đặt 
 
@@ -31,6 +31,8 @@ Hoặc
 ```
 yarn start
 ```
+#### CHÚ Ý: Khi clone dự án về, kiểm tra linkAPI có đúng với PORT của Back-End đang chạy hay không.
 
-#link API Backend
+
+#Link API Backend
 https://github.com/PhuocVinh308/APIPOS.git
