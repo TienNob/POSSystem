@@ -35,4 +35,4 @@ yarn start
 
 
 #Link API Backend
-https://github.com/PhuocVinh308/APIPOS.git
+https://github.com/PhuocVinh308/APIPOS
