@@ -21,10 +21,16 @@ Hoặc
 ```
 yarn install
 ```
-4. Chạy Ứng Dụng: Sau khi cài đặt xong, bạn có thể khởi động ứng dụng bằng cách sử dụng lệnh sau:
+3. Chạy Ứng Dụng: Sau khi cài đặt xong, bạn có thể khởi động ứng dụng bằng cách sử dụng lệnh sau:
 
+```
+npm start
+```
+Hoặc 
 
-
+```
+yarn start
+```
 
 #link API Backend
 https://github.com/PhuocVinh308/APIPOS.git
