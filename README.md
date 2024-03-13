@@ -1,6 +1,6 @@
-# website quản lý bán hàng
+# UI Hệ Thống Quản Lý Bán Hàng Quán Cà Phê
 
-# Chức năng
+# Mô Tả
 
 + Thêm bàn
 + Thêm sản phẩm dựa trên số bàn
