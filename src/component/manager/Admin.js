@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./admin.css"; // Import CSS file
-import { Modal } from "react-bootstrap";
+import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa"; // Import FaPlus icon
 import { LinkAPI } from "../../LinkAPI";
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
   const [products, setProducts] = useState([]);
-  const [IDMax, setIDMax] = useState();
   const [newProduct, setNewProduct] = useState({
     productName: "",
     price: "",
@@ -32,17 +31,6 @@ function Admin() {
       }
     }
     fetchProducts();
-  }, []);
-  useEffect(() => {
-    async function fetchIDMax() {
-      try {
-        const response = await axios.get(`${LinkAPI}products/max`);
-        setIDMax(response.data);
-      } catch (error) {
-        console.error("Error fetching id:", error);
-      }
-    }
-    fetchIDMax();
   }, []);
 
   const handleInputChange = (e) => {
@@ -137,10 +125,85 @@ function Admin() {
   const imageArray = importAll(imageFiles);
 
   return (
-    <div>
+    <div className="d-flex flex-column align-items-center">
       <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
         Product Management
       </h1>
+      <div
+        className="product-card-1 product-card mt-3 mb-1"
+        onClick={() => setShowAddProduct(true)}
+      >
+        <div className="card-btn-add me-2">
+          <FaPlus className="btn-add" />
+        </div>
+        <h5 className="mb-0"> Thêm sản phẩm</h5>
+      </div>
+
+      <Container>
+        {/* <div className="table-container">
+          {products.map((product, index) => (
+            <div className="product-card" key={product.id}>
+              <div className="body-card">
+                <img src={imageArray[index]} alt={product.productName} />
+                <h3>{product.productName}</h3>
+                <p>Giá: {product.price}K</p>
+              </div>
+              <div className="btn-card">
+                <button
+                  className="btn-edit"
+                  onClick={() => handleEditProduct(product.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDeleteProduct(product.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+          <div
+            className="product-card-1 product-card"
+            onClick={() => setShowAddProduct(true)}
+          >
+            <div className="card-btn-add">
+              <FaPlus className="btn-add" />
+            </div>
+          </div>
+        </div> */}
+
+        <Row>
+          {products.map((product, i) => (
+            <Col className="mt-4" xs="6" md="4" lg="3">
+              <Card className="card-fix">
+                <Card.Img
+                  className="admin-card_body "
+                  height=""
+                  variant="top"
+                  src={imageArray[i]}
+                />
+                <Card.Body className="card-body_fix">
+                  <Card.Title>{product.productName}</Card.Title>
+                  <Card.Text className="blackColor">
+                    Giá: {product.price}k
+                  </Card.Text>
+                  <Button
+                    className="me-2"
+                    onClick={() => handleDeleteProduct(product.id)}
+                  >
+                    Xoá
+                  </Button>
+                  <Button onClick={() => handleEditProduct(product.id)}>
+                    Sửa
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
 
       <Modal
         show={showAddProduct}
@@ -173,7 +236,9 @@ function Admin() {
                 onChange={handleInputChange}
               />
               <div className="btn-form">
-                <button type="submit">Add Product</button>
+                <button className="me-2" type="submit">
+                  Add Product
+                </button>
                 <button type="button" onClick={() => setShowAddProduct(false)}>
                   Cancel
                 </button>
@@ -184,90 +249,47 @@ function Admin() {
       </Modal>
 
       <Modal
-        size="lg"
         show={showEditProduct}
         onHide={() => setShowEditProduct(false)}
-        aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="custom-modal"
       >
-        <Modal.Body className="modal-body">
-          <div className="container">
-            <div className="form-container">
-              <h2>Edit Product</h2>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="productName"
-                  value={editingProduct.productName}
-                  placeholder="Product Name"
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="number"
-                  name="price"
-                  value={editingProduct.price}
-                  placeholder="Price"
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="linkImage"
-                  value={editingProduct.linkImage}
-                  placeholder="Image URL"
-                  onChange={handleInputChange}
-                />
-                <div className="btn-form">
-                  <button type="submit">Save</button>
-                  <button
-                    type="button"
-                    onClick={() => setShowEditProduct(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+        <Modal.Body>
+          <div className="form-container">
+            <h2>Edit Product</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="productName"
+                value={editingProduct.productName}
+                placeholder="Product Name"
+                onChange={handleInputChange}
+              />
+              <input
+                type="number"
+                name="price"
+                value={editingProduct.price}
+                placeholder="Price"
+                onChange={handleInputChange}
+              />
+              <input
+                type="text"
+                name="linkImage"
+                value={editingProduct.linkImage}
+                placeholder="Image URL"
+                onChange={handleInputChange}
+              />
+              <div className="btn-form">
+                <button className="me-2" type="submit">
+                  Save
+                </button>
+                <button type="button" onClick={() => setShowEditProduct(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </Modal.Body>
       </Modal>
-
-      <div className="container">
-        <div className="table-container">
-          {products.map((product, index) => (
-            <div className="product-card" key={product.id}>
-              <div className="body-card">
-                <img src={product.linkImage} alt={product.productName} />
-                {/* <img src={imageArray[index]} alt={product.productName} /> */}
-                <h3>{product.productName}</h3>
-                <p>Giá: {product.price}K</p>
-              </div>
-              <div className="btn-card">
-                <button
-                  className="btn-edit"
-                  onClick={() => handleEditProduct(product.id)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDeleteProduct(product.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-          <div
-            className="product-card-1 product-card"
-            onClick={() => setShowAddProduct(true)}
-          >
-            <div className="card-btn-add">
-              <FaPlus className="btn-add" />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

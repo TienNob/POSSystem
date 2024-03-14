@@ -20,6 +20,10 @@ button {
   border-radius: 50px !important;
   padding: 6px 18px !important;
   border: none !important;
+  transition: all ease 0.3s !important;
+}
+button:hover {
+  opacity: 0.7;
 }
 .buttonDisible {
   background-color: #7d769c !important;
