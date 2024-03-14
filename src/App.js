@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import "./App.css";
-
+import Admin from "./component/manager/Admin.js";
 import Nab from "./component/navbar/Nav.js";
 import TableList from "./component/TableAPI.js";
 import ProductList from "./component/ProductAPI.js";
@@ -22,7 +22,9 @@ function App() {
 
         <Col xs lg="3"></Col>
       </Row>
+
       <Routes>
+        <Route path="/admin" element={<Admin />} />
         <Route path="/history" element={<History />} />
         <Route path="/orderdetail" element={<OrderDetail />} />
       </Routes>

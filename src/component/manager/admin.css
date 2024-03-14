@@ -1,0 +1,202 @@
+.heading {
+  display: flex;
+  justify-content: center;
+}
+
+.table-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+  margin: 0 auto;
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 250px;
+  background-color: #b2b2b2 !important;
+  color: white !important;
+}
+
+.product-card h3 {
+  margin-bottom: 10px;
+}
+
+.product-card p {
+  margin-bottom: 5px;
+}
+
+.form-container {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #000;
+}
+
+.form-container input {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #000;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4284ca;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+.product-card .btn-card {
+  display: flex;
+  justify-content: space-between;
+}
+
+.body-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.body-card img {
+  max-width: 100px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.body-card h3 {
+  margin-bottom: 5px;
+}
+
+.body-card p {
+  margin-bottom: 10px;
+}
+
+.btn-add {
+  background-color: #376bba;
+  color: #fff;
+  width: 150px;
+  display: block;
+  margin: 0 auto;
+}
+.btn-edit {
+  background-color: #60646a;
+  color: #fff;
+}
+
+.btn-delete {
+  background-color: #ee5766;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.product-card .btn-card button:hover {
+  opacity: 0.9;
+}
+
+.form-container button[type="button"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-container button[type="button"]:hover {
+  background-color: #838c92;
+}
+
+.btn-form {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+.btn-form button {
+  flex: 1;
+}
+.btn-form button:last-child {
+  margin-right: 0;
+}
+.form-container button[type="button"] {
+  width: 45%;
+  padding: 10px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-container button[type="button"]:hover {
+  background-color: #838c92;
+}
+
+.btn-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-form button {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.btn-form button:last-child {
+  margin-right: 0;
+}
+
+.product-card-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card-btn-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-btn-add .btn-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #60646a;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.card-btn-add .btn-add:hover {
+  background-color: #86898f;
+}

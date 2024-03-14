@@ -20,7 +20,6 @@ function TotalOder() {
 
   const customerInfoArray =
     JSON.parse(localStorage.getItem("customerInfoArray")) || {};
-  console.log(customerInfoArray);
 
   useEffect(() => {
     const fetchTableIDFromLocalStorage = () => {
@@ -182,7 +181,7 @@ function TotalOder() {
                 onClick={handleIconClick}
               />
               <CiEdit
-                className="ms-2"
+                className="ms-2 totalIconArrow"
                 size={"18px"}
                 onClick={handleIconEditClick}
               />
@@ -213,14 +212,14 @@ function TotalOder() {
 
       <OrderContent tableID={tableID} />
 
-      <Modal show={showFormModal} onHide={handleCloseFormModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Chuyển Bàn</Modal.Title>
+      <Modal centered show={showFormModal} onHide={handleCloseFormModal}>
+        <Modal.Header className="justify-content-center">
+          <Modal.Title className="blackColor ">Chuyển Bàn</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
             <Form.Group controlId="formNewTable">
-              <Form.Label>Chọn bàn mới:</Form.Label>
+              <Form.Label className="blackColor">Chọn bàn mới:</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Nhập số bàn mới"
@@ -228,9 +227,18 @@ function TotalOder() {
                 onChange={(e) => setNewTable(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Chuyển bàn
-            </Button>
+            <Modal.Footer>
+              <Button
+                className="me-2 buttonDisible"
+                variant="secondary"
+                onClick={handleCloseFormModal}
+              >
+                Huỷ
+              </Button>
+              <Button variant="primary" type="submit">
+                Chuyển bàn{" "}
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal.Body>
       </Modal>

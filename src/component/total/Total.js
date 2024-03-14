@@ -101,6 +101,9 @@ function Total({ totalPrice, products, tableID }) {
     }
   };
   const handleShowModal = () => {
+    if (totalPrice <= 0) {
+      return alert("Không thể thanh toán khi không có sản phẩm");
+    }
     setShowModal(true);
   };
   const handleCloseModal = () => {
