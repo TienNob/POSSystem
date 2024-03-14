@@ -17,13 +17,17 @@ function Nav() {
         throw new Error("Network response was not ok.");
       })
       .then((blob) => {
-        // Create object URL for the blob
         const url = window.URL.createObjectURL(blob);
-        // Create a temporary link element
         const a = document.createElement("a");
         a.href = url;
-
-        a.download = "DoanhThu" + Date.now().toString() + ".xlsx";
+        const currentDate = new Date(Date.now());
+        const year = currentDate.getFullYear();
+        const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+        const day = ('0' + currentDate.getDate()).slice(-2);
+        const hours = ('0' + currentDate.getHours()).slice(-2);
+        const minutes = ('0' + currentDate.getMinutes()).slice(-2);
+        const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
+        a.download = "DoanhThu_" + formattedDate + ".xlsx";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
