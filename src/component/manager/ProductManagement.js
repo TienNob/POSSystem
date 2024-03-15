@@ -127,7 +127,7 @@ function Admin() {
   return (
     <div className="d-flex flex-column align-items-center">
       <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
-        Product Management
+        Quản lý sản phẩm
       </h1>
       <div
         className="product-card-1 product-card mt-3 mb-1"
@@ -140,40 +140,6 @@ function Admin() {
       </div>
 
       <Container>
-        {/* <div className="table-container">
-          {products.map((product, index) => (
-            <div className="product-card" key={product.id}>
-              <div className="body-card">
-                <img src={imageArray[index]} alt={product.productName} />
-                <h3>{product.productName}</h3>
-                <p>Giá: {product.price}K</p>
-              </div>
-              <div className="btn-card">
-                <button
-                  className="btn-edit"
-                  onClick={() => handleEditProduct(product.id)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDeleteProduct(product.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-          <div
-            className="product-card-1 product-card"
-            onClick={() => setShowAddProduct(true)}
-          >
-            <div className="card-btn-add">
-              <FaPlus className="btn-add" />
-            </div>
-          </div>
-        </div> */}
-
         <Row>
           {products.map((product, i) => (
             <Col className="mt-4" xs="6" md="4" lg="3">

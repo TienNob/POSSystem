@@ -139,7 +139,7 @@ function TableList() {
                     </Form.Label>
                     <Form.Control
                       className="mb-4"
-                      type="text"
+                      type="number"
                       placeholder="Nhập số điện thoại"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}

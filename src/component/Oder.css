@@ -69,3 +69,7 @@
 .sumTotal {
   font-weight: bold;
 }
+.orderContent-inputChange {
+  background-color: transparent;
+  border: none;
+}
