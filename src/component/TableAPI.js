@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { BsArrowRight } from "react-icons/bs";
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import { LinkAPI } from "../LinkAPI";
 import {
   Card,
@@ -104,7 +104,7 @@ function TableList() {
                   <Card.Title className="cardList">Bàn {table.id}</Card.Title>
                   <Card.Text className="cardList">
                     Trạng thái
-                    <BsArrowRight className="ms-1" size={"18px"} />{" "}
+                    <ArrowRightAltIcon className="ms-1" size={"18px"} />{" "}
                     <span
                       style={{
                         color: table.status ? "#a72a56" : "#2d5f37",

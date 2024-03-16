@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./admin.css"; // Import CSS file
+
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa"; // Import FaPlus icon
 import { LinkAPI } from "../../LinkAPI";
@@ -59,7 +60,7 @@ function TableManagement() {
   return (
     <div className="d-flex flex-column align-items-center">
       <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
-        Quản lý số bàn
+        Quản lý bàn
       </h1>
       <div
         className="product-card-1 product-card mt-3 mb-1"
@@ -68,7 +69,7 @@ function TableManagement() {
         <div className="card-btn-add me-2">
           <FaPlus className="btn-add" />
         </div>
-        <h5 className="mb-0"> Thêm số bàn</h5>
+        <h5 className="mb-0"> Thêm bàn</h5>
       </div>
 
       <Container>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LinkAPI } from "../LinkAPI";
-import { IoAddCircle } from "react-icons/io5";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import TotalOder from "./TotalOder";
 
@@ -85,7 +85,7 @@ function ProductList() {
               <Card.Body className="fillter d-flex flex-column justify-content-between">
                 <Card.Title>{product.productName}</Card.Title>
                 <Card.Text className="d-flex justify-content-between ">
-                  <IoAddCircle className="ms-1" size={"18px"} />
+                  <AddCircleIcon className="ms-1" size={"18px"} />
                   <p className="mb-0">{product.price} K</p>
                 </Card.Text>
               </Card.Body>

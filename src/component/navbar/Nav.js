@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
-import { BsArrowLeftShort } from "react-icons/bs";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 
@@ -22,10 +22,10 @@ function Nav() {
         a.href = url;
         const currentDate = new Date(Date.now());
         const year = currentDate.getFullYear();
-        const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-        const day = ('0' + currentDate.getDate()).slice(-2);
-        const hours = ('0' + currentDate.getHours()).slice(-2);
-        const minutes = ('0' + currentDate.getMinutes()).slice(-2);
+        const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+        const day = ("0" + currentDate.getDate()).slice(-2);
+        const hours = ("0" + currentDate.getHours()).slice(-2);
+        const minutes = ("0" + currentDate.getMinutes()).slice(-2);
         const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
         a.download = "DoanhThu_" + formattedDate + ".xlsx";
         document.body.appendChild(a);
@@ -44,7 +44,7 @@ function Nav() {
         <Container>
           <Link to="/">
             <Navbar.Brand>
-              <BsArrowLeftShort size={"40px"} />
+              <ArrowBackIcon sx={{ fontSize: 30 }} className="NavBack" />
             </Navbar.Brand>
           </Link>
           <Navbar.Toggle />

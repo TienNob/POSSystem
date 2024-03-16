@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, ListGroup, Button } from "react-bootstrap";
 import Total from "./Total";
-import { RiDeleteBinLine } from "react-icons/ri";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function OrderContent({ tableID }) {
   const [products, setProducts] = useState([]);
@@ -114,8 +114,9 @@ function OrderContent({ tableID }) {
                 >
                   +
                 </Button>
-                <RiDeleteBinLine
+                <DeleteIcon
                   className=" deleteListProduct"
+                  sx={{ fontSize: 18 }}
                   onClick={() => handleDeleteProduct(index)}
                 />
               </div>

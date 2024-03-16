@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Container, Modal, Button, Form } from "react-bootstrap";
-import { IoIosArrowDown } from "react-icons/io";
-import { CiEdit } from "react-icons/ci";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import Person2Icon from "@mui/icons-material/Person2";
 import axios from "axios";
-import { FaUser } from "react-icons/fa";
 import OrderContent from "./total/OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../LinkAPI";
@@ -165,14 +165,14 @@ function TotalOder() {
 
             {customerInfo && (
               <span className="d-flex align-items-center">
-                <FaUser className="me-1" size={"12px"} />
+                <Person2Icon className="me-1" size={"12px"} />
                 {customerName}
               </span>
             )}
           </div>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              <IoIosArrowDown
+              <KeyboardArrowDownIcon
                 className="totalIconArrow"
                 size={"18px"}
                 style={{
@@ -180,7 +180,7 @@ function TotalOder() {
                 }}
                 onClick={handleIconClick}
               />
-              <CiEdit
+              <DriveFileRenameOutlineIcon
                 className="ms-2 totalIconArrow"
                 size={"18px"}
                 onClick={handleIconEditClick}
