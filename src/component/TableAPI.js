@@ -90,7 +90,7 @@ function TableList() {
   return (
     <Container>
       <Row>
-        {tables.map((table) => (
+        {tables.map((table, i) => (
           <Col key={table.id} lg="4" className="mt-4">
             <div
               className="tableOder"

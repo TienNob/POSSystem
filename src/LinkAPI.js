@@ -1,4 +1,4 @@
-export const LinkAPI = "http://localhost:8086/api/";
+export const LinkAPI = "http://localhost:8080/api/";
 // <<<<<<< HEAD
 // export const LinkAPI = "http://localhost:8080/api/";
 // =======

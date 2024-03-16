@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./admin.css"; // Import CSS file
-import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
+import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa"; // Import FaPlus icon
 import { LinkAPI } from "../../LinkAPI";
 
@@ -9,8 +9,8 @@ function TableManagement() {
   const [showAddTable, setShowAddTable] = useState(false);
   const [tables, setTables] = useState([]);
   const [newTable, setNewTable] = useState({
-    tableNumber: "",
-    status: "",
+    id: "",
+    status: true,
   });
   console.log(tables);
   useEffect(() => {
@@ -24,18 +24,23 @@ function TableManagement() {
     }
     fetchTables();
   }, []);
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewTable({ ...newTable, [name]: value });
+    const { value } = e.target;
+    console.log(value);
+    setNewTable({ ...newTable, id: parseInt(value) || "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      const filterTable = tables.filter((table) => table.id === newTable.id);
+      if (filterTable) {
+        return alert("Bàn đã tồn tại");
+      }
       const response = await axios.post(`${LinkAPI}table`, newTable);
       setTables([...tables, response.data]);
-      setNewTable({ tableNumber: "", status: "" });
+      setNewTable({ id: "", status: true });
       setShowAddTable(false);
     } catch (error) {
       console.error("Error adding table:", error);
@@ -96,9 +101,8 @@ function TableManagement() {
             <h2>Thêm số bàn</h2>
             <form onSubmit={handleSubmit}>
               <input
-                type="text"
-                name="tableNumber"
-                value={newTable.tableNumber}
+                type="number"
+                value={newTable.id}
                 placeholder="Số bàn"
                 onChange={handleInputChange}
               />
