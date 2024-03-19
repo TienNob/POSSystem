@@ -27,7 +27,6 @@ function TableManagement() {
   }, []);
   const handleInputChange = (e) => {
     const { value } = e.target;
-    console.log(value);
     setNewTable({ ...newTable, id: parseInt(value) || "" });
   };
 
@@ -36,7 +35,9 @@ function TableManagement() {
 
     try {
       const filterTable = tables.filter((table) => table.id === newTable.id);
-      if (filterTable) {
+
+      console.log(filterTable);
+      if (filterTable.length >= 1) {
         return alert("Bàn đã tồn tại");
       }
       const response = await axios.post(`${LinkAPI}table`, newTable);
