@@ -58,9 +58,11 @@ function OrderContent({ tableID }) {
     const updatedProducts = [...products];
     if (updatedProducts[index].quantity > 1) {
       updatedProducts[index].quantity -= 1;
-
+      console.log(updatedProducts[index].quantity);
       setProducts(updatedProducts);
       updateLocalStorage(updatedProducts);
+    } else {
+      handleDeleteProduct(index);
     }
   };
   const handleDeleteProduct = (index) => {

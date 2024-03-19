@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./admin.css"; // Import CSS file
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
-import { FaPlus } from "react-icons/fa"; // Import FaPlus icon
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { LinkAPI } from "../../LinkAPI";
-
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -135,7 +134,7 @@ function Admin() {
         onClick={() => setShowAddProduct(true)}
       >
         <div className="card-btn-add me-2">
-          <FaPlus className="btn-add" />
+          <ControlPointIcon className="btn-add" />
         </div>
         <h5 className="mb-0"> Thêm sản phẩm</h5>
       </div>

@@ -3,7 +3,7 @@ import axios from "axios";
 import "./admin.css"; // Import CSS file
 
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
-import { FaPlus } from "react-icons/fa"; // Import FaPlus icon
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { LinkAPI } from "../../LinkAPI";
 
 function TableManagement() {
@@ -67,7 +67,7 @@ function TableManagement() {
         onClick={() => setShowAddTable(true)}
       >
         <div className="card-btn-add me-2">
-          <FaPlus className="btn-add" />
+          <ControlPointIcon className="btn-add" />
         </div>
         <h5 className="mb-0"> Thêm bàn</h5>
       </div>
