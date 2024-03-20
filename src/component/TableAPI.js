@@ -58,33 +58,27 @@ function TableList() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Xử lý khi form được submit
-    if (phoneNumber && customerName) {
-      localStorage.setItem("selectedTableID", tableID);
-      const customerInfo = {
-        phoneNumber: phoneNumber,
-        customerName: customerName,
-      };
+    const customerInfo = {
+      phoneNumber: phoneNumber || "",
+      customerName: customerName || "Khách lẻ",
+    };
+    localStorage.setItem("selectedTableID", tableID);
+    const selectedTableID = localStorage.getItem("selectedTableID"); // Lấy ID của bàn từ local storage
+    let customerInfoArray =
+      JSON.parse(localStorage.getItem("customerInfoArray")) || {};
 
-      const selectedTableID = localStorage.getItem("selectedTableID"); // Lấy ID của bàn từ local storage
-      let customerInfoArray =
-        JSON.parse(localStorage.getItem("customerInfoArray")) || {};
-
-      if (!customerInfoArray[selectedTableID]) {
-        customerInfoArray[selectedTableID] = [];
-      }
-
-      customerInfoArray[selectedTableID].push(customerInfo);
-
-      localStorage.setItem(
-        "customerInfoArray",
-        JSON.stringify(customerInfoArray)
-      );
-      setShowModal(false); // Ẩn modal sau khi submit
-      history("/productlist");
-    } else {
-      alert("Vui lòng nhập số điện thoại và tên khách hàng.");
+    if (!customerInfoArray[selectedTableID]) {
+      customerInfoArray[selectedTableID] = [];
     }
+
+    customerInfoArray[selectedTableID].push(customerInfo);
+
+    localStorage.setItem(
+      "customerInfoArray",
+      JSON.stringify(customerInfoArray)
+    );
+    setShowModal(false); // Ẩn modal sau khi submit
+    history("/productlist");
   };
 
   return (
@@ -94,6 +88,9 @@ function TableList() {
           <Col key={table.id} lg="4" className="mt-4">
             <div
               className="tableOder"
+              style={{
+                opacity: table.status ? "0.7" : "1",
+              }}
               onClick={() => handleTableClick(table.id, table.status)}
             >
               <Card

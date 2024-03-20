@@ -3,6 +3,8 @@ import { Navbar, Container, Modal, Button, Form } from "react-bootstrap";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Person2Icon from "@mui/icons-material/Person2";
+import MergeIcon from "@mui/icons-material/Merge";
+import Tooltip from "@mui/material/Tooltip";
 import axios from "axios";
 import OrderContent from "./total/OrderContent";
 import "./Oder.css";
@@ -17,6 +19,7 @@ function TotalOder() {
   const [customerName, setCustomerName] = useState("");
   const [newTable, setNewTable] = useState("");
   const [showFormModal, setShowFormModal] = useState(false);
+  const [mergeTable, setMergeTable] = useState(false);
 
   const customerInfoArray =
     JSON.parse(localStorage.getItem("customerInfoArray")) || {};
@@ -89,19 +92,25 @@ function TotalOder() {
       }
     }
   };
-
   const handleIconEditClick = () => {
     setShowFormModal(true);
   };
 
   const handleCloseFormModal = () => {
+    setMergeTable(false);
     setShowFormModal(false);
   };
-
+  const handleMergeButtonClick = () => {
+    setMergeTable(true); // Set mergeTable state to true to indicate merging tables
+    setShowFormModal(true); // Open the modal
+  };
   const handleFormSubmit = (event) => {
     event.preventDefault();
     // Kiểm tra xem bàn mới có tồn tại không
-    const tableExists = newTable <= tableList.length;
+    const tableExists = tableList.some((table) => {
+      return table.id === parseInt(newTable);
+    });
+    console.log(tableExists);
     if (!tableExists) {
       alert("Bàn mới không tồn tại trong danh sách!");
       return;
@@ -111,12 +120,18 @@ function TotalOder() {
       customerInfoArray[parseInt(newTable)] &&
       customerInfoArray[parseInt(newTable)].length > 0;
 
-    if (isTableOccupied) {
-      // Nếu không có thông tin khách hàng, hiển thị cảnh báo
-      alert("Không thể chuyển bàn khi bàn đã có khách!");
+    if (isTableOccupied && !mergeTable) {
+      alert("Không thể chuyển bàn khi bàn đang có khách!");
       return;
     }
-
+    if (!isTableOccupied && mergeTable) {
+      alert("Không thể gộp bàn khi bàn chưa có khách");
+      return;
+    }
+    if (mergeTable && tableID === newTable) {
+      alert("Không thể gộp với bàn hiện tại");
+      return;
+    }
     const storedProductsByTable =
       JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
     const productsForTable = storedProductsByTable[tableID];
@@ -126,15 +141,45 @@ function TotalOder() {
     const productsForNewTable = storedProductsByTable[newTable] || [];
 
     // Cập nhật thông tin khách hàng và sản phẩm đã đặt hàng cho bàn mới
-    customerInfoArray[newTable] = [...customerInfoForNewTable, customerInfo];
-    storedProductsByTable[newTable] = [
-      ...productsForNewTable,
-      ...productsForTable,
-    ];
+    if (mergeTable) {
+      // Gộp bàn
+      const mergedProducts = [];
 
-    // Xóa thông tin khách hàng và sản phẩm đã đặt hàng của bàn cũ
-    delete customerInfoArray[tableID];
-    delete storedProductsByTable[tableID];
+      productsForTable.forEach((product) => {
+        const existingProduct = mergedProducts.find(
+          (p) => p.productName === product.productName
+        );
+        if (existingProduct) {
+          existingProduct.quantity += product.quantity;
+        } else {
+          mergedProducts.push({ ...product });
+        }
+      });
+
+      productsForNewTable.forEach((product) => {
+        const existingProduct = mergedProducts.find(
+          (p) => p.productName === product.productName
+        );
+        if (existingProduct) {
+          existingProduct.quantity += product.quantity;
+        } else {
+          mergedProducts.push({ ...product });
+        }
+      });
+
+      storedProductsByTable[newTable] = mergedProducts;
+      customerInfoArray[newTable] = [...customerInfoForNewTable, customerInfo];
+
+      delete customerInfoArray[tableID];
+      delete storedProductsByTable[tableID];
+    } else {
+      // Chuyển bàn
+      customerInfoArray[newTable] = [...customerInfoArray[tableID]];
+      storedProductsByTable[newTable] = [...productsForTable];
+
+      delete customerInfoArray[tableID];
+      delete storedProductsByTable[tableID];
+    }
 
     // Lưu các thay đổi vào localStorage
     localStorage.setItem(
@@ -172,19 +217,31 @@ function TotalOder() {
           </div>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              <KeyboardArrowDownIcon
-                className="totalIconArrow"
-                size={"18px"}
-                style={{
-                  transform: iconRotated ? "rotate(360deg)" : "rotate(0deg)",
-                }}
-                onClick={handleIconClick}
-              />
-              <DriveFileRenameOutlineIcon
-                className="ms-2 totalIconArrow"
-                size={"18px"}
-                onClick={handleIconEditClick}
-              />
+              <Tooltip title="Bàn có khách" arrow>
+                <KeyboardArrowDownIcon
+                  className="totalIconArrow"
+                  sx={{ fontSize: 18 }}
+                  style={{
+                    transform: iconRotated ? "rotate(360deg)" : "rotate(0deg)",
+                  }}
+                  onClick={handleIconClick}
+                />
+              </Tooltip>
+              <Tooltip title="Chuyển bàn" arrow>
+                <DriveFileRenameOutlineIcon
+                  className="ms-2 totalIconArrow"
+                  sx={{ fontSize: 18 }}
+                  onClick={handleIconEditClick}
+                />
+              </Tooltip>
+              <Tooltip title="Gộp bàn" arrow>
+                <MergeIcon
+                  sx={{ fontSize: 18 }}
+                  tooltipTitle={"gộp bàn"}
+                  className="ms-2 totalIconArrow"
+                  onClick={handleMergeButtonClick}
+                />
+              </Tooltip>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
@@ -214,15 +271,19 @@ function TotalOder() {
 
       <Modal centered show={showFormModal} onHide={handleCloseFormModal}>
         <Modal.Header className="justify-content-center">
-          <Modal.Title className="blackColor ">Chuyển Bàn</Modal.Title>
+          <Modal.Title className="blackColor ">
+            {mergeTable ? "Gộp Bàn" : "Chuyển Bàn"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
             <Form.Group controlId="formNewTable">
-              <Form.Label className="blackColor">Chọn bàn mới:</Form.Label>
+              <Form.Label className="blackColor">
+                {mergeTable ? "Chọn bàn mới:" : "Chọn bàn đến:"}
+              </Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Nhập số bàn mới"
+                placeholder={`Nhập số bàn ${mergeTable ? "mới" : "đến"}`}
                 value={newTable}
                 onChange={(e) => setNewTable(e.target.value)}
               />
@@ -236,7 +297,7 @@ function TotalOder() {
                 Huỷ
               </Button>
               <Button variant="primary" type="submit">
-                Chuyển bàn{" "}
+                {mergeTable ? "Gộp bàn" : "Chuyển bàn"}
               </Button>
             </Modal.Footer>
           </Form>

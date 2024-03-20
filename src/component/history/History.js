@@ -46,7 +46,7 @@ function History() {
             <tr key={item.id}>
               <td className="setHistoryColor">{index + 1}</td>
               <td className="setHistoryColor">
-                {item.phoneNumber !== null ? item.phoneNumber : "Khách lẻ"}
+                {item.phoneNumber !== "" ? item.phoneNumber : "Khách lẻ"}
               </td>
 
               <td className="setHistoryColor">
