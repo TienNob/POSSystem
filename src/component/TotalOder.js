@@ -220,7 +220,7 @@ function TotalOder() {
               <Tooltip title="Bàn có khách" arrow>
                 <KeyboardArrowDownIcon
                   className="totalIconArrow"
-                  sx={{ fontSize: 18 }}
+                  sx={{ fontSize: 20 }}
                   style={{
                     transform: iconRotated ? "rotate(360deg)" : "rotate(0deg)",
                   }}
@@ -230,13 +230,13 @@ function TotalOder() {
               <Tooltip title="Chuyển bàn" arrow>
                 <DriveFileRenameOutlineIcon
                   className="ms-2 totalIconArrow"
-                  sx={{ fontSize: 18 }}
+                  sx={{ fontSize: 20 }}
                   onClick={handleIconEditClick}
                 />
               </Tooltip>
               <Tooltip title="Gộp bàn" arrow>
                 <MergeIcon
-                  sx={{ fontSize: 18 }}
+                  sx={{ fontSize: 20 }}
                   tooltipTitle={"gộp bàn"}
                   className="ms-2 totalIconArrow"
                   onClick={handleMergeButtonClick}

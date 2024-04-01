@@ -4,6 +4,7 @@ import "./admin.css"; // Import CSS file
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { LinkAPI } from "../../LinkAPI";
+
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -125,7 +126,7 @@ function Admin() {
   const imageArray = importAll(imageFiles);
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center main-container">
       <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
         Quản lý sản phẩm
       </h1>

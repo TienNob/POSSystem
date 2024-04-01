@@ -56,7 +56,7 @@ function History() {
                   .replace("T", " ")
                   .replace(" ", ", ")}
               </td>
-              <td className="setHistoryColor">{item.totalAmount}</td>
+              <td className="setHistoryColor">{item.totalAmount} K</td>
               <td className="setHistoryColor">
                 <Link onClick={() => handleClick(item.id)} to="/orderdetail">
                   Xem thêm

@@ -10,6 +10,7 @@ function OrderDetail() {
     axios
       .get(`${LinkAPI}orders/chitiethoadon`)
       .then((res) => {
+        console.log(res.data);
         const filterProductByID = res.data.filter(
           (item) => item.id === storedOrderID
         );
@@ -37,10 +38,10 @@ function OrderDetail() {
               <td className="setHistoryColor">{product.banId}</td>
 
               <td className="setHistoryColor">{product.productName}</td>
-              <td className="setHistoryColor">{product.price}</td>
+              <td className="setHistoryColor">{product.price} K</td>
               <td className="setHistoryColor">{product.quantity}</td>
               <td className="setHistoryColor">
-                {product.quantity * product.price}
+                {product.quantity * product.price} K
               </td>
             </tr>
           ))}

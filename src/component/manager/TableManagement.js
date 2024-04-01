@@ -59,7 +59,7 @@ function TableManagement() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center main-container">
       <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
         Quản lý bàn
       </h1>

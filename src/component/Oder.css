@@ -8,7 +8,7 @@
   bottom: 0;
   min-width: 23%;
   background-color: #090e28;
-  border: 1px solid #050a19;
+  border: 1px solid #000;
 }
 .orderContent {
   overflow-y: scroll;
@@ -20,12 +20,12 @@
   left: 0;
   position: absolute;
   bottom: 0;
-  border: 1px solid #050a19;
+  border: 1px solid #000;
 }
 
 .totalNav {
   background-color: #090e28 !important;
-  border: 1px solid #050a19;
+  border: 1px solid #000;
   color: white !important;
 }
 .totalTableList {
@@ -52,6 +52,17 @@
   transition: all ease 0.3s;
   cursor: pointer;
   filter: brightness(70%);
+}
+.total-divideIcon {
+  background-color: #634fbb;
+  height: 30px;
+  width: 36px;
+  border-radius: 5px;
+  transition: all ease 0.3s;
+}
+.total-divideIcon:hover {
+  opacity: 0.7;
+  cursor: pointer;
 }
 .totalIconArrow:hover {
   filter: brightness(100%);
