@@ -37,6 +37,10 @@ function Total({ totalPrice, products, tableID }) {
     }
   }, [tableID]);
   const handleShowSplitModal = () => {
+    if (products.length < 1) {
+      alert("Không thể tách hoá đơn khi không có sản phẩm");
+      return;
+    }
     setShowSplitModal(true);
     // Initialize selected products and quantities
     const initialSelectedProducts = {};
@@ -66,7 +70,10 @@ function Total({ totalPrice, products, tableID }) {
         const productInTable = productsForTable.find(
           (product) => product.id === parseInt(productId)
         );
-
+        if (productInTable && productQuantity === 0) {
+          alert("Không thể tách khi giá trị bằng 0");
+          return;
+        }
         if (productInTable && productInTable.quantity >= productQuantity) {
           // Nếu số lượng sản phẩm đủ, thêm vào mảng selectedProductsToPay
           selectedProductsToPay.push({
@@ -124,7 +131,7 @@ function Total({ totalPrice, products, tableID }) {
       axios
         .post(`${LinkAPI}orders`, {
           ban: { id: tableID },
-          orderDate: new Date(),
+          orderDate: new Date().toLocaleString(),
           totalAmount: splitInvoice.totalPrice,
           phoneNumber: phoneNumber,
           products: splitInvoice.products,

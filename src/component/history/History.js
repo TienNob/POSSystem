@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, Table } from "react-bootstrap";
 import { LinkAPI } from "../../LinkAPI";
-import usePagination from "@mui/material/usePagination";
 
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -28,6 +27,7 @@ function History() {
       .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`)
       .then((res) => {
         const sortedHistory = res.data.content.sort((a, b) => {
+          console.log(new Date(b.orderDate) - new Date(a.orderDate));
           return new Date(b.orderDate) - new Date(a.orderDate);
         });
         setHistory(sortedHistory);

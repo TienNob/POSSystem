@@ -21,7 +21,7 @@ function AdminHome() {
     fetch("http://localhost:8080/api/orders")
       .then((response) => response.json())
       .then((data) => {
-        setNumberOfOrders(data.length);
+        setNumberOfOrders(data.totalElements);
       })
       .catch((error) => console.error("Error fetching orders:", error));
 

@@ -179,35 +179,35 @@ function Admin() {
       >
         <Modal.Body>
           <div className="form-container">
-            <h2>Add Product</h2>
+            <h2>Thêm sản phẩm</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="productName"
                 value={newProduct.productName}
-                placeholder="Product Name"
+                placeholder="Tên sản phẩm"
                 onChange={handleInputChange}
               />
               <input
                 type="number"
                 name="price"
                 value={newProduct.price}
-                placeholder="Price"
+                placeholder="Giá"
                 onChange={handleInputChange}
               />
               <input
                 type="text"
                 name="linkImage"
                 value={newProduct.linkImage}
-                placeholder="Image URL"
+                placeholder="Đường dẫn hình ảnh"
                 onChange={handleInputChange}
               />
               <div className="btn-form">
                 <button className="me-2" type="submit">
-                  Add Product
+                  Thêm
                 </button>
                 <button type="button" onClick={() => setShowAddProduct(false)}>
-                  Cancel
+                  Huỷ
                 </button>
               </div>
             </form>
@@ -222,35 +222,35 @@ function Admin() {
       >
         <Modal.Body>
           <div className="form-container">
-            <h2>Edit Product</h2>
+            <h2>Sửa Sản Phẩm</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="productName"
                 value={editingProduct.productName}
-                placeholder="Product Name"
+                placeholder="Tên sản phẩm"
                 onChange={handleInputChange}
               />
               <input
                 type="number"
                 name="price"
                 value={editingProduct.price}
-                placeholder="Price"
+                placeholder="Giá"
                 onChange={handleInputChange}
               />
               <input
                 type="text"
                 name="linkImage"
                 value={editingProduct.linkImage}
-                placeholder="Image URL"
+                placeholder="Đường dẫn hình ảnh"
                 onChange={handleInputChange}
               />
               <div className="btn-form">
                 <button className="me-2" type="submit">
-                  Save
+                  Thêm
                 </button>
                 <button type="button" onClick={() => setShowEditProduct(false)}>
-                  Cancel
+                  Huỷ
                 </button>
               </div>
             </form>
