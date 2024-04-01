@@ -27,13 +27,24 @@ function History() {
     setCurrentPage(currentPage - 1);
   };
 
+  const handleFirstPage = () => {
+    setCurrentPage(0);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(totalPages - 1);
+  };
+
   useEffect(() => {
     axios
         .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`)
         .then((res) => {
-          setHistory(res.data.content);
+          const sortedHistory = res.data.content.sort((a, b) => {
+            return new Date(b.orderDate) - new Date(a.orderDate);
+          });
+          setHistory(sortedHistory);
           setTotalPages(res.data.totalPages);
-          console.log(res.data.content);
+          console.log(sortedHistory);
         })
         .catch((error) => {
           console.error("Error fetching product data:", error);
@@ -55,7 +66,7 @@ function History() {
           <tbody>
           {history.map((item, index) => (
               <tr key={item.id}>
-                <td className="setHistoryColor">{currentPage * pageSize + index + 1}</td> {/* STT tính từ currentPage và pageSize */}
+                <td className="setHistoryColor">{currentPage * pageSize + index + 1}</td>
                 <td className="setHistoryColor">
                   {item.phoneNumber !== "" ? item.phoneNumber : "Khách lẻ"}
                 </td>
@@ -76,13 +87,19 @@ function History() {
           ))}
           </tbody>
         </Table>
-        <div>
+        <div className="button-container">
+          <button onClick={handleFirstPage} disabled={currentPage === 0}>
+            First
+          </button>
           <button onClick={handlePreviousPage} disabled={currentPage === 0}>
             Previous
           </button>
-          <span>{currentPage + 1}</span>
+          <span>Page {currentPage + 1} of {totalPages}</span>
           <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
             Next
+          </button>
+          <button onClick={handleLastPage} disabled={currentPage === totalPages - 1}>
+            Last
           </button>
         </div>
       </Container>
