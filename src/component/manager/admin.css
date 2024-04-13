@@ -124,6 +124,7 @@
   vertical-align: middle;
   line-height: 1px;
   font-size: 20px;
+  cursor: pointer;
 }
 .icon_header {
   vertical-align: middle;
@@ -201,6 +202,7 @@
 .sidebar-list-item {
   padding: 20px 20px 20px 20px;
   font-size: 18px;
+  transition: all ease-in-out 0.2s;
 }
 
 .sidebar-list-item:hover {
@@ -208,7 +210,7 @@
   cursor: pointer;
 }
 
-.sidebar-list-item > a {
+.sidebar-link {
   text-decoration: none;
   color: #9e9ea4;
 }
@@ -216,12 +218,22 @@
 .sidebar-responsive {
   display: inline !important;
   position: absolute;
+
   /*
-    we want the z-index of the sidebar higher so that
-    the charts are not showing over the sidebar 
-    on small screens
+  we want the z-index of the sidebar higher so that
+  the charts are not showing over the sidebar 
+  on small screens
   */
   z-index: 12 !important;
+}
+.close_icon {
+  margin-top: 15px;
+  margin-left: 24px;
+  cursor: pointer;
+  transition: all 0.3s linear;
+}
+.close_icon:hover {
+  opacity: 0.6;
 }
 
 /* End Sidebar  */
@@ -287,7 +299,9 @@
   margin-top: 60px;
   height: 300px;
 }
-
+.recharts-default-tooltip {
+  background-color: #212a75 !important;
+}
 /* End Main  */
 
 /* Medium <= 992px */

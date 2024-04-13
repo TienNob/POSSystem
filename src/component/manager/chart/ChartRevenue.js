@@ -45,7 +45,7 @@ class ChartRevenue extends Component {
             data={this.state.orders}
             margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <XAxis dataKey="thang" fontSize={12} tick={{ fill: "white" }}>
               <Label
                 offset={0}

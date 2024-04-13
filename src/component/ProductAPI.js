@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { LinkAPI } from "../LinkAPI";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Card, Container, Row, Col } from "react-bootstrap";
@@ -9,6 +10,7 @@ import "../App.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
   const importAll = (r) => {
     let images = [];
     r.keys().map((item) => {
@@ -23,17 +25,43 @@ function ProductList() {
     /\.(png|jpe?g|svg)$/
   );
   const imageArray = importAll(imageFiles);
-
   useEffect(() => {
+    // Lấy token từ localStorage
+    const token = localStorage.getItem("authToken");
+
+    // Kiểm tra xem token có tồn tại không
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
+      navigate("/login");
+      return;
+    }
+
+    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
-      .get(`${LinkAPI}products`)
+      .get(`${LinkAPI}products`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setProducts(res.data);
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, []);
+  }, [navigate, LinkAPI]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${LinkAPI}products`)
+  //     .then((res) => {
+  //       setProducts(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching product data:", error);
+  //     });
+  // }, []);
 
   const addProductToTotal = (product) => {
     const selectedTableID = localStorage.getItem("selectedTableID"); // Lấy ID của bàn từ local storage

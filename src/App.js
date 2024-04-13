@@ -12,24 +12,32 @@ import TableList from "./component/TableAPI.js";
 import ProductList from "./component/ProductAPI.js";
 import OrderDetail from "./component/history/OrderDetail.js";
 import History from "./component/history/History.js";
-
+import Login from "./component/form/Login.js";
 function App() {
+  const currentPath = window.location.pathname;
+  const isAdmin =
+    currentPath === "/productManagement" ||
+    currentPath === "/tableManagement" ||
+    currentPath === "/adminHome";
+  const isStaf = currentPath === "/" || currentPath === "/productlist";
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
+  // const isLogin = (currentPath = "/login");
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
-  const currentPath = window.location.pathname;
-
   return (
     <div className="app">
       <div>
-        {currentPath !== "/productManagement" &&
-          currentPath !== "/tableManagement" &&
-          currentPath !== "/adminHome" && <Nab />}
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
 
-        {currentPath !== "/productManagement" &&
-          currentPath !== "/tableManagement" &&
-          currentPath !== "/adminHome" && (
+      <div>
+        <div>
+          {!isAdmin && isStaf && <Nab />}
+
+          {!isAdmin && (
             <Row className="margin-space">
               <Col lg="9" md="9" xs="12">
                 <Routes>
@@ -42,39 +50,31 @@ function App() {
             </Row>
           )}
 
-        <Routes>
-          <Route path="/history" element={<History />} />
-          <Route path="/orderdetail" element={<OrderDetail />} />
-        </Routes>
-      </div>
-      <div
-        className="grid-container"
-        style={{
-          display:
-            currentPath === "/productManagement" ||
-            currentPath === "/tableManagement" ||
-            currentPath === "/adminHome"
-              ? "gird"
-              : "none",
-        }}
-      >
-        {currentPath === "/productManagement" ||
-          currentPath === "/tableManagement" ||
-          (currentPath === "/adminHome" && (
+          <Routes>
+            <Route path="/history" element={<History />} />
+            <Route path="/orderdetail" element={<OrderDetail />} />
+          </Routes>
+        </div>
+        <div
+          className="grid-container"
+          style={{
+            display: isAdmin ? "gird" : "none",
+          }}
+        >
+          {isAdmin && (
             <AdminSidebar
               openSidebarToggle={openSidebarToggle}
               OpenSidebar={OpenSidebar}
             />
-          ))}
-        {currentPath === "/productManagement" ||
-          currentPath === "/tableManagement" ||
-          (currentPath === "/adminHome" && <AdminHeader />)}
+          )}
+          {isAdmin && <AdminHeader OpenSidebar={OpenSidebar} />}
 
-        <Routes>
-          <Route path="/adminHome" element={<AdminHome />} />
-          <Route path="/productManagement" element={<ProductManagement />} />
-          <Route path="/tableManagement" element={<TableManagement />} />
-        </Routes>
+          <Routes>
+            <Route path="/adminHome" element={<AdminHome />} />
+            <Route path="/productManagement" element={<ProductManagement />} />
+            <Route path="/tableManagement" element={<TableManagement />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );

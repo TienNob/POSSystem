@@ -10,7 +10,7 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
       id="sidebar"
       className={openSidebarToggle ? "sidebar-responsive" : ""}
     >
-      <div className="sidebar-title">
+      <div className="sidebar-title d-flex justify-content-between ">
         <div className="sidebar-brand">COFFEE POS</div>
         <span className="icon close_icon" onClick={OpenSidebar}>
           X
@@ -18,21 +18,21 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
       </div>
 
       <ul className="sidebar-list">
-        <li className="sidebar-list-item">
-          <Link to="/adminHome">
+        <Link className="sidebar-link" to="/adminHome">
+          <li className="sidebar-list-item">
             <DashboardIcon className="icon" /> Dashboard
-          </Link>
-        </li>
-        <li className="sidebar-list-item">
-          <Link to="/productManagement">
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/productManagement">
+          <li className="sidebar-list-item">
             <LocalCafeIcon className="icon" /> Sản Phẩm
-          </Link>
-        </li>
-        <li className="sidebar-list-item">
-          <Link to="/tableManagement">
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/tableManagement">
+          <li className="sidebar-list-item">
             <TableBarIcon className="icon" /> Bàn
-          </Link>
-        </li>
+          </li>
+        </Link>
       </ul>
     </aside>
   );
