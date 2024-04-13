@@ -20,63 +20,34 @@ function AdminHome() {
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
   const [numberOfCustomers, setNumberOfCustomers] = useState(0);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [totalRevenue, setTotalRevenue] = useState(null);
 
   useEffect(() => {
-    fetch(`${LinkAPI}orders`)
+    fetch("http://localhost:8080/api/orders")
       .then((response) => response.json())
       .then((data) => {
-        setNumberOfOrders(data.totalElements);
+        setNumberOfOrders(data.length);
       })
       .catch((error) => console.error("Error fetching orders:", error));
 
-    fetch(`${LinkAPI}table`)
+    fetch("http://localhost:8080/api/table")
       .then((response) => response.json())
       .then((data) => {
         setNumberOfTables(data.length);
       })
       .catch((error) => console.error("Error fetching tables:", error));
-    fetch(`${LinkAPI}products`)
+    fetch("http://localhost:8080/api/products")
       .then((response) => response.json())
       .then((data) => {
         setNumberOfProducts(data.length);
       })
       .catch((error) => console.error("Error fetching customers:", error));
-    fetch(`${LinkAPI}customers`)
+    fetch("http://localhost:8080/api/customers")
       .then((response) => response.json())
       .then((data) => {
         setNumberOfCustomers(data.length);
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
-
-  useEffect(() => {
-    // Kiểm tra xem đã chọn cả hai ngày bắt đầu và kết thúc chưa
-    if (startDate && endDate) {
-      // Tạo URL với tham số truy vấn
-      const url = `http://localhost:8080/api/orders/thongke?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
-
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // Xử lý dữ liệu nhận được ở đây
-          setTotalRevenue(data.totalRevenue);
-        })
-        .catch((error) => {
-          console.error(
-            "There was a problem with your fetch operation:",
-            error
-          );
-        });
-    }
-  }, [startDate, endDate]);
 
   return (
     <main className="main-container">
@@ -114,20 +85,7 @@ function AdminHome() {
           <h2 className="mt-3 mb-3">{numberOfOrders}</h2>
         </div>
       </div>
-      <div>
-        <DatePicker
-          label="Chọn ngày bắt đầu"
-          value={startDate}
-          onChange={(date) => setStartDate(date)}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        <DatePicker
-          label="Chọn ngày kết thúc"
-          value={endDate}
-          onChange={(date) => setEndDate(date)}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </div>
+
       <div className="charts">
         <div className="chart-container" style={{ marginBottom: "70px" }}>
           <h3 className="chart-title">

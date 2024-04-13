@@ -13,6 +13,7 @@ import ProductList from "./component/ProductAPI.js";
 import OrderDetail from "./component/history/OrderDetail.js";
 import History from "./component/history/History.js";
 import Login from "./component/form/Login.js";
+import EmployeeManagement from "./component/manager/EmployeeManagement";
 function App() {
   const currentPath = window.location.pathname;
   const isAdmin =
@@ -73,6 +74,7 @@ function App() {
             <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/productManagement" element={<ProductManagement />} />
             <Route path="/tableManagement" element={<TableManagement />} />
+            <Route path="/employeeManagement" element={<EmployeeManagement />} />
           </Routes>
         </div>
       </div>

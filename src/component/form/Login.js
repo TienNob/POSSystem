@@ -18,7 +18,6 @@ function Login() {
       username: username,
       password: password,
     };
-    console.log(loginData);
     axios
       .post(`${API_BASE_URL}/Token`, loginData)
       .then((loginResponse) => {
@@ -26,6 +25,7 @@ function Login() {
 
         // Lưu token vào localStorage
         const token = loginResponse.data;
+          localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
         console.log("Token đã được lưu trong localStorage:", token);
 
