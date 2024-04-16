@@ -56,13 +56,13 @@ const headCells = [
         id: 'employeeId',
         numeric: false,
         disablePadding: true,
-        label: 'Employee ID',
+        label: 'ID',
     },
     {
         id: 'fullName',
         numeric: false,
         disablePadding: false,
-        label: 'Full Name',
+        label: 'Họ tên',
     },
     {
         id: 'cccd',
@@ -74,25 +74,25 @@ const headCells = [
         id: 'phoneNumber',
         numeric: false,
         disablePadding: false,
-        label: 'Phone Number',
+        label: 'SĐT',
     },
     {
         id: 'position',
         numeric: false,
         disablePadding: false,
-        label: 'Position',
+        label: 'Vị trí công việc',
     },
     {
         id: 'account',
         numeric: false,
         disablePadding: false,
-        label: 'Account',
+        label: 'Tên đăng nhâp',
     },
     {
         id: 'dob',
         numeric: false,
         disablePadding: false,
-        label: 'Date of Birth',
+        label: 'Ngày sinh',
     },
 ];
 
