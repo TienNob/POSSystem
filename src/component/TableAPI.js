@@ -25,8 +25,23 @@ function TableList() {
   const history = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    // Kiểm tra xem token có tồn tại không
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
+      history("/login");
+      return;
+    }
+
+    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
-      .get(`${LinkAPI}table`)
+      .get(`${LinkAPI}table`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         const customInfoStore =
           JSON.parse(localStorage.getItem("customerInfoArray")) || {};
@@ -38,9 +53,9 @@ function TableList() {
         setTables(updatedTables);
       })
       .catch((error) => {
-        console.error("Lỗi khi lấy dữ liệu bàn:", error);
+        console.error("Error fetching product data:", error);
       });
-  }, []);
+  }, [history, LinkAPI]);
 
   const handleTableClick = (tableID, status) => {
     if (status === true) {

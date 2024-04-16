@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Navbar, Container, Modal, Button, Form } from "react-bootstrap";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import Person2Icon from "@mui/icons-material/Person2";
 import MergeIcon from "@mui/icons-material/Merge";
 import Tooltip from "@mui/material/Tooltip";
-import axios from "axios";
 import OrderContent from "./total/OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../LinkAPI";
@@ -20,7 +21,7 @@ function TotalOder() {
   const [newTable, setNewTable] = useState("");
   const [showFormModal, setShowFormModal] = useState(false);
   const [mergeTable, setMergeTable] = useState(false);
-
+  const navigate = useNavigate();
   const customerInfoArray =
     JSON.parse(localStorage.getItem("customerInfoArray")) || {};
 
@@ -35,20 +36,46 @@ function TotalOder() {
     fetchTableIDFromLocalStorage();
   }, []);
 
-  useEffect(() => {
-    const fetchTableList = async () => {
-      try {
-        // Fetch the list of tables from the API
-        const response = await axios.get(`${LinkAPI}table`);
-        // Update the table list state with the fetched data
-        setTableList(response.data);
-      } catch (error) {
-        console.error("Error fetching table list:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTableList = async () => {
+  //     try {
+  //       // Fetch the list of tables from the API
+  //       const response = await axios.get(`${LinkAPI}table`);
+  //       // Update the table list state with the fetched data
+  //       setTableList(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching table list:", error);
+  //     }
+  //   };
 
-    fetchTableList();
-  }, []);
+  //   fetchTableList();
+  // }, []);
+
+  useEffect(() => {
+    // Lấy token từ localStorage
+    const token = localStorage.getItem("authToken");
+
+    // Kiểm tra xem token có tồn tại không
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
+      navigate("/login");
+      return;
+    }
+    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
+    axios
+      .get(`${LinkAPI}table`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setTableList(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [navigate, LinkAPI]);
 
   useEffect(() => {
     const storedTableID = localStorage.getItem("selectedTableID");

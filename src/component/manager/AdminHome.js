@@ -10,7 +10,6 @@ import { DatePicker } from "@mui/lab";
 import TextField from "@mui/material/TextField";
 
 import { ResponsiveContainer } from "recharts";
-import { LinkAPI } from "../../LinkAPI";
 
 import ChartProduct from "./chart/ChartProduct";
 import ChartRevenue from "./chart/ChartRevenue";
@@ -20,34 +19,51 @@ function AdminHome() {
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
   const [numberOfCustomers, setNumberOfCustomers] = useState(0);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/orders")
+    fetch("http://localhost:8080/api/orders", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setNumberOfOrders(data.length);
       })
       .catch((error) => console.error("Error fetching orders:", error));
 
-    fetch("http://localhost:8080/api/table")
+    fetch("http://localhost:8080/api/table", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setNumberOfTables(data.length);
       })
       .catch((error) => console.error("Error fetching tables:", error));
-    fetch("http://localhost:8080/api/products")
+    fetch("http://localhost:8080/api/products", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setNumberOfProducts(data.length);
       })
       .catch((error) => console.error("Error fetching customers:", error));
-    fetch("http://localhost:8080/api/customers")
+    fetch("http://localhost:8080/api/customers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setNumberOfCustomers(data.length);
       })
       .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+  }, [token]);
 
   return (
     <main className="main-container">

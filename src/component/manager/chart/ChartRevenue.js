@@ -4,11 +4,11 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Label,
 } from "recharts";
+import { LinkAPI } from "../../../LinkAPI";
 
 class ChartRevenue extends Component {
   constructor(props) {
@@ -19,7 +19,13 @@ class ChartRevenue extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/api/orders/doanhthuthang")
+    const token = localStorage.getItem("authToken");
+
+    fetch(`${LinkAPI}orders/doanhthuthang`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         const monthsData = this.populateMissingMonths(data);

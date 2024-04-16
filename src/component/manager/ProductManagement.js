@@ -9,6 +9,8 @@ function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
   const [products, setProducts] = useState([]);
+  const token = localStorage.getItem("authToken");
+
   const [newProduct, setNewProduct] = useState({
     productName: "",
     price: "",
@@ -25,14 +27,18 @@ function Admin() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await axios.get(`${LinkAPI}products`);
+        const response = await axios.get(`${LinkAPI}products`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     }
     fetchProducts();
-  }, []);
+  }, [token]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +64,12 @@ function Admin() {
         console.log(newProductWithImage);
         const response = await axios.post(
           `${LinkAPI}products`,
-          newProductWithImage
+          newProductWithImage,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setProducts([...products, response.data]);
         setNewProduct({
@@ -83,7 +94,12 @@ function Admin() {
     try {
       await axios.put(
         `${LinkAPI}products/${editingProduct.id}`,
-        editingProduct
+        editingProduct,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const updatedProducts = products.map((product) =>
         product.id === editingProduct.id ? editingProduct : product
@@ -103,7 +119,11 @@ function Admin() {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`${LinkAPI}products/${productId}`);
+      await axios.delete(`${LinkAPI}products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProducts(products.filter((product) => product.id !== productId));
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -146,7 +166,7 @@ function Admin() {
             <Col className="mt-4" xs="6" md="4" lg="3">
               <Card className="card-fix">
                 <Card.Img
-                  className="admin-card_body "
+                  className="admin-card_product"
                   height=""
                   variant="top"
                   src={imageArray[i]}

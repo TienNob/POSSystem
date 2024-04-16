@@ -8,11 +8,18 @@ import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 
 function Nav() {
+  const token = localStorage.getItem("authToken");
+
   const handleExportExcel = () => {
-    fetch(`${LinkAPI}orders/xuatExcel`)
+    fetch(`${LinkAPI}orders/xuatHTML`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (response.ok) {
-          return response.blob();
+          console.log(response);
+          return response.data;
         }
         throw new Error("Network response was not ok.");
       })

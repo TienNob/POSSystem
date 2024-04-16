@@ -7,6 +7,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import { LinkAPI } from "../../../LinkAPI";
 
 class ChartProduct extends Component {
   constructor(props) {
@@ -17,7 +18,12 @@ class ChartProduct extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:8080/api/orders/thucuongyeuthich")
+    const token = localStorage.getItem("authToken");
+    fetch(`${LinkAPI}orders/thucuongyeuthich`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         this.setState({ drinks: data });

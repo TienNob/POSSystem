@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 import { Form, Button } from "react-bootstrap";
@@ -25,22 +25,18 @@ function Login() {
 
         // Lưu token vào localStorage
         const token = loginResponse.data;
-          localStorage.removeItem("authToken");
+        localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
         console.log("Token đã được lưu trong localStorage:", token);
 
         // Điều hướng đến trang danh sách sản phẩm
-        navigate("/productlist");
+        navigate("/");
       })
       .catch((loginError) => {
         console.error("Lỗi khi đăng nhập:", loginError);
       });
-
-    // Thêm interceptor để thêm token vào tiêu đề Authorization
-  };
-  useEffect(() => {
-    // Lấy token từ localStorage
     const token = localStorage.getItem("authToken");
+    // Lấy token từ localStorage
 
     // Kiểm tra xem token có tồn tại không
     if (!token) {
@@ -48,8 +44,6 @@ function Login() {
       // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       navigate("/login");
     }
-
-    // Thêm token vào axios
     axios.interceptors.request.use(
       (config) => {
         if (token) {
@@ -66,7 +60,7 @@ function Login() {
         return Promise.reject(error);
       }
     );
-  }, [navigate]);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>

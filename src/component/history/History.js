@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, Table } from "react-bootstrap";
 import { LinkAPI } from "../../LinkAPI";
-
+import { useNavigate } from "react-router-dom";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import "./history.css";
@@ -13,7 +13,7 @@ function History() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-
+  const navigate = useNavigate();
   const handleClick = (id) => {
     if (id !== null && id !== undefined) {
       localStorage.setItem("selectedOrderID", JSON.stringify(id));
@@ -23,8 +23,24 @@ function History() {
   };
 
   useEffect(() => {
+    // Lấy token từ localStorage
+    const token = localStorage.getItem("authToken");
+
+    // Kiểm tra xem token có tồn tại không
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
+      navigate("/login");
+      return;
+    }
+
+    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
-      .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`)
+      .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         const sortedHistory = res.data.content.sort((a, b) => {
           console.log(new Date(b.orderDate) - new Date(a.orderDate));
@@ -32,13 +48,30 @@ function History() {
         });
         setHistory(sortedHistory);
         setTotalPages(res.data.totalPages);
-
-        console.log(sortedHistory);
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [currentPage, pageSize]);
+  }, [navigate, LinkAPI, currentPage, pageSize]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`)
+  //     .then((res) => {
+  //       const sortedHistory = res.data.content.sort((a, b) => {
+  //         console.log(new Date(b.orderDate) - new Date(a.orderDate));
+  //         return new Date(b.orderDate) - new Date(a.orderDate);
+  //       });
+  //       setHistory(sortedHistory);
+  //       setTotalPages(res.data.totalPages);
+
+  //       console.log(sortedHistory);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching product data:", error);
+  //     });
+  // }, [currentPage, pageSize]);
+
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage - 1);
   };

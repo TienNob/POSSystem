@@ -19,6 +19,7 @@ function App() {
   const isAdmin =
     currentPath === "/productManagement" ||
     currentPath === "/tableManagement" ||
+    currentPath === "/employeeManagement" ||
     currentPath === "/adminHome";
   const isStaf = currentPath === "/" || currentPath === "/productlist";
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -74,7 +75,10 @@ function App() {
             <Route path="/adminHome" element={<AdminHome />} />
             <Route path="/productManagement" element={<ProductManagement />} />
             <Route path="/tableManagement" element={<TableManagement />} />
-            <Route path="/employeeManagement" element={<EmployeeManagement />} />
+            <Route
+              path="/employeeManagement"
+              element={<EmployeeManagement />}
+            />
           </Routes>
         </div>
       </div>

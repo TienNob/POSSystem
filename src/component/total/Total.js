@@ -18,6 +18,8 @@ function Total({ totalPrice, products, tableID }) {
   const [splitInvoice, setSplitInvoice] = useState(null); // State để lưu hoá đơn được tách
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     // Retrieve customer's phone number from localStorage
     const storedCustomerInfoArray = JSON.parse(
@@ -129,28 +131,54 @@ function Total({ totalPrice, products, tableID }) {
     if (splitInvoice) {
       // Step 1: Tạo hoá đơn mới và gửi lên máy chủ
       axios
-        .post(`${LinkAPI}orders`, {
-          ban: { id: tableID },
-          orderDate: new Date().toLocaleString(),
-          totalAmount: splitInvoice.totalPrice,
-          phoneNumber: phoneNumber,
-          products: splitInvoice.products,
-        })
+        .post(
+          `${LinkAPI}orders`,
+          {
+            ban: { id: tableID },
+            orderDate: new Date().toLocaleString(),
+            totalAmount: splitInvoice.totalPrice,
+            phoneNumber: phoneNumber,
+            products: splitInvoice.products,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           console.log("Invoice data sent successfully:", response.data);
-          axios.post(`${LinkAPI}customers`, {}).then((response) => {
-            console.log("Invoice data sent successfully:", response.data);
-          });
+          axios
+            .post(
+              `${LinkAPI}customers`,
+
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log("Invoice data sent successfully:", response.data);
+            });
           const maxOrderId = response.data.id;
 
           // Step 2: Tạo các order-items cho hoá đơn mới
           const orderItemPromises = splitInvoice.products.map(
             (productToPay) => {
-              return axios.post(`${LinkAPI}order-items`, {
-                order: { id: maxOrderId },
-                product: { id: productToPay.id },
-                quantity: productToPay.quantity,
-              });
+              return axios.post(
+                `${LinkAPI}order-items`,
+                {
+                  order: { id: maxOrderId },
+                  product: { id: productToPay.id },
+                  quantity: productToPay.quantity,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
             }
           );
 
@@ -205,41 +233,61 @@ function Total({ totalPrice, products, tableID }) {
         totalAmount: totalPrice,
         phoneNumber: phoneNumber,
       };
-      axios.post(`${LinkAPI}orders`, invoiceData).then((response) => {
-        console.log("Invoice data sent successfully:", response.data);
-        axios.post(`${LinkAPI}customers`, customers).then((response) => {
+      axios
+        .post(`${LinkAPI}orders`, invoiceData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
           console.log("Invoice data sent successfully:", response.data);
-        });
+          axios
+            .post(`${LinkAPI}customers`, customers, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((response) => {
+              console.log("Invoice data sent successfully:", response.data);
+            });
 
-        axios
-          .get(`${LinkAPI}orders/max`)
-          .then((response) => {
-            const maxOrderId = response.data;
-            console.log(maxOrderId.value);
-            for (let i = 0; i < products.length; i++) {
-              const orderItem = {
-                order: { id: maxOrderId },
-                product: { id: products[i].id },
-                quantity: products[i].quantity,
-              };
-              // Gửi dữ liệu order item
-              axios
-                .post(`${LinkAPI}order-items`, orderItem)
-                .then((response) => {
-                  console.log(
-                    "Order item data sent successfully:",
-                    response.data
-                  );
-                })
-                .catch((error) => {
-                  console.error("Error sending order item data:", error);
-                });
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching max order id:", error);
-          });
-      });
+          axios
+            .get(`${LinkAPI}orders/max`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((response) => {
+              const maxOrderId = response.data;
+              console.log(maxOrderId);
+              for (let i = 0; i < products.length; i++) {
+                const orderItem = {
+                  order: { id: maxOrderId },
+                  product: { id: products[i].id },
+                  quantity: products[i].quantity,
+                };
+                // Gửi dữ liệu order item
+                axios
+                  .post(`${LinkAPI}order-items`, orderItem, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((response) => {
+                    console.log(
+                      "Order item data sent successfully:",
+                      response.data
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error sending order item data:", error);
+                  });
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching max order id:", error);
+            });
+        });
 
       if (productsForTable) {
         const updatedProducts = [];

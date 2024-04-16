@@ -9,22 +9,29 @@ import { LinkAPI } from "../../LinkAPI";
 function TableManagement() {
   const [showAddTable, setShowAddTable] = useState(false);
   const [tables, setTables] = useState([]);
+  const token = localStorage.getItem("authToken");
+
   const [newTable, setNewTable] = useState({
     id: "",
     status: true,
   });
+
   console.log(tables);
   useEffect(() => {
     async function fetchTables() {
       try {
-        const response = await axios.get(`${LinkAPI}table`);
+        const response = await axios.get(`${LinkAPI}table`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setTables(response.data);
       } catch (error) {
         console.error("Error fetching tables:", error);
       }
     }
     fetchTables();
-  }, []);
+  }, [token]);
   const handleInputChange = (e) => {
     const { value } = e.target;
     setNewTable({ ...newTable, id: parseInt(value) || "" });
@@ -40,8 +47,19 @@ function TableManagement() {
       if (filterTable.length >= 1) {
         return alert("Bàn đã tồn tại");
       }
-      const response = await axios.post(`${LinkAPI}table`, newTable);
-      setTables([...tables, response.data]);
+      console.log(newTable.id);
+      const response = await axios.post(
+        `${LinkAPI}table/${newTable.id}`,
+        newTable,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+
+      setTables([...tables, newTable]);
       setNewTable({ id: "", status: true });
       setShowAddTable(false);
     } catch (error) {
@@ -51,7 +69,11 @@ function TableManagement() {
 
   const handleDeleteTable = async (tableId) => {
     try {
-      await axios.delete(`${LinkAPI}table/${tableId}`);
+      await axios.delete(`${LinkAPI}table/${tableId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTables(tables.filter((table) => table.id !== tableId));
     } catch (error) {
       console.error("Error deleting table:", error);
@@ -81,11 +103,8 @@ function TableManagement() {
                 <Card.Body className="card-body_fix">
                   <Card.Title>Số bàn: {table.id}</Card.Title>
 
-                  <Card.Text className="blackColor">
-                    Trạng thái: {table.status}
-                  </Card.Text>
                   <Button
-                    className="me-2"
+                    className="me-2 mt-4"
                     onClick={() => handleDeleteTable(table.id)}
                   >
                     Xoá
