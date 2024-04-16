@@ -3,12 +3,16 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
+  const currentPath = window.location.pathname;
+
+  const navigate = useNavigate();
 
   const handleExportExcel = () => {
     fetch(`${LinkAPI}orders/xuatHTML`, {
@@ -45,15 +49,23 @@ function Nav() {
       });
   };
 
+  const handleBack = () => {
+    if (currentPath === "/") {
+      return;
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
         <Container>
-          <Link to="/">
-            <Navbar.Brand>
-              <ArrowBackIcon sx={{ fontSize: 30 }} className="NavBack" />
-            </Navbar.Brand>
-          </Link>
+          {/* <Link to="/"> */}
+          <Navbar.Brand onClick={handleBack}>
+            <ArrowBackIcon sx={{ fontSize: 30 }} className="NavBack" />
+          </Navbar.Brand>
+          {/* </Link> */}
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>

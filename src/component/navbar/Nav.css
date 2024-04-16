@@ -8,3 +8,10 @@
 .Nav {
   background-color: #050a19 !important;
 }
+.navbar-brand > .NavBack {
+  cursor: pointer;
+  transition: all ease-in 0.3s;
+}
+.NavBack:hover {
+  opacity: 0.6;
+}

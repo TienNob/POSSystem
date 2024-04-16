@@ -117,8 +117,6 @@ function History() {
       <div className="button-container mt-4">
         <Stack spacing={2}>
           <Pagination
-            showFirstButton
-            showLastButton
             className="history-pagination"
             count={totalPages}
             color="primary"
