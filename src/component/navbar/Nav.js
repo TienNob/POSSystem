@@ -1,7 +1,14 @@
 import React from "react";
+import { useState } from "react";
+import { pink } from "@mui/material/colors";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
+import Logout from "@mui/icons-material/Logout";
+
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -10,7 +17,9 @@ import { LinkAPI } from "../../LinkAPI";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
+  const userName = localStorage.getItem("userName");
   const currentPath = window.location.pathname;
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
 
@@ -48,7 +57,12 @@ function Nav() {
         console.error("Error exporting Excel:", error);
       });
   };
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userName");
 
+    navigate("/login");
+  };
   const handleBack = () => {
     if (currentPath === "/") {
       return;
@@ -56,11 +70,17 @@ function Nav() {
       navigate(-1);
     }
   };
-
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
-        <Container>
+        <Container fluid>
           {/* <Link to="/"> */}
           <Navbar.Brand onClick={handleBack}>
             <ArrowBackIcon sx={{ fontSize: 30 }} className="NavBack" />
@@ -68,17 +88,69 @@ function Nav() {
           {/* </Link> */}
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-              <Link to="/history">
+            <Navbar.Text className="d-flex">
+              <Link className="nav-order" to="/history">
                 <Button className="me-2" variant="primary">
                   Hoá đơn
                 </Button>
               </Link>
               <Button onClick={handleExportExcel}>Xuất báo cáo ngày</Button>
+
+              <Avatar
+                className="ms-4 nav-avatar"
+                onClick={handleClick}
+                sx={{ width: 36, height: 36, bgcolor: pink[500] }}
+              >
+                {userName[0]}
+              </Avatar>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem className="blackColor" onClick={handleClose}>
+          <Avatar /> {userName}
+        </MenuItem>
+
+        <MenuItem onClick={handleLogout} className="blackColor">
+          <Logout className="blackColor me-2" fontSize="small" />
+          Logout
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

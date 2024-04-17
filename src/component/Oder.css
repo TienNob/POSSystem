@@ -1,4 +1,5 @@
-.blackColor {
+.blackColor,
+.blackColor > path {
   color: #050a19 !important;
 }
 .totalOder {

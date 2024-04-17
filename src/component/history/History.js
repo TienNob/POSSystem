@@ -52,7 +52,7 @@ function History() {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [navigate, LinkAPI, currentPage, pageSize]);
+  }, [navigate, currentPage, pageSize]);
 
   // useEffect(() => {
   //   axios

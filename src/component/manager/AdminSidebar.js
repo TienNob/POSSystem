@@ -3,44 +3,49 @@ import { Link } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TableBarIcon from "@mui/icons-material/TableBar";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount"; // Thêm icon cho quản lí nhân viên
-
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import MoodIcon from "@mui/icons-material/Mood";
 function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
   return (
-      <aside
-          id="sidebar"
-          className={openSidebarToggle ? "sidebar-responsive" : ""}
-      >
-        <div className="sidebar-title d-flex justify-content-between ">
-          <div className="sidebar-brand">COFFEE POS</div>
-          <span className="icon close_icon" onClick={OpenSidebar}>
+    <aside
+      id="sidebar"
+      className={openSidebarToggle ? "sidebar-responsive" : ""}
+    >
+      <div className="sidebar-title d-flex justify-content-between ">
+        <div className="sidebar-brand">COFFEE POS</div>
+        <span className="icon close_icon" onClick={OpenSidebar}>
           X
         </span>
-        </div>
+      </div>
 
-        <ul className="sidebar-list">
-          <Link className="sidebar-link" to="/adminHome">
-            <li className="sidebar-list-item">
-              <DashboardIcon className="icon" /> Dashboard
-            </li>
-          </Link>
-          <Link className="sidebar-link" to="/productManagement">
-            <li className="sidebar-list-item">
-              <LocalCafeIcon className="icon" /> Sản Phẩm
-            </li>
-          </Link>
-          <Link className="sidebar-link" to="/tableManagement">
-            <li className="sidebar-list-item">
-              <TableBarIcon className="icon" /> Bàn
-            </li>
-          </Link>
-          <Link className="sidebar-link" to="/employeeManagement"> {/* Liên kết đến trang quản lí nhân viên */}
-            <li className="sidebar-list-item">
-              <SupervisorAccountIcon className="icon" /> Nhân Viên
-            </li>
-          </Link>
-        </ul>
-      </aside>
+      <ul className="sidebar-list">
+        <Link className="sidebar-link" to="/adminHome">
+          <li className="sidebar-list-item">
+            <DashboardIcon className="icon" /> Dashboard
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/productManagement">
+          <li className="sidebar-list-item">
+            <LocalCafeIcon className="icon" /> Sản Phẩm
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/tableManagement">
+          <li className="sidebar-list-item">
+            <TableBarIcon className="icon" /> Bàn
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/employeeManagement">
+          <li className="sidebar-list-item">
+            <SupervisorAccountIcon className="icon" /> Nhân Viên
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/customerManagement">
+          <li className="sidebar-list-item">
+            <MoodIcon className="icon" /> Khách hàng
+          </li>
+        </Link>
+      </ul>
+    </aside>
   );
 }
 

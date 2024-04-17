@@ -15,3 +15,14 @@
 .NavBack:hover {
   opacity: 0.6;
 }
+
+.nav-order {
+  display: contents;
+}
+.nav-avatar {
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+.nav-avatar:hover {
+  opacity: 0.7;
+}

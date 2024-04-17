@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import "./App.css";
@@ -14,16 +14,19 @@ import OrderDetail from "./component/history/OrderDetail.js";
 import History from "./component/history/History.js";
 import Login from "./component/form/Login.js";
 import EmployeeManagement from "./component/manager/EmployeeManagement";
+import CustomerManagement from "./component/manager/CustomerManagement";
 function App() {
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isLogin = currentPath === "/login";
   const isAdmin =
     currentPath === "/productManagement" ||
+    currentPath === "/customerManagement" ||
     currentPath === "/tableManagement" ||
     currentPath === "/employeeManagement" ||
     currentPath === "/adminHome";
   const isStaf = currentPath === "/" || currentPath === "/productlist";
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
-  // const isLogin = (currentPath = "/login");
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
@@ -37,7 +40,7 @@ function App() {
 
       <div>
         <div>
-          {!isAdmin && isStaf && <Nab />}
+          {(!isAdmin || !isLogin) && isStaf && <Nab />}
 
           {!isAdmin && (
             <Row className="margin-space">
@@ -78,6 +81,10 @@ function App() {
             <Route
               path="/employeeManagement"
               element={<EmployeeManagement />}
+            />
+            <Route
+              path="/customerManagement"
+              element={<CustomerManagement />}
             />
           </Routes>
         </div>

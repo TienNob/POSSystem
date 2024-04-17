@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { Form, Button } from "react-bootstrap";
+// import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import "./login.css";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
-  const API_BASE_URL = "http://localhost:8080/auth";
+  const API_BASE_URL = "http://localhost:8080/auth/";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +30,7 @@ function Login() {
       password: password,
     };
     axios
-      .post(`${API_BASE_URL}/Token`, loginData)
+      .post(`${API_BASE_URL}Token`, loginData)
       .then((loginResponse) => {
         console.log("Đăng nhập thành công:", loginResponse.data);
 
@@ -27,6 +38,7 @@ function Login() {
         const token = loginResponse.data;
         localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
+        localStorage.setItem("userName", loginData.username);
         console.log("Token đã được lưu trong localStorage:", token);
 
         // Điều hướng đến trang danh sách sản phẩm
@@ -63,31 +75,65 @@ function Login() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formUsername">
-        <Form.Label>Tên đăng nhập</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Nhập tên đăng nhập"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </Form.Group>
+    // <ThemeProvider theme={defaultTheme}>
+    <Container component="main" maxWidth="xs">
+      <Box
+        className="login-form"
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Đăng nhập
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            className="login-name"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Tên đăng nhập"
+            name="name"
+            autoComplete="name"
+            autoFocus
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-      <Form.Group controlId="formPassword">
-        <Form.Label>Mật khẩu</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Nhập mật khẩu"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Form.Group>
-
-      <Button variant="primary" type="submit">
-        Đăng nhập
-      </Button>
-    </Form>
+          <TextField
+            className="login-name"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Mật khẩu"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Nhớ tên tài khoản"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Đăng nhập
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+    // </ThemeProvider>
   );
 }
 

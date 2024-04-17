@@ -6,14 +6,12 @@ import TableBarIcon from "@mui/icons-material/TableBar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PieChartIcon from "@mui/icons-material/PieChart";
-import { DatePicker } from "@mui/lab";
-import TextField from "@mui/material/TextField";
 
 import { ResponsiveContainer } from "recharts";
 
 import ChartProduct from "./chart/ChartProduct";
 import ChartRevenue from "./chart/ChartRevenue";
-
+import { LinkAPI } from "../../LinkAPI";
 function AdminHome() {
   const [numberOfOrders, setNumberOfOrders] = useState(0);
   const [numberOfTables, setNumberOfTables] = useState(0);
@@ -22,18 +20,19 @@ function AdminHome() {
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/orders", {
+    fetch(`${LinkAPI}orders`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
+
       .then((data) => {
-        setNumberOfOrders(data.length);
+        setNumberOfOrders(data.content.length);
       })
       .catch((error) => console.error("Error fetching orders:", error));
 
-    fetch("http://localhost:8080/api/table", {
+    fetch(`${LinkAPI}table`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +42,7 @@ function AdminHome() {
         setNumberOfTables(data.length);
       })
       .catch((error) => console.error("Error fetching tables:", error));
-    fetch("http://localhost:8080/api/products", {
+    fetch(`${LinkAPI}products`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -53,7 +52,7 @@ function AdminHome() {
         setNumberOfProducts(data.length);
       })
       .catch((error) => console.error("Error fetching customers:", error));
-    fetch("http://localhost:8080/api/customers", {
+    fetch(`${LinkAPI}customers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
