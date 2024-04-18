@@ -50,18 +50,7 @@ function ProductList() {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [navigate, LinkAPI]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${LinkAPI}products`)
-  //     .then((res) => {
-  //       setProducts(res.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching product data:", error);
-  //     });
-  // }, []);
+  }, [navigate]);
 
   const addProductToTotal = (product) => {
     const selectedTableID = localStorage.getItem("selectedTableID"); // Lấy ID của bàn từ local storage
@@ -98,7 +87,7 @@ function ProductList() {
       <TotalOder />
       <Row>
         {products.map((product, i) => (
-          <Col key={product.id} lg="4" className="mt-4">
+          <Col key={product.id} lg="4" md="4" xs="6" className="mt-4">
             <Card
               onClick={() => addProductToTotal(product)}
               style={{

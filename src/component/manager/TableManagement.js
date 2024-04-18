@@ -3,7 +3,7 @@ import axios from "axios";
 import "./admin.css"; // Import CSS file
 
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../LinkAPI";
 
 function TableManagement() {
@@ -82,23 +82,22 @@ function TableManagement() {
 
   return (
     <div className="d-flex flex-column align-items-center main-container">
-      <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
-        Quản lý bàn
-      </h1>
       <div
-        className="product-card-1 product-card mt-3 mb-1"
-        onClick={() => setShowAddTable(true)}
+        className="d-flex justify-content-between align-items-center"
+        style={{ color: "white", width: "100%" }}
       >
-        <div className="card-btn-add me-2">
-          <ControlPointIcon className="btn-add" />
-        </div>
-        <h5 className="mb-0"> Thêm bàn</h5>
+        <h3 style={{ color: "white" }}>Quản lý Bàn</h3>
+
+        <Button onClick={() => setShowAddTable(true)}>
+          <AddIcon className="me-1" />
+          Thêm bàn
+        </Button>
       </div>
 
       <Container>
         <Row>
           {tables.map((table, i) => (
-            <Col className="mt-4" xs="6" md="4" lg="3" key={table.id}>
+            <Col className="mt-4" xs="4" md="3" lg="3" key={table.id}>
               <Card className="card-fix">
                 <Card.Body className="card-body_fix">
                   <Card.Title>Số bàn: {table.id}</Card.Title>

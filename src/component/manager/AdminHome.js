@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from "react";
-
+import axios from "axios";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TableBarIcon from "@mui/icons-material/TableBar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PieChartIcon from "@mui/icons-material/PieChart";
-
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { ResponsiveContainer } from "recharts";
-
 import ChartProduct from "./chart/ChartProduct";
 import ChartRevenue from "./chart/ChartRevenue";
 import { LinkAPI } from "../../LinkAPI";
+import "./admin.css";
+
 function AdminHome() {
   const [numberOfOrders, setNumberOfOrders] = useState(0);
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
   const [numberOfCustomers, setNumberOfCustomers] = useState(0);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [revenueData, setRevenueData] = useState([]);
+  const [productData, setProductData] = useState([]);
+
   const token = localStorage.getItem("authToken");
 
+  // Lấy dữ liệu tổng quan
   useEffect(() => {
     fetch(`${LinkAPI}orders`, {
       headers: {
@@ -26,7 +36,6 @@ function AdminHome() {
       },
     })
       .then((response) => response.json())
-
       .then((data) => {
         setNumberOfOrders(data.content.length);
       })
@@ -42,6 +51,7 @@ function AdminHome() {
         setNumberOfTables(data.length);
       })
       .catch((error) => console.error("Error fetching tables:", error));
+
     fetch(`${LinkAPI}products`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -51,7 +61,8 @@ function AdminHome() {
       .then((data) => {
         setNumberOfProducts(data.length);
       })
-      .catch((error) => console.error("Error fetching customers:", error));
+      .catch((error) => console.error("Error fetching products:", error));
+
     fetch(`${LinkAPI}customers`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,8 +72,44 @@ function AdminHome() {
       .then((data) => {
         setNumberOfCustomers(data.length);
       })
-      .catch((error) => console.error("Error fetching products:", error));
+      .catch((error) => console.error("Error fetching customers:", error));
   }, [token]);
+
+  // Lấy dữ liệu doanh thu và sản phẩm yêu thích khi phạm vi ngày thay đổi
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      fetchRevenueData(dateRange[0], dateRange[1]);
+    }
+  }, [dateRange]);
+
+  // Hàm lấy dữ liệu doanh thu và sản phẩm yêu thích
+  const fetchRevenueData = async (startDate, endDate) => {
+    try {
+      const response = await axios.post(
+        `${LinkAPI}orders/thongke`,
+        {
+          startDate: startDate.format("YYYY-MM-DD"),
+          endDate: endDate.format("YYYY-MM-DD"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = response.data;
+
+      // Cập nhật dữ liệu cho các biểu đồ
+      setRevenueData(data.revenue);
+      setProductData(data.product);
+    } catch (error) {
+      console.error("Error fetching revenue data:", error);
+    }
+  };
+
+  const handleDateRangeChange = (newDateRange) => {
+    setDateRange(newDateRange);
+  };
 
   return (
     <main className="main-container">
@@ -101,14 +148,34 @@ function AdminHome() {
         </div>
       </div>
 
-      <div className="charts">
+      <div className="admin-LocalizationProvider">
+        <h3 className="chart-title mb-3">
+          <EditCalendarIcon className="me-2" />
+          Phạm vi thống kê
+        </h3>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoItem component="DateRangePicker">
+            <DateRangePicker
+              value={dateRange}
+              onChange={handleDateRangeChange}
+              className="admin-datePicker"
+              localeText={{
+                start: "",
+                end: "",
+              }}
+            />
+          </DemoItem>
+        </LocalizationProvider>
+      </div>
+
+      <div className="charts mt-4">
         <div className="chart-container" style={{ marginBottom: "70px" }}>
           <h3 className="chart-title">
             <BarChartIcon className="me-2" />
             Doanh thu
           </h3>
           <ResponsiveContainer width="100%" height={300}>
-            <ChartRevenue />
+            <ChartRevenue data={revenueData} />
           </ResponsiveContainer>
         </div>
 
@@ -118,7 +185,7 @@ function AdminHome() {
             Thức uống yêu thích
           </h3>
           <ResponsiveContainer width="100%" height={300}>
-            <ChartProduct />
+            <ChartProduct data={productData} />
           </ResponsiveContainer>
         </div>
       </div>

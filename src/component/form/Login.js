@@ -45,6 +45,7 @@ function Login() {
         navigate("/");
       })
       .catch((loginError) => {
+        alert("Tài khoản chưa được cấp quyền, vui lòng nhập lại");
         console.error("Lỗi khi đăng nhập:", loginError);
       });
     const token = localStorage.getItem("authToken");

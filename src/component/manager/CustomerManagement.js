@@ -180,7 +180,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          THÔNG TIN KHÁCH HÀNG
+          Thông tin khách hàng
         </Typography>
       )}
 

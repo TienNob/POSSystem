@@ -25,7 +25,11 @@ function App() {
     currentPath === "/tableManagement" ||
     currentPath === "/employeeManagement" ||
     currentPath === "/adminHome";
-  const isStaf = currentPath === "/" || currentPath === "/productlist";
+  const isStaf =
+    currentPath === "/" ||
+    currentPath === "/productlist" ||
+    currentPath === "/history" ||
+    currentPath === "/orderdetail";
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);

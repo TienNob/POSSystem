@@ -11,7 +11,7 @@ import OrderContent from "./total/OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../LinkAPI";
 
-function TotalOder() {
+function TotalOder({ openDrawer }) {
   const [tableID, setTableID] = useState(null);
   const [tableList, setTableList] = useState([]);
   const [showTableList, setShowTableList] = useState(false);
@@ -22,6 +22,8 @@ function TotalOder() {
   const [showFormModal, setShowFormModal] = useState(false);
   const [mergeTable, setMergeTable] = useState(false);
   const navigate = useNavigate();
+  const totalOderClass = openDrawer ? "totalOder show" : "totalOder";
+
   const customerInfoArray =
     JSON.parse(localStorage.getItem("customerInfoArray")) || {};
 
@@ -35,21 +37,6 @@ function TotalOder() {
 
     fetchTableIDFromLocalStorage();
   }, []);
-
-  // useEffect(() => {
-  //   const fetchTableList = async () => {
-  //     try {
-  //       // Fetch the list of tables from the API
-  //       const response = await axios.get(`${LinkAPI}table`);
-  //       // Update the table list state with the fetched data
-  //       setTableList(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching table list:", error);
-  //     }
-  //   };
-
-  //   fetchTableList();
-  // }, []);
 
   useEffect(() => {
     // Lấy token từ localStorage
@@ -75,7 +62,7 @@ function TotalOder() {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [navigate, LinkAPI]);
+  }, [navigate]);
 
   useEffect(() => {
     const storedTableID = localStorage.getItem("selectedTableID");
@@ -227,7 +214,7 @@ function TotalOder() {
   };
 
   return (
-    <div className="totalOder">
+    <div className={totalOderClass}>
       <Navbar className="totalNav">
         <Container>
           <div>

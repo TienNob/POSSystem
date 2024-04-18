@@ -1,4 +1,3 @@
-//EmployeeManagement
 import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
@@ -193,7 +192,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} Đã chọn
         </Typography>
       ) : (
         <Typography
@@ -203,7 +202,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Employee List
+          Thông tin nhân viên
         </Typography>
       )}
 
@@ -324,20 +323,28 @@ export default function EnhancedTable() {
 
   return (
     <Box className="main-container" sx={{ width: "100%" }}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAddEmployee}
-        >
-          Thêm nhân viên
-        </Button>
-        <Modal open={isModalOpen} onClose={closeModal}></Modal>
-      </Box>
-
       <Paper sx={{ width: "100%", mb: 2 }}>
+        <Box
+          className="me-2"
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mb: 1,
+            pt: 3,
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleAddEmployee}
+          >
+            Thêm nhân viên
+          </Button>
+          <Modal open={isModalOpen} onClose={closeModal}></Modal>
+        </Box>
         <EnhancedTableToolbar numSelected={selected.length} />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

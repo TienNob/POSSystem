@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./admin.css"; // Import CSS file
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../LinkAPI";
-
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -147,19 +146,17 @@ function Admin() {
 
   return (
     <div className="d-flex flex-column align-items-center main-container">
-      <h1 style={{ color: "white", textAlign: "center", marginTop: "20px" }}>
-        Quản lý sản phẩm
-      </h1>
       <div
-        className="product-card-1 product-card mt-3 mb-1"
-        onClick={() => setShowAddProduct(true)}
+        className="d-flex justify-content-between align-items-center"
+        style={{ color: "white", width: "100%" }}
       >
-        <div className="card-btn-add me-2">
-          <ControlPointIcon className="btn-add" />
-        </div>
-        <h5 className="mb-0"> Thêm sản phẩm</h5>
-      </div>
+        <h3 style={{ color: "white" }}>Quản lý sản phẩm</h3>
 
+        <Button onClick={() => setShowAddProduct(true)}>
+          <AddIcon className="me-1" />
+          Thêm sản phẩm
+        </Button>
+      </div>
       <Container>
         <Row>
           {products.map((product, i) => (
@@ -177,12 +174,15 @@ function Admin() {
                     Giá: {product.price}k
                   </Card.Text>
                   <Button
-                    className="me-2"
+                    className="me-2 mt-1"
                     onClick={() => handleDeleteProduct(product.id)}
                   >
                     Xoá
                   </Button>
-                  <Button onClick={() => handleEditProduct(product.id)}>
+                  <Button
+                    className="mt-1"
+                    onClick={() => handleEditProduct(product.id)}
+                  >
                     Sửa
                   </Button>
                 </Card.Body>

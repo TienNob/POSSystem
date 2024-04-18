@@ -26,3 +26,11 @@
 .nav-avatar:hover {
   opacity: 0.7;
 }
+div > .nav-drawer_icon {
+  display: none;
+  cursor: pointer;
+  transition: all ease-in 0.3s;
+}
+.nav-drawer_icon:hover {
+  opacity: 0.7;
+}

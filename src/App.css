@@ -22,3 +22,15 @@
 .fillter {
   backdrop-filter: brightness(0.7);
 }
+@media (max-width: 767px) {
+  .totalOder {
+    display: none;
+  }
+
+  .totalOder.show {
+    display: block;
+  }
+  nav > div > .nav-drawer_icon {
+    display: block;
+  }
+}

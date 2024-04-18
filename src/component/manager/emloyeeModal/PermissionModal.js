@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import {
   Dialog,
   DialogTitle,
@@ -12,6 +13,7 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
+const API_BASE_URL = "http://localhost:8080/auth/";
 
 const PermissionModal = ({ open, onClose }) => {
   const [userData, setUserData] = useState({
@@ -32,6 +34,7 @@ const PermissionModal = ({ open, onClose }) => {
     e.preventDefault();
     try {
       console.log("Submit successfully", userData);
+      axios.post(`${API_BASE_URL}addNewUser`, userData);
       setUserData({
         username: "",
         password: "",
@@ -71,10 +74,10 @@ const PermissionModal = ({ open, onClose }) => {
           <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Quyền</InputLabel>
             <Select
-              value={userData.role}
+              value={userData.roles}
               onChange={handleChange}
               label="Role"
-              name="role"
+              name="roles"
             >
               <MenuItem value="ROLE_USER" sx={{ color: "black" }}>
                 ROLE_USER

@@ -8,13 +8,14 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "@mui/icons-material/Logout";
-
+import { Drawer } from "@mui/material";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
-
+import TotalOder from "../TotalOder";
 function Nav() {
   const token = localStorage.getItem("authToken");
   const userName = localStorage.getItem("userName");
@@ -22,7 +23,11 @@ function Nav() {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = React.useState(false);
 
+  const toggleDrawer = (newOpen) => () => {
+    setOpenDrawer(newOpen);
+  };
   const handleExportExcel = () => {
     fetch(`${LinkAPI}orders/xuatHTML`, {
       headers: {
@@ -81,11 +86,17 @@ function Nav() {
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
         <Container fluid>
-          {/* <Link to="/"> */}
           <Navbar.Brand onClick={handleBack}>
             <ArrowBackIcon sx={{ fontSize: 30 }} className="NavBack" />
           </Navbar.Brand>
-          {/* </Link> */}
+          <ShoppingBasketIcon
+            className="nav-drawer_icon me-2"
+            onClick={toggleDrawer(true)}
+          />
+          <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+            <TotalOder openDrawer={openDrawer} />
+          </Drawer>
+
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text className="d-flex">
