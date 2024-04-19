@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { pink } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -21,6 +22,7 @@ function Nav() {
   const userName = localStorage.getItem("userName");
   const currentPath = window.location.pathname;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [fullName, setFullName] = useState("");
 
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = React.useState(false);
@@ -28,6 +30,28 @@ function Nav() {
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      navigate("/");
+      return;
+    }
+    axios
+      .get(`${LinkAPI}employees/account?account=${userName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setFullName(res.data.fullName);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [navigate]);
+
   const handleExportExcel = () => {
     fetch(`${LinkAPI}orders/xuatHTML`, {
       headers: {
@@ -112,7 +136,7 @@ function Nav() {
                 onClick={handleClick}
                 sx={{ width: 36, height: 36, bgcolor: pink[500] }}
               >
-                {userName[0]}
+                {fullName[0]}
               </Avatar>
             </Navbar.Text>
           </Navbar.Collapse>
@@ -154,7 +178,7 @@ function Nav() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem className="blackColor" onClick={handleClose}>
-          <Avatar /> {userName}
+          <Avatar /> {fullName}
         </MenuItem>
 
         <MenuItem onClick={handleLogout} className="blackColor">

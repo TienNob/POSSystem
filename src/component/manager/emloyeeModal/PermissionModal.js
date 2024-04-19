@@ -8,14 +8,10 @@ import {
   DialogActions,
   Button,
   TextField,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
 } from "@mui/material";
 const API_BASE_URL = "http://localhost:8080/auth/";
 
-const PermissionModal = ({ open, onClose }) => {
+const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
@@ -40,6 +36,7 @@ const PermissionModal = ({ open, onClose }) => {
         password: "",
         roles: "ROLE_USER",
       });
+      setPermissionUserData(userData);
 
       onClose();
     } catch (error) {
@@ -60,6 +57,7 @@ const PermissionModal = ({ open, onClose }) => {
             value={userData.username}
             onChange={handleChange}
             margin="normal"
+            required
           />
           <TextField
             fullWidth
@@ -71,19 +69,7 @@ const PermissionModal = ({ open, onClose }) => {
             onChange={handleChange}
             margin="normal"
           />
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Quyền</InputLabel>
-            <Select
-              value={userData.roles}
-              onChange={handleChange}
-              label="Role"
-              name="roles"
-            >
-              <MenuItem value="ROLE_USER" sx={{ color: "black" }}>
-                ROLE_USER
-              </MenuItem>
-            </Select>
-          </FormControl>
+
           <DialogActions>
             <Button type="submit" sx={{ color: "white" }}>
               Xác nhận

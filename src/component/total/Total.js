@@ -309,10 +309,10 @@ function Total({ totalPrice, products, tableID }) {
         );
         setShowModal(false);
 
-        if (currentPath === "/") {
+        if (currentPath === "/tableList") {
           window.location.reload();
         } else {
-          navigate("/");
+          navigate("/tableList");
         }
       }
     }

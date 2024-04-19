@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import {
@@ -13,12 +13,10 @@ import {
   Select,
   MenuItem,
   Grid,
-  Box,
 } from "@mui/material";
 import { LinkAPI } from "../../../LinkAPI";
 import PermissionModal from "./PermissionModal";
 const token = localStorage.getItem("authToken");
-
 const Modal = ({ open, onClose }) => {
   const [employeeData, setEmployeeData] = useState({
     fullName: "",
@@ -29,15 +27,23 @@ const Modal = ({ open, onClose }) => {
     dob: null,
   });
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
-
+  const [permissionUserData, setPermissionUserData] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setEmployeeData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
+  useEffect(() => {
+    if (permissionUserData) {
+      setEmployeeData((prevData) => ({
+        ...prevData,
+        account: permissionUserData.username,
+      }));
+    }
+  }, [permissionUserData]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -57,6 +63,7 @@ const Modal = ({ open, onClose }) => {
         dob: null,
       });
       onClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error adding new employee:", error);
     }
@@ -68,19 +75,6 @@ const Modal = ({ open, onClose }) => {
         <DialogTitle>Thêm nhân viên</DialogTitle>
 
         <DialogContent>
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              variant="outlined"
-              onClick={() => setPermissionModalOpen(true)}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                color: "white",
-              }}
-            >
-              Cấp quyền
-            </Button>
-          </Box>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={4}>
@@ -145,7 +139,7 @@ const Modal = ({ open, onClose }) => {
                   label="Tên tài khoản"
                   variant="outlined"
                   name="account"
-                  value={employeeData.account}
+                  value={permissionUserData ? permissionUserData.username : ""}
                   onChange={handleChange}
                   margin="normal"
                 />
@@ -182,6 +176,7 @@ const Modal = ({ open, onClose }) => {
       <PermissionModal
         open={permissionModalOpen}
         onClose={() => setPermissionModalOpen(false)}
+        setPermissionUserData={setPermissionUserData}
       />
     </>
   );
