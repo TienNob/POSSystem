@@ -135,7 +135,7 @@ function Total({ totalPrice, products, tableID }) {
           `${LinkAPI}orders`,
           {
             ban: { id: tableID },
-            orderDate: new Date().toLocaleString(),
+            orderDate: new Date(),
             totalAmount: splitInvoice.totalPrice,
             phoneNumber: phoneNumber,
             products: splitInvoice.products,
@@ -151,6 +151,7 @@ function Total({ totalPrice, products, tableID }) {
           axios
             .post(
               `${LinkAPI}customers`,
+              customers,
 
               {
                 headers: {
@@ -213,10 +214,10 @@ function Total({ totalPrice, products, tableID }) {
 
               setShowModal(false);
               console.log(currentPath);
-              if (currentPath === "/") {
+              if (currentPath === "/tableList") {
                 window.location.reload();
               } else {
-                navigate("/");
+                navigate("/tableList");
               }
             })
             .catch((error) => {

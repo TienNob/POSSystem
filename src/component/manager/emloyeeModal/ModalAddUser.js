@@ -140,6 +140,7 @@ const Modal = ({ open, onClose }) => {
               </Grid>
               <Grid item xs={4}>
                 <TextField
+                  onClick={() => setPermissionModalOpen(true)}
                   fullWidth
                   label="Tên tài khoản"
                   variant="outlined"

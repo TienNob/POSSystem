@@ -66,10 +66,10 @@ function Nav() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
 
-    navigate("/login");
+    navigate("/");
   };
   const handleBack = () => {
-    if (currentPath === "/") {
+    if (currentPath === "/tableList") {
       return;
     } else {
       navigate(-1);

@@ -31,7 +31,7 @@ function TableList() {
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
       // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
-      history("/login");
+      history("/");
       return;
     }
 

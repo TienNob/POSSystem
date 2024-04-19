@@ -42,7 +42,7 @@ function Login() {
         console.log("Token đã được lưu trong localStorage:", token);
 
         // Điều hướng đến trang danh sách sản phẩm
-        navigate("/");
+        navigate("/tableList");
       })
       .catch((loginError) => {
         alert("Tài khoản chưa được cấp quyền, vui lòng nhập lại");

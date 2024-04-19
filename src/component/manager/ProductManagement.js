@@ -223,11 +223,11 @@ function Admin() {
                 onChange={handleInputChange}
               />
               <div className="btn-form">
-                <button className="me-2" type="submit">
-                  Thêm
-                </button>
                 <button type="button" onClick={() => setShowAddProduct(false)}>
                   Huỷ
+                </button>
+                <button className="ms-2" type="submit">
+                  Thêm
                 </button>
               </div>
             </form>
@@ -266,11 +266,11 @@ function Admin() {
                 onChange={handleInputChange}
               />
               <div className="btn-form">
-                <button className="me-2" type="submit">
-                  Thêm
-                </button>
                 <button type="button" onClick={() => setShowEditProduct(false)}>
                   Huỷ
+                </button>
+                <button className="ms-2" type="submit">
+                  Thay đổi
                 </button>
               </div>
             </form>

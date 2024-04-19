@@ -82,12 +82,6 @@ const PermissionModal = ({ open, onClose }) => {
               <MenuItem value="ROLE_USER" sx={{ color: "black" }}>
                 ROLE_USER
               </MenuItem>
-              <MenuItem value="ROLE_ADMIN" sx={{ color: "black" }}>
-                ROLE_ADMIN
-              </MenuItem>
-              <MenuItem value="ROLE_STAFF" sx={{ color: "black" }}>
-                ROLE_STAFF
-              </MenuItem>
             </Select>
           </FormControl>
           <DialogActions>

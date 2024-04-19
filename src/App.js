@@ -18,7 +18,7 @@ import CustomerManagement from "./component/manager/CustomerManagement";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
-  const isLogin = currentPath === "/login";
+  const isLogin = currentPath === "/";
   const isAdmin =
     currentPath === "/productManagement" ||
     currentPath === "/customerManagement" ||
@@ -26,7 +26,7 @@ function App() {
     currentPath === "/employeeManagement" ||
     currentPath === "/adminHome";
   const isStaf =
-    currentPath === "/" ||
+    currentPath === "/tableList" ||
     currentPath === "/productlist" ||
     currentPath === "/history" ||
     currentPath === "/orderdetail";
@@ -38,7 +38,7 @@ function App() {
     <div className="app">
       <div>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
         </Routes>
       </div>
 
@@ -50,7 +50,7 @@ function App() {
             <Row className="margin-space">
               <Col lg="9" md="9" xs="12">
                 <Routes>
-                  <Route path="/" element={<TableList />} />
+                  <Route path="/tableList" element={<TableList />} />
                   <Route path="/productlist" element={<ProductList />} />
                 </Routes>
               </Col>

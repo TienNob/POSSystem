@@ -2,11 +2,14 @@ import React from "react";
 import "../Oder.css";
 
 function Invoice({ totalPrice, products, tableID, phoneNumber }) {
+  const userName = localStorage.getItem("userName");
+
   return (
     <div className="invoice blackColor">
       <p className="blackColor text-center">{new Date().toLocaleString()}</p>
       <p className="blackColor">Số bàn: {tableID}</p>
-      <p className="blackColor">SĐT:{phoneNumber} </p>
+      <p className="blackColor">SĐT: {phoneNumber} </p>
+      <p className="blackColor">Nhân viên: {userName} </p>
       <table className="table table-bordered">
         <thead>
           <tr>
