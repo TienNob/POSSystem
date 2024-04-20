@@ -86,6 +86,7 @@ const Modal = ({ open, onClose }) => {
                   value={employeeData.fullName}
                   onChange={handleChange}
                   margin="normal"
+                  required
                 />
               </Grid>
               <Grid item xs={4}>
@@ -97,6 +98,7 @@ const Modal = ({ open, onClose }) => {
                   value={employeeData.cccd}
                   onChange={handleChange}
                   margin="normal"
+                  required
                 />
               </Grid>
               <Grid item xs={4}>
@@ -108,6 +110,7 @@ const Modal = ({ open, onClose }) => {
                   value={employeeData.phoneNumber}
                   onChange={handleChange}
                   margin="normal"
+                  required
                 />
               </Grid>
               <Grid item xs={4}>
@@ -119,14 +122,9 @@ const Modal = ({ open, onClose }) => {
                     label="Position"
                     name="position"
                     sx={{ color: "black" }}
+                    required
                   >
-                    <MenuItem value="Manager" sx={{ color: "black" }}>
-                      Quản lý
-                    </MenuItem>
-                    <MenuItem value="Supervisor" sx={{ color: "black" }}>
-                      Cửa hàng trưởng
-                    </MenuItem>
-                    <MenuItem value="Staff" sx={{ color: "black" }}>
+                    <MenuItem value="Nhân viên" sx={{ color: "black" }}>
                       Nhân viên
                     </MenuItem>
                   </Select>
@@ -142,6 +140,7 @@ const Modal = ({ open, onClose }) => {
                   value={permissionUserData ? permissionUserData.username : ""}
                   onChange={handleChange}
                   margin="normal"
+                  required
                 />
               </Grid>
               <Grid item xs={4}>
@@ -157,15 +156,20 @@ const Modal = ({ open, onClose }) => {
                   }
                   onChange={handleChange}
                   margin="normal"
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
                 <DialogActions>
+                  <Button
+                    className="buttonDisible"
+                    variant="contained"
+                    onClick={onClose}
+                  >
+                    Trở lại
+                  </Button>
                   <Button type="submit" variant="contained" color="primary">
                     Thêm nhân viên
-                  </Button>
-                  <Button variant="contained" onClick={onClose}>
-                    Trở lại
                   </Button>
                 </DialogActions>
               </Grid>

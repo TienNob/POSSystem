@@ -168,7 +168,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+  const { numSelected, onDelete } = props;
 
   return (
     <Toolbar
@@ -208,7 +208,7 @@ function EnhancedTableToolbar(props) {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -225,6 +225,7 @@ function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default function EnhancedTable() {
@@ -321,6 +322,29 @@ export default function EnhancedTable() {
     [order, orderBy, page, rowsPerPage, rows]
   );
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa?");
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem("authToken");
+        await Promise.all(
+          selected.map(async (id) => {
+            await axios.delete(`${LinkAPI}employees/${selected}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          })
+        );
+        const updatedRows = rows.filter((row) => !selected.includes(row.id));
+        setRows(updatedRows);
+        setSelected([]);
+      } catch (error) {
+        console.error("Error deleting data:", error);
+      }
+    }
+  };
+
   return (
     <Box className="main-container" sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -343,8 +367,10 @@ export default function EnhancedTable() {
           </Button>
           <Modal open={isModalOpen} onClose={closeModal}></Modal>
         </Box>
-        <EnhancedTableToolbar numSelected={selected.length} />
-
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          onDelete={handleDelete}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

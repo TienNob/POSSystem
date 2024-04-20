@@ -68,14 +68,19 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
             value={userData.password}
             onChange={handleChange}
             margin="normal"
+            required
           />
 
           <DialogActions>
+            <Button
+              className="buttonDisible"
+              onClick={onClose}
+              sx={{ color: "white" }}
+            >
+              Trở lại
+            </Button>
             <Button type="submit" sx={{ color: "white" }}>
               Xác nhận
-            </Button>
-            <Button onClick={onClose} sx={{ color: "white" }}>
-              Trở lại
             </Button>
           </DialogActions>
         </form>

@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { pink } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -10,6 +10,12 @@ import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "@mui/icons-material/Logout";
 import { Drawer } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +29,8 @@ function Nav() {
   const currentPath = window.location.pathname;
   const [anchorEl, setAnchorEl] = useState(null);
   const [fullName, setFullName] = useState("");
+  const [htmlData, setHtmlData] = useState("");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = React.useState(false);
@@ -52,7 +60,7 @@ function Nav() {
       });
   }, [navigate]);
 
-  const handleExportExcel = () => {
+  const handleGetHTML = () => {
     fetch(`${LinkAPI}orders/xuatHTML`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -60,8 +68,28 @@ function Nav() {
     })
       .then((response) => {
         if (response.ok) {
+          return response.text();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((htmlData) => {
+        setHtmlData(htmlData);
+        setModalIsOpen(true);
+      })
+      .catch((error) => {
+        console.error("Error exporting Excel:", error);
+      });
+  };
+  const handleExportExcel = () => {
+    fetch(`${LinkAPI}orders/xuatExcel`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
           console.log(response);
-          return response.data;
+          return response.blob();
         }
         throw new Error("Network response was not ok.");
       })
@@ -100,12 +128,17 @@ function Nav() {
     }
   };
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = React.useCallback((event) => {
     setAnchorEl(event.currentTarget);
-  };
+  }, []);
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleOpenModal = useCallback(() => {
+    handleGetHTML();
+    setModalIsOpen(true);
+  }, [setModalIsOpen]);
+
   return (
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
@@ -129,8 +162,22 @@ function Nav() {
                   Hoá đơn
                 </Button>
               </Link>
-              <Button onClick={handleExportExcel}>Xuất báo cáo ngày</Button>
-
+              <Button onClick={handleOpenModal}>Xuất báo cáo ngày</Button>
+              <Dialog open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+                <DialogContent>
+                  {/* Render the HTML content inside a div */}
+                  <div dangerouslySetInnerHTML={{ __html: htmlData }} />
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    className="buttonDisible"
+                    onClick={() => setModalIsOpen(false)}
+                  >
+                    Huỷ
+                  </Button>
+                  <Button onClick={handleExportExcel}>Xuất Excel</Button>
+                </DialogActions>
+              </Dialog>
               <Avatar
                 className="ms-4 nav-avatar"
                 onClick={handleClick}
