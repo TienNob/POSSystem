@@ -263,6 +263,11 @@
   justify-content: space-around;
   padding: 8px 15px;
   border-radius: 5px;
+  color: #fff;
+  text-decoration: none;
+}
+.admin-card:hover {
+  opacity: 0.7;
 }
 
 .admin-card:first-child {
@@ -369,4 +374,7 @@
 }
 .MuiDateRangePickerDay-notSelectedDate {
   background-color: transparent !important;
+}
+.MuiCheckbox-root > .MuiSvgIcon-fontSizeMedium > path {
+  color: #7d769c;
 }

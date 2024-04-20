@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TableBarIcon from "@mui/icons-material/TableBar";
@@ -118,34 +119,34 @@ function AdminHome() {
       </div>
 
       <div className="main-cards">
-        <div className="admin-card">
+        <Link to="/customerManagement" className="admin-card">
           <div className="card-inner">
             <h5 className="mt-3 mb-3">KHÁCH HÀNG</h5>
             <PeopleAltIcon className="card_icon" />
           </div>
           <h2 className="mt-3 mb-3">{numberOfCustomers}</h2>
-        </div>
-        <div className="admin-card">
+        </Link>
+        <Link to="/productManagement" className="admin-card">
           <div className="card-inner">
             <h5 className="mt-3 mb-3">SẢN PHẨM</h5>
             <ArchiveIcon className="card_icon" />
           </div>
           <h2 className="mt-3 mb-3">{numberOfProducts}</h2>
-        </div>
-        <div className="admin-card">
+        </Link>
+        <Link to="/tableManagement" className="admin-card">
           <div className="card-inner">
             <h5 className="mt-3 mb-3">BÀN</h5>
             <TableBarIcon className="card_icon" />
           </div>
           <h2 className="mt-3 mb-3">{numberOfTables}</h2>
-        </div>
-        <div className="admin-card">
+        </Link>
+        <Link to="/History" className="admin-card">
           <div className="card-inner">
             <h5 className="mt-3 mb-3">HOÁ ĐƠN</h5>
             <ReceiptIcon className="card_icon" />
           </div>
           <h2 className="mt-3 mb-3">{numberOfOrders}</h2>
-        </div>
+        </Link>
       </div>
 
       <div className="admin-LocalizationProvider">

@@ -19,6 +19,7 @@ function Total({ totalPrice, products, tableID }) {
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
   const token = localStorage.getItem("authToken");
+  const userName = localStorage.getItem("userName");
 
   useEffect(() => {
     // Retrieve customer's phone number from localStorage
@@ -139,6 +140,7 @@ function Total({ totalPrice, products, tableID }) {
             totalAmount: splitInvoice.totalPrice,
             phoneNumber: phoneNumber,
             products: splitInvoice.products,
+            // employee: userName,
           },
           {
             headers: {
@@ -233,7 +235,9 @@ function Total({ totalPrice, products, tableID }) {
         orderDate: new Date(),
         totalAmount: totalPrice,
         phoneNumber: phoneNumber,
+        // employee: { employeeid: 21 },
       };
+      console.log(invoiceData);
       axios
         .post(`${LinkAPI}orders`, invoiceData, {
           headers: {

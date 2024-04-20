@@ -1,15 +1,42 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "../Oder.css";
+import { useNavigate } from "react-router-dom";
+import { LinkAPI } from "../../LinkAPI";
 
 function Invoice({ totalPrice, products, tableID, phoneNumber }) {
   const userName = localStorage.getItem("userName");
+  const [fullName, setFullName] = useState("");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      navigate("/");
+      return;
+    }
+    axios
+      .get(`${LinkAPI}employees/account?account=${userName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setFullName(res.data.fullName);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [navigate]);
   return (
     <div className="invoice blackColor">
       <p className="blackColor text-center">{new Date().toLocaleString()}</p>
       <p className="blackColor">Số bàn: {tableID}</p>
       <p className="blackColor">SĐT: {phoneNumber} </p>
-      <p className="blackColor">Nhân viên: {userName} </p>
+      <p className="blackColor">Nhân viên: {fullName} </p>
       <table className="table table-bordered">
         <thead>
           <tr>

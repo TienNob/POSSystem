@@ -17,7 +17,7 @@ function AdminHome({ OpenSidebar }) {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
 
-    navigate("/login");
+    navigate("/");
   };
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
