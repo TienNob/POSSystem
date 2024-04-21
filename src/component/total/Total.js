@@ -16,10 +16,31 @@ function Total({ totalPrice, products, tableID }) {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [productQuantities, setProductQuantities] = useState({});
   const [splitInvoice, setSplitInvoice] = useState(null); // State để lưu hoá đơn được tách
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
   const token = localStorage.getItem("authToken");
   const userName = localStorage.getItem("userName");
+
+  useEffect(() => {
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      navigate("/");
+      return;
+    }
+    axios
+      .get(`${LinkAPI}employees/account?account=${userName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUserId(res.data.employeeId);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [navigate, userName]);
 
   useEffect(() => {
     // Retrieve customer's phone number from localStorage
@@ -140,7 +161,7 @@ function Total({ totalPrice, products, tableID }) {
             totalAmount: splitInvoice.totalPrice,
             phoneNumber: phoneNumber,
             products: splitInvoice.products,
-            // employee: userName,
+            employee: { employeeId: userId },
           },
           {
             headers: {
@@ -235,9 +256,8 @@ function Total({ totalPrice, products, tableID }) {
         orderDate: new Date(),
         totalAmount: totalPrice,
         phoneNumber: phoneNumber,
-        // employee: { employeeid: 21 },
+        employee: { employeeId: userId },
       };
-      console.log(invoiceData);
       axios
         .post(`${LinkAPI}orders`, invoiceData, {
           headers: {
@@ -245,6 +265,7 @@ function Total({ totalPrice, products, tableID }) {
           },
         })
         .then((response) => {
+          console.log(invoiceData);
           console.log("Invoice data sent successfully:", response.data);
           axios
             .post(`${LinkAPI}customers`, customers, {
@@ -264,7 +285,6 @@ function Total({ totalPrice, products, tableID }) {
             })
             .then((response) => {
               const maxOrderId = response.data;
-              console.log(maxOrderId);
               for (let i = 0; i < products.length; i++) {
                 const orderItem = {
                   order: { id: maxOrderId },

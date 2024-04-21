@@ -5,6 +5,8 @@ import TableBarIcon from "@mui/icons-material/TableBar";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import MoodIcon from "@mui/icons-material/Mood";
+import Logo from "../../logo.png";
+
 function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
   return (
     <aside
@@ -12,7 +14,10 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
       className={openSidebarToggle ? "sidebar-responsive" : ""}
     >
       <div className="sidebar-title d-flex justify-content-between ">
-        <div className="sidebar-brand">COFFEE POS</div>
+        <Link to="/adminHome">
+          <img width="100px" src={Logo} alt="" />
+        </Link>
+        <div className="sidebar-brand"></div>
         <span className="icon close_icon" onClick={OpenSidebar}>
           X
         </span>
@@ -21,7 +26,7 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
       <ul className="sidebar-list">
         <Link className="sidebar-link" to="/adminHome">
           <li className="sidebar-list-item">
-            <DashboardIcon className="icon" /> Dashboard
+            <DashboardIcon className="icon" /> Tổng quan
           </li>
         </Link>
         <Link className="sidebar-link" to="/productManagement">

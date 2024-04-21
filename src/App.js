@@ -18,13 +18,14 @@ import CustomerManagement from "./component/manager/CustomerManagement";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
+  console.log(currentPath);
   const isLogin = currentPath === "/";
   const isAdmin =
+    currentPath === "/adminHome" ||
     currentPath === "/productManagement" ||
     currentPath === "/customerManagement" ||
     currentPath === "/tableManagement" ||
-    currentPath === "/employeeManagement" ||
-    currentPath === "/adminHome";
+    currentPath === "/employeeManagement";
   const isStaf =
     currentPath === "/tableList" ||
     currentPath === "/productlist" ||
@@ -67,7 +68,7 @@ function App() {
         <div
           className="grid-container"
           style={{
-            display: isAdmin ? "gird" : "none",
+            display: !isStaf ? "grid" : "none",
           }}
         >
           {isAdmin && (

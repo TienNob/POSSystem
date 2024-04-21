@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TableBarIcon from "@mui/icons-material/TableBar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import PieChartIcon from "@mui/icons-material/PieChart";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
@@ -129,7 +129,7 @@ function AdminHome() {
         <Link to="/productManagement" className="admin-card">
           <div className="card-inner">
             <h5 className="mt-3 mb-3">SẢN PHẨM</h5>
-            <ArchiveIcon className="card_icon" />
+            <LocalCafeIcon className="card_icon" />
           </div>
           <h2 className="mt-3 mb-3">{numberOfProducts}</h2>
         </Link>

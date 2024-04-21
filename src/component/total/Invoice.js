@@ -30,7 +30,7 @@ function Invoice({ totalPrice, products, tableID, phoneNumber }) {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [navigate]);
+  }, [navigate, userName]);
   return (
     <div className="invoice blackColor">
       <p className="blackColor text-center">{new Date().toLocaleString()}</p>

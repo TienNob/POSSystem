@@ -14,6 +14,7 @@ function History() {
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
+
   const handleClick = (id) => {
     if (id !== null && id !== undefined) {
       localStorage.setItem("selectedOrderID", JSON.stringify(id));
@@ -54,24 +55,6 @@ function History() {
       });
   }, [navigate, currentPage, pageSize]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`)
-  //     .then((res) => {
-  //       const sortedHistory = res.data.content.sort((a, b) => {
-  //         console.log(new Date(b.orderDate) - new Date(a.orderDate));
-  //         return new Date(b.orderDate) - new Date(a.orderDate);
-  //       });
-  //       setHistory(sortedHistory);
-  //       setTotalPages(res.data.totalPages);
-
-  //       console.log(sortedHistory);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching product data:", error);
-  //     });
-  // }, [currentPage, pageSize]);
-
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage - 1);
   };
@@ -85,6 +68,7 @@ function History() {
             <th className="setHistoryColor">Số điện thoại</th>
             <th className="setHistoryColor">Ngày thanh toán</th>
             <th className="setHistoryColor">Tổng thành tiền</th>
+            <th className="setHistoryColor">Nhân viên</th>
             <th className="setHistoryColor">Chi tiết hoá đơn</th>
           </tr>
         </thead>
@@ -105,6 +89,9 @@ function History() {
                   .replace(" ", ", ")}
               </td>
               <td className="setHistoryColor">{item.totalAmount} K</td>
+              <td className="setHistoryColor">
+                {item.employee ? item.employee.fullName : ""}
+              </td>
               <td className="setHistoryColor">
                 <Link onClick={() => handleClick(item.id)} to="/orderdetail">
                   Xem thêm

@@ -10,19 +10,16 @@ import Button from "react-bootstrap/Button";
 import Navbar from "react-bootstrap/Navbar";
 import Logout from "@mui/icons-material/Logout";
 import { Drawer } from "@mui/material";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogContent, DialogActions } from "@mui/material";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 import TotalOder from "../TotalOder";
+
 function Nav() {
   const token = localStorage.getItem("authToken");
   const userName = localStorage.getItem("userName");
@@ -58,7 +55,7 @@ function Nav() {
       .catch((error) => {
         console.error("Error fetching product data:", error);
       });
-  }, [navigate]);
+  }, [navigate, userName]);
 
   const handleGetHTML = () => {
     fetch(`${LinkAPI}orders/xuatHTML`, {
@@ -80,8 +77,8 @@ function Nav() {
         console.error("Error exporting Excel:", error);
       });
   };
-  const handleExportExcel = () => {
-    fetch(`${LinkAPI}orders/xuatExcel`, {
+  const handleExportPDF = () => {
+    fetch(`${LinkAPI}orders/xuatPDF`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -104,7 +101,7 @@ function Nav() {
         const hours = ("0" + currentDate.getHours()).slice(-2);
         const minutes = ("0" + currentDate.getMinutes()).slice(-2);
         const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
-        a.download = "DoanhThu_" + formattedDate + ".xlsx";
+        a.download = "DoanhThu_" + formattedDate + ".pdf";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -119,6 +116,9 @@ function Nav() {
     localStorage.removeItem("userName");
 
     navigate("/");
+  };
+  const handleAdmin = () => {
+    navigate("/adminHome");
   };
   const handleBack = () => {
     if (currentPath === "/tableList") {
@@ -175,7 +175,7 @@ function Nav() {
                   >
                     Huỷ
                   </Button>
-                  <Button onClick={handleExportExcel}>Xuất Excel</Button>
+                  <Button onClick={handleExportPDF}>Xuất</Button>
                 </DialogActions>
               </Dialog>
               <Avatar
@@ -224,11 +224,21 @@ function Nav() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem className="blackColor" onClick={handleClose}>
-          <Avatar /> {fullName}
+        <MenuItem className="blackColor" sx={{ pr: 8 }} onClick={handleClose}>
+          <Avatar /> {!fullName ? userName : fullName}
         </MenuItem>
-
-        <MenuItem onClick={handleLogout} className="blackColor">
+        {userName === "admin" ? (
+          <MenuItem onClick={handleAdmin} className="blackColor" sx={{ pr: 8 }}>
+            <AdminPanelSettingsIcon
+              className="blackColor me-2"
+              fontSize="small"
+            />
+            Quản lý
+          </MenuItem>
+        ) : (
+          ""
+        )}
+        <MenuItem onClick={handleLogout} className="blackColor" sx={{ pr: 8 }}>
           <Logout className="blackColor me-2" fontSize="small" />
           Logout
         </MenuItem>

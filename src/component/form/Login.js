@@ -41,11 +41,14 @@ function Login() {
         localStorage.setItem("userName", loginData.username);
         console.log("Token đã được lưu trong localStorage:", token);
 
-        // Điều hướng đến trang danh sách sản phẩm
-        navigate("/tableList");
+        if (loginData.username === "admin") {
+          navigate("/adminHome");
+        } else {
+          navigate("/tableList");
+        }
       })
       .catch((loginError) => {
-        alert("Tài khoản chưa được cấp quyền, vui lòng nhập lại");
+        alert("Tên đăng nhập hoặc mật khẩu chưa đúng, vui lòng nhập lại");
         console.error("Lỗi khi đăng nhập:", loginError);
       });
     const token = localStorage.getItem("authToken");
@@ -55,7 +58,7 @@ function Login() {
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
       // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
-      navigate("/login");
+      navigate("/");
     }
     axios.interceptors.request.use(
       (config) => {

@@ -5,6 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useNavigate } from "react-router-dom";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
@@ -18,6 +19,9 @@ function AdminHome({ OpenSidebar }) {
     localStorage.removeItem("userName");
 
     navigate("/");
+  };
+  const handleSell = () => {
+    navigate("/tableList");
   };
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -75,11 +79,14 @@ function AdminHome({ OpenSidebar }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem className="blackColor" onClick={handleClose}>
+        <MenuItem className="blackColor" sx={{ pr: 8 }} onClick={handleClose}>
           <Avatar /> {userName}
         </MenuItem>
-
-        <MenuItem onClick={handleLogout} className="blackColor">
+        <MenuItem className="blackColor" sx={{ pr: 8 }} onClick={handleSell}>
+          <StorefrontIcon className="blackColor me-2" fontSize="small" />
+          Bán hàng
+        </MenuItem>
+        <MenuItem onClick={handleLogout} className="blackColor" sx={{ pr: 8 }}>
           <Logout className="blackColor me-2" fontSize="small" />
           Logout
         </MenuItem>
