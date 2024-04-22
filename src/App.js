@@ -7,6 +7,7 @@ import AdminSidebar from "./component/manager/AdminSidebar.js";
 import AdminHeader from "./component/manager/AdminHeader.js";
 import ProductManagement from "./component/manager/ProductManagement.js";
 import TableManagement from "./component/manager/TableManagement.js";
+import AuthorFooter from "./component/AuthorFooter.js";
 import Nab from "./component/navbar/Nav.js";
 import TableList from "./component/TableAPI.js";
 import ProductList from "./component/ProductAPI.js";
@@ -54,6 +55,7 @@ function App() {
                   <Route path="/tableList" element={<TableList />} />
                   <Route path="/productlist" element={<ProductList />} />
                 </Routes>
+                <AuthorFooter />
               </Col>
 
               <Col md="3" lg="3" xs="0"></Col>

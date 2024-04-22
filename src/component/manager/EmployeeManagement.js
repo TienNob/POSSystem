@@ -337,6 +337,7 @@ export default function EnhancedTable() {
         const updatedRows = rows.filter((row) => !selected.includes(row.id));
         setRows(updatedRows);
         setSelected([]);
+        window.location.reload();
       } catch (error) {
         console.error("Error deleting data:", error);
       }

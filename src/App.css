@@ -22,6 +22,16 @@
 .fillter {
   backdrop-filter: brightness(0.7);
 }
+.author-footer {
+  position: fixed;
+  bottom: 0;
+  right: 50%;
+  opacity: 0.4;
+}
+.author-footer > p {
+  font-size: 13px;
+}
+
 @media (max-width: 767px) {
   .totalOder {
     display: none;

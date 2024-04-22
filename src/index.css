@@ -38,7 +38,10 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+body > .modalInvoice,
+body > .modal {
+  z-index: 2000;
+}
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
