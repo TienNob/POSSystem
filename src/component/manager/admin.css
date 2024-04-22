@@ -378,3 +378,14 @@
 .MuiCheckbox-root > .MuiSvgIcon-fontSizeMedium > path {
   color: #7d769c;
 }
+.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar > p {
+  color: #7d769c;
+  margin-bottom: 0;
+}
+.css-16c50h-MuiInputBase-root-MuiTablePagination-select > div {
+  color: #7d769c;
+  background-color: #f4f2f2;
+}
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper > ul {
+  color: #7d769c;
+}
