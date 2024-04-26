@@ -15,13 +15,12 @@ function Total({ totalPrice, products, tableID }) {
   const [showSplitModal, setShowSplitModal] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [productQuantities, setProductQuantities] = useState({});
-  const [splitInvoice, setSplitInvoice] = useState(null); // State để lưu hoá đơn được tách
+  const [splitInvoice, setSplitInvoice] = useState(null);
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
   const token = localStorage.getItem("authToken");
   const userName = localStorage.getItem("userName");
-
   useEffect(() => {
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
@@ -150,6 +149,7 @@ function Total({ totalPrice, products, tableID }) {
       point: Math.floor((totalPrice * 10) / 100),
       name: phoneName,
     };
+
     if (splitInvoice) {
       // Step 1: Tạo hoá đơn mới và gửi lên máy chủ
       axios
@@ -172,18 +172,63 @@ function Total({ totalPrice, products, tableID }) {
         .then((response) => {
           console.log("Invoice data sent successfully:", response.data);
           axios
-            .post(
-              `${LinkAPI}customers`,
-              customers,
-
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
+            .get(`${LinkAPI}customers`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
             .then((response) => {
-              console.log("Invoice data sent successfully:", response.data);
+              const filteredCustomers = response.data.filter(
+                (customer) => customer.phoneNumber === phoneNumber
+              );
+              if (filteredCustomers.length > 0) {
+                // Nếu khách hàng đã tồn tại, lấy thông tin về điểm hiện tại của họ
+                const currentCustomer = filteredCustomers[0];
+                console.log(currentCustomer);
+                const currentPoints = currentCustomer.point || 0;
+
+                // Tính toán điểm mới dựa trên tổng cộng của hoá đơn hiện tại
+                const newPoints =
+                  currentPoints +
+                  Math.floor((splitInvoice.totalPrice * 10) / 100);
+                customers.point = newPoints;
+                // Cập nhật lại điểm của khách hàng
+                axios
+                  .put(`${LinkAPI}customers/${currentCustomer.id}`, customers, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((response) => {
+                    console.log(
+                      "Customer points updated successfully:",
+                      response.data
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error updating customer points:", error);
+                  });
+              } else {
+                // Nếu khách hàng chưa tồn tại, thêm mới thông tin khách hàng
+                axios
+                  .post(`${LinkAPI}customers`, customers, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((response) => {
+                    console.log(
+                      "New customer added successfully:",
+                      response.data
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error adding new customer:", error);
+                  });
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching customer data:", error);
             });
           const maxOrderId = response.data.id;
 
@@ -268,13 +313,62 @@ function Total({ totalPrice, products, tableID }) {
           console.log(invoiceData);
           console.log("Invoice data sent successfully:", response.data);
           axios
-            .post(`${LinkAPI}customers`, customers, {
+            .get(`${LinkAPI}customers`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             })
             .then((response) => {
-              console.log("Invoice data sent successfully:", response.data);
+              const filteredCustomers = response.data.filter(
+                (customer) => customer.phoneNumber === phoneNumber
+              );
+              if (filteredCustomers.length > 0) {
+                // Nếu khách hàng đã tồn tại, lấy thông tin về điểm hiện tại của họ
+                const currentCustomer = filteredCustomers[0];
+                const currentPoints = currentCustomer.point || 0;
+
+                // Tính toán điểm mới dựa trên tổng cộng của hoá đơn hiện tại
+                const newPoints =
+                  currentPoints + Math.floor((totalPrice * 10) / 100);
+                customers.point = newPoints;
+
+                // Cập nhật lại điểm của khách hàng
+                axios
+                  .put(`${LinkAPI}customers/${currentCustomer.id}`, customers, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((response) => {
+                    console.log(
+                      "Customer points updated successfully:",
+                      response.data
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error updating customer points:", error);
+                  });
+              } else {
+                // Nếu khách hàng chưa tồn tại, thêm mới thông tin khách hàng
+                axios
+                  .post(`${LinkAPI}customers`, customers, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  .then((response) => {
+                    console.log(
+                      "New customer added successfully:",
+                      response.data
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error adding new customer:", error);
+                  });
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching customer data:", error);
             });
 
           axios

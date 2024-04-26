@@ -219,14 +219,16 @@ export default function EnhancedTable() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRows(response.data);
+        const filterDataCustomer = response.data.filter(
+          (data) => data.name !== "Khách lẻ"
+        );
+        setRows(filterDataCustomer);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchData();
   }, []);
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -355,7 +357,7 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.id}
+                      {index + 1}
                     </TableCell>
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.phoneNumber}</TableCell>

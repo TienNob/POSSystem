@@ -39,17 +39,13 @@ function TotalOder({ openDrawer }) {
   }, []);
 
   useEffect(() => {
-    // Lấy token từ localStorage
     const token = localStorage.getItem("authToken");
 
-    // Kiểm tra xem token có tồn tại không
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
-      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       navigate("/");
       return;
     }
-    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
       .get(`${LinkAPI}table`, {
         headers: {
@@ -228,6 +224,9 @@ function TotalOder({ openDrawer }) {
                 {customerName}
               </span>
             )}
+            {/* {customerInfo && (
+              <small className="ms-4 ps-2 d-flex align-items-center">Điểm: 1</small>
+            )} */}
           </div>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>

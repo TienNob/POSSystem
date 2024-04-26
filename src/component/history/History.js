@@ -82,11 +82,7 @@ function History() {
                 {item.phoneNumber !== "" ? item.phoneNumber : "Khách lẻ"}
               </td>
               <td className="setHistoryColor">
-                {new Date(item.orderDate)
-                  .toISOString()
-                  .slice(0, 19)
-                  .replace("T", " ")
-                  .replace(" ", ", ")}
+                {new Date(item.orderDate).toLocaleString()}
               </td>
               <td className="setHistoryColor">{item.totalAmount} K</td>
               <td className="setHistoryColor">

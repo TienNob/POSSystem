@@ -22,20 +22,17 @@ function TableList() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [tableID, setTableID] = useState(""); // Thêm state cho tableID
+  const [customerInfo, setCustomerInfo] = useState(null);
+
+  const token = localStorage.getItem("authToken");
   const history = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-
-    // Kiểm tra xem token có tồn tại không
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
-      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       history("/");
       return;
     }
-
-    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
       .get(`${LinkAPI}table`, {
         headers: {
@@ -57,6 +54,34 @@ function TableList() {
       });
   }, [history, LinkAPI]);
 
+  const handlePhoneNumberChange = (e) => {
+    const phoneNumber = e.target.value;
+    setPhoneNumber(phoneNumber);
+    if (phoneNumber) {
+      axios
+        .get(`${LinkAPI}customers`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          const filteredCustomers = res.data.filter(
+            (customer) => customer.phoneNumber === phoneNumber
+          );
+          if (filteredCustomers.length > 0) {
+            setCustomerInfo(filteredCustomers[0]); // Lưu thông tin khách hàng vào state
+          } else {
+            setCustomerInfo(null); // Reset state nếu không tìm thấy thông tin khách hàng
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching customer data:", error);
+        });
+    } else {
+      setCustomerInfo(null); // Reset state khi số điện thoại rỗng
+    }
+  };
+
   const handleTableClick = (tableID, status) => {
     if (status === true) {
       history("/productlist");
@@ -70,13 +95,15 @@ function TableList() {
   const handleModalClose = () => {
     setShowModal(false); // Ẩn modal khi đóng
   };
-
+  console.log(customerInfo);
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const customerInfo = {
+    const customerInfoLocal = {
       phoneNumber: phoneNumber || "",
-      customerName: customerName || "Khách lẻ",
+      customerName:
+        customerInfo !== null ? customerInfo.name : customerName || "Khách lẻ",
     };
+    console.log(customerInfoLocal);
     localStorage.setItem("selectedTableID", tableID);
     const selectedTableID = localStorage.getItem("selectedTableID"); // Lấy ID của bàn từ local storage
     let customerInfoArray =
@@ -86,7 +113,7 @@ function TableList() {
       customerInfoArray[selectedTableID] = [];
     }
 
-    customerInfoArray[selectedTableID].push(customerInfo);
+    customerInfoArray[selectedTableID].push(customerInfoLocal);
 
     localStorage.setItem(
       "customerInfoArray",
@@ -154,7 +181,7 @@ function TableList() {
                       type="number"
                       placeholder="Nhập số điện thoại"
                       value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      onChange={(e) => handlePhoneNumberChange(e)} // Thay đổi ở đây
                     />
                   </Form.Group>
                 )}
@@ -164,7 +191,7 @@ function TableList() {
                     className="mb-4"
                     type="text"
                     placeholder="Nhập tên khách hàng"
-                    value={customerName}
+                    value={customerInfo ? customerInfo.name : customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                   />
                 </Form.Group>

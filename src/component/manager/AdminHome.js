@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+} from "@mui/material";
+
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import TableBarIcon from "@mui/icons-material/TableBar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -12,6 +23,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import dayjs from "dayjs";
 import { ResponsiveContainer } from "recharts";
 import ChartProduct from "./chart/ChartProduct";
 import ChartRevenue from "./chart/ChartRevenue";
@@ -23,11 +35,11 @@ function AdminHome() {
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
   const [numberOfCustomers, setNumberOfCustomers] = useState(0);
+  const [dataByDate, setDataByDate] = useState([]);
   const [dateRange, setDateRange] = useState([null, null]);
-  const [revenueData, setRevenueData] = useState([]);
-  const [productData, setProductData] = useState([]);
-
   const token = localStorage.getItem("authToken");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Lấy dữ liệu tổng quan
   useEffect(() => {
@@ -85,24 +97,20 @@ function AdminHome() {
 
   // Hàm lấy dữ liệu doanh thu và sản phẩm yêu thích
   const fetchRevenueData = async (startDate, endDate) => {
+    const dayStart = dayjs(startDate.$d);
+    const formattedStartDate = dayStart.format("YYYY-MM-DD");
+    const dayEnd = dayjs(endDate.$d);
+    const formattedEndDate = dayEnd.format("YYYY-MM-DD");
     try {
-      const response = await axios.post(
-        `${LinkAPI}orders/thongke`,
-        {
-          startDate: startDate.format("YYYY-MM-DD"),
-          endDate: endDate.format("YYYY-MM-DD"),
-        },
+      const response = await axios.get(
+        `${LinkAPI}orders/thongke?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      const data = response.data;
-
-      // Cập nhật dữ liệu cho các biểu đồ
-      setRevenueData(data.revenue);
-      setProductData(data.product);
+      setDataByDate(response.data);
     } catch (error) {
       console.error("Error fetching revenue data:", error);
     }
@@ -110,6 +118,14 @@ function AdminHome() {
 
   const handleDateRangeChange = (newDateRange) => {
     setDateRange(newDateRange);
+  };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   return (
@@ -149,7 +165,29 @@ function AdminHome() {
         </Link>
       </div>
 
-      <div className="admin-LocalizationProvider">
+      <div className="charts">
+        <div className="chart-container" style={{ marginBottom: "70px" }}>
+          <h3 className="chart-title">
+            <BarChartIcon className="me-2" />
+            Doanh thu
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <ChartRevenue />
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-container" style={{ marginBottom: "70px" }}>
+          <h3 className="chart-title">
+            <PieChartIcon className="me-2" />
+            Thức uống yêu thích
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <ChartProduct />
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="admin-LocalizationProvider mb-3">
         <h3 className="chart-title mb-3">
           <EditCalendarIcon className="me-2" />
           Phạm vi thống kê
@@ -169,27 +207,50 @@ function AdminHome() {
         </LocalizationProvider>
       </div>
 
-      <div className="charts mt-4">
-        <div className="chart-container" style={{ marginBottom: "70px" }}>
-          <h3 className="chart-title">
-            <BarChartIcon className="me-2" />
-            Doanh thu
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <ChartRevenue data={revenueData} />
-          </ResponsiveContainer>
+      {dataByDate.length < 1 ? (
+        <i>Không có hoá đơn trong thời gian thống kê</i>
+      ) : (
+        <div className="table mt-4">
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell>Số điện thoại</TableCell>
+                  <TableCell>Ngày thanh toán</TableCell>
+                  <TableCell>Thành Tiền</TableCell>
+                  <TableCell>Nhân viên</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dataByDate
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>
+                        {item.phoneNumber ? item.phoneNumber : "Khách lẻ"}
+                      </TableCell>
+                      <TableCell>{item.orderDate}</TableCell>
+                      <TableCell>{item.totalAmount}k</TableCell>
+                      <TableCell>{item.employeeFullName}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            className="adminHome_pagination"
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={dataByDate.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </div>
-
-        <div className="chart-container" style={{ marginBottom: "70px" }}>
-          <h3 className="chart-title">
-            <PieChartIcon className="me-2" />
-            Thức uống yêu thích
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <ChartProduct data={productData} />
-          </ResponsiveContainer>
-        </div>
-      </div>
+      )}
     </main>
   );
 }
