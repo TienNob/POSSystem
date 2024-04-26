@@ -40,7 +40,7 @@ function AdminHome() {
   const token = localStorage.getItem("authToken");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  console.log(dateRange);
   // Lấy dữ liệu tổng quan
   useEffect(() => {
     fetch(`${LinkAPI}orders`, {
@@ -90,26 +90,46 @@ function AdminHome() {
 
   // Lấy dữ liệu doanh thu và sản phẩm yêu thích khi phạm vi ngày thay đổi
   useEffect(() => {
-    if (dateRange[0] && dateRange[1]) {
+    if (dateRange[0] || dateRange[1]) {
       fetchRevenueData(dateRange[0], dateRange[1]);
     }
   }, [dateRange]);
 
   // Hàm lấy dữ liệu doanh thu và sản phẩm yêu thích
   const fetchRevenueData = async (startDate, endDate) => {
-    const dayStart = dayjs(startDate.$d);
-    const formattedStartDate = dayStart.format("YYYY-MM-DD");
-    const dayEnd = dayjs(endDate.$d);
-    const formattedEndDate = dayEnd.format("YYYY-MM-DD");
+    let formattedStartDate;
+    let formattedEndDate;
+
+    if (startDate) {
+      const dayStart = dayjs(startDate.$d);
+      formattedStartDate = dayStart.format("YYYY-MM-DD");
+    }
+
+    if (endDate) {
+      const dayEnd = dayjs(endDate.$d);
+      formattedEndDate = dayEnd.format("YYYY-MM-DD");
+    }
+    let apiLink;
+    console.log(apiLink);
+    if (formattedStartDate && formattedEndDate) {
+      // Use the provided start and end dates for a date range query
+      apiLink = `${LinkAPI}orders/thongke?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    } else {
+      // Handle cases where either start or end date is missing
+      if (formattedStartDate) {
+        // Use start date for a "from date" query (assuming supported by API)
+        apiLink = `${LinkAPI}orders/thongke?startDate=${formattedStartDate}`;
+      } else if (formattedEndDate) {
+        // Use end date for a "to date" query (assuming supported by API)
+        apiLink = `${LinkAPI}orders/thongke?endDate=${formattedEndDate}`;
+      }
+    }
     try {
-      const response = await axios.get(
-        `${LinkAPI}orders/thongke?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(apiLink, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setDataByDate(response.data);
     } catch (error) {
       console.error("Error fetching revenue data:", error);
