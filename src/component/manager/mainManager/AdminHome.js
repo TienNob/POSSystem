@@ -25,10 +25,10 @@ import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import dayjs from "dayjs";
 import { ResponsiveContainer } from "recharts";
-import ChartProduct from "./chart/ChartProduct";
-import ChartRevenue from "./chart/ChartRevenue";
-import { LinkAPI } from "../../LinkAPI";
-import "./admin.css";
+import ChartProduct from "../chart/ChartProduct";
+import ChartRevenue from "../chart/ChartRevenue";
+import { LinkAPI } from "../../../LinkAPI";
+import "../admin.css";
 
 function AdminHome() {
   const [numberOfOrders, setNumberOfOrders] = useState(0);
@@ -199,7 +199,7 @@ function AdminHome() {
         <div className="chart-container" style={{ marginBottom: "70px" }}>
           <h3 className="chart-title">
             <PieChartIcon className="me-2" />
-            Thức uống yêu thích
+            Thức uống yêu thích nhất
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <ChartProduct />

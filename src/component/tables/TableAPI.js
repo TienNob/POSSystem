@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import { LinkAPI } from "../LinkAPI";
+import { LinkAPI } from "../../LinkAPI";
 import {
   Card,
   Container,
@@ -12,16 +12,16 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import TotalOder from "./TotalOder";
-import "../App.css";
-import "./Oder.css";
+import TotalOder from "../total/TotalOder";
+import "../../App.css";
+import "../total/Oder.css";
 
 function TableList() {
   const [tables, setTables] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State để kiểm soát việc hiển thị modal
+  const [showModal, setShowModal] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [customerName, setCustomerName] = useState("");
-  const [tableID, setTableID] = useState(""); // Thêm state cho tableID
+  const [tableID, setTableID] = useState("");
   const [customerInfo, setCustomerInfo] = useState(null);
 
   const token = localStorage.getItem("authToken");

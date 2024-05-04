@@ -26,21 +26,24 @@ class ChartProduct extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ drinks: data });
+        const top3Drinks = data
+          .sort((a, b) => b.soLuong - a.soLuong)
+          .slice(0, 3);
+        this.setState({ drinks: top3Drinks });
       })
       .catch((error) => console.error("Error fetching drinks:", error));
   }
 
   render() {
     const DARK_COLORS = [
-      "#1f77b4",
-      "#ff7f0e",
-      "#2ca02c",
       "#d62728",
       "#9467bd",
-      "#8c564b",
       "#e377c2",
+      "#8c564b",
+      "#ff7f0e",
+      "#2ca02c",
       "#7f7f7f",
+      "#1f77b4",
       "#bcbd22",
       "#17becf",
     ];
@@ -54,10 +57,8 @@ class ChartProduct extends Component {
             width: "100%",
             marginTop: "10px",
           }}
-        >
-          {/* <span style={{ fontSize: '16px' }}>Biểu đồ tròn thức uống yêu thích</span> */}
-        </div>
-        <ResponsiveContainer>
+        ></div>
+        <ResponsiveContainer className="chart-product">
           <PieChart>
             <Pie
               data={this.state.drinks}

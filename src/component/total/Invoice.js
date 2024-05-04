@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../Oder.css";
+import "./Oder.css";
 import { useNavigate } from "react-router-dom";
 import { LinkAPI } from "../../LinkAPI";
 

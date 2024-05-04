@@ -22,7 +22,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { visuallyHidden } from "@mui/utils";
 import axios from "axios";
-import { LinkAPI } from "../../LinkAPI";
+import { LinkAPI } from "../../../LinkAPI";
 import Modal from "./emloyeeModal/ModalAddUser";
 
 function descendingComparator(a, b, orderBy) {
@@ -411,7 +411,7 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.employeeId}
+                      {index + 1}
                     </TableCell>
                     <TableCell>{row.fullName}</TableCell>
                     <TableCell>{row.cccd}</TableCell>

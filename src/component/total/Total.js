@@ -4,7 +4,7 @@ import { Button, Container, Modal, Form } from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import Invoice from "./Invoice";
-import "../Oder.css";
+import "./Oder.css";
 import axios from "axios";
 import { LinkAPI } from "../../LinkAPI";
 

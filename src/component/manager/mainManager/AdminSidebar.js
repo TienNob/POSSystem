@@ -5,7 +5,7 @@ import TableBarIcon from "@mui/icons-material/TableBar";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import MoodIcon from "@mui/icons-material/Mood";
-import Logo from "../../logo.png";
+import Logo from "../../../logo.png";
 
 function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
   return (

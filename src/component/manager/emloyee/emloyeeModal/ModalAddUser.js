@@ -14,7 +14,7 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
-import { LinkAPI } from "../../../LinkAPI";
+import { LinkAPI } from "../../../../LinkAPI";
 import PermissionModal from "./PermissionModal";
 const token = localStorage.getItem("authToken");
 const Modal = ({ open, onClose }) => {

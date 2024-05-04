@@ -393,3 +393,6 @@
 .adminHome_pagination > div {
   background-color: white;
 }
+div > div > div > div > .chart-product > .recharts-wrapper {
+  max-height: 376px !important;
+}

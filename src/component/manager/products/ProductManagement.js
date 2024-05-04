@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./admin.css";
+import "../admin.css";
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
-import { LinkAPI } from "../../LinkAPI";
+import { LinkAPI } from "../../../LinkAPI";
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -138,7 +138,7 @@ function Admin() {
   };
 
   const imageFiles = require.context(
-    "../../../APIPOS/images",
+    "../../../../APIPOS/images",
     false,
     /\.(png|jpe?g|svg)$/
   );

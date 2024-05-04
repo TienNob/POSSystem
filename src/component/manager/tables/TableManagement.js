@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./admin.css"; // Import CSS file
+import "../admin.css";
 
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
-import { LinkAPI } from "../../LinkAPI";
+import { LinkAPI } from "../../../LinkAPI";
 
 function TableManagement() {
   const [showAddTable, setShowAddTable] = useState(false);

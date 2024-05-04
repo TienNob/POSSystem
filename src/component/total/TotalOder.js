@@ -7,9 +7,9 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import Person2Icon from "@mui/icons-material/Person2";
 import MergeIcon from "@mui/icons-material/Merge";
 import Tooltip from "@mui/material/Tooltip";
-import OrderContent from "./total/OrderContent";
+import OrderContent from "./OrderContent";
 import "./Oder.css";
-import { LinkAPI } from "../LinkAPI";
+import { LinkAPI } from "../../LinkAPI";
 
 function TotalOder({ openDrawer }) {
   const [tableID, setTableID] = useState(null);

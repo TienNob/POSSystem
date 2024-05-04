@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { LinkAPI } from "../LinkAPI";
+import { LinkAPI } from "../../LinkAPI";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Card, Container, Row, Col } from "react-bootstrap";
-import TotalOder from "./TotalOder";
+import TotalOder from "../total/TotalOder";
 
-import "../App.css";
+import "../../App.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -20,7 +20,7 @@ function ProductList() {
   };
 
   const imageFiles = require.context(
-    "../../APIPOS/images",
+    "../../../APIPOS/images",
     false,
     /\.(png|jpe?g|svg)$/
   );

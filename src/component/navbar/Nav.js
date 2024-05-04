@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
-import TotalOder from "../TotalOder";
+import TotalOder from "../total/TotalOder";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
