@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { LinkAPI } from "../../../../LinkAPI";
 import PermissionModal from "./PermissionModal";
+import Notification from "../../../../notification/Notification";
 const token = localStorage.getItem("authToken");
 const Modal = ({ open, onClose }) => {
   const [employeeData, setEmployeeData] = useState({
@@ -28,6 +29,9 @@ const Modal = ({ open, onClose }) => {
   });
   const [permissionModalOpen, setPermissionModalOpen] = useState(false);
   const [permissionUserData, setPermissionUserData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -64,8 +68,14 @@ const Modal = ({ open, onClose }) => {
       });
       onClose();
       window.location.reload();
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Thêm nhân viên thành công!");
     } catch (error) {
       console.error("Error adding new employee:", error);
+      setShowAlert(true);
+      setAlertSeverity("error");
+      setAlertMessage("Xảy ra lỗi khi thêm nhân viên!");
     }
   };
 
@@ -177,6 +187,12 @@ const Modal = ({ open, onClose }) => {
           </form>
         </DialogContent>
       </Dialog>
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       <PermissionModal
         open={permissionModalOpen}
         onClose={() => setPermissionModalOpen(false)}

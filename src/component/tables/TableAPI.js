@@ -15,6 +15,7 @@ import {
 import TotalOder from "../total/TotalOder";
 import "../../App.css";
 import "../total/Oder.css";
+import Notification from "../../notification/Notification";
 
 function TableList() {
   const [tables, setTables] = useState([]);
@@ -23,6 +24,9 @@ function TableList() {
   const [customerName, setCustomerName] = useState("");
   const [tableID, setTableID] = useState("");
   const [customerInfo, setCustomerInfo] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const token = localStorage.getItem("authToken");
   const history = useNavigate();
@@ -95,7 +99,7 @@ function TableList() {
   const handleModalClose = () => {
     setShowModal(false); // Ẩn modal khi đóng
   };
-  console.log(customerInfo);
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const customerInfoLocal = {
@@ -119,8 +123,13 @@ function TableList() {
       "customerInfoArray",
       JSON.stringify(customerInfoArray)
     );
-    setShowModal(false); // Ẩn modal sau khi submit
+    setShowModal(false);
     history("/productlist");
+    setShowAlert(true);
+    setAlertSeverity("success");
+    setAlertMessage(
+      `Đã thêm khách hàng ${customerName} vào bàn ${selectedTableID}`
+    );
   };
 
   return (
@@ -160,6 +169,12 @@ function TableList() {
         ))}
       </Row>
       <TotalOder />
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       {showModal &&
         tables.find((table) => table.id === tableID) &&
         !tables.find((table) => table.id === tableID).status && (

@@ -7,6 +7,7 @@ import Invoice from "./Invoice";
 import "./Oder.css";
 import axios from "axios";
 import { LinkAPI } from "../../LinkAPI";
+import Notification from "../../notification/Notification";
 
 function Total({ totalPrice, products, tableID }) {
   const [showModal, setShowModal] = useState(false);
@@ -21,6 +22,10 @@ function Total({ totalPrice, products, tableID }) {
   const currentPath = window.location.pathname;
   const token = localStorage.getItem("authToken");
   const userName = localStorage.getItem("userName");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
   useEffect(() => {
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
@@ -61,7 +66,9 @@ function Total({ totalPrice, products, tableID }) {
   }, [tableID]);
   const handleShowSplitModal = () => {
     if (products.length < 1) {
-      alert("Không thể tách hoá đơn khi không có sản phẩm");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Không thể tách hoá đơn khi không có sản phẩm`);
       return;
     }
     setShowSplitModal(true);
@@ -94,7 +101,9 @@ function Total({ totalPrice, products, tableID }) {
           (product) => product.id === parseInt(productId)
         );
         if (productInTable && productQuantity === 0) {
-          alert("Không thể tách khi giá trị bằng 0");
+          setShowAlert(true);
+          setAlertSeverity("warning");
+          setAlertMessage(`Không thể tách khi giá trị bằng 0!`);
           return;
         }
         if (productInTable && productInTable.quantity >= productQuantity) {
@@ -108,7 +117,11 @@ function Total({ totalPrice, products, tableID }) {
           console.log(selectedProductsToPay);
         } else {
           // Nếu số lượng không đủ, hiển thị thông báo
-          alert(`Sản phẩm ${productInTable.productName} không đủ số lượng.`);
+          setShowAlert(true);
+          setAlertSeverity("warning");
+          setAlertMessage(
+            `Sản phẩm ${productInTable.productName} không đủ số lượng!`
+          );
           return;
         }
         // Tạo hoá đơn mới với các sản phẩm được chọn
@@ -163,6 +176,7 @@ function Total({ totalPrice, products, tableID }) {
             products: splitInvoice.products,
             employee: { employeeId: userId },
           },
+
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -170,7 +184,9 @@ function Total({ totalPrice, products, tableID }) {
           }
         )
         .then((response) => {
-          console.log("Invoice data sent successfully:", response.data);
+          setShowAlert(true);
+          setAlertSeverity("success");
+          setAlertMessage(`Thanh toán thành công!`);
           axios
             .get(`${LinkAPI}customers`, {
               headers: {
@@ -310,8 +326,10 @@ function Total({ totalPrice, products, tableID }) {
           },
         })
         .then((response) => {
-          console.log(invoiceData);
-          console.log("Invoice data sent successfully:", response.data);
+          console.log(response);
+          setShowAlert(true);
+          setAlertSeverity("success");
+          setAlertMessage(`Thanh toán thành công!`);
           axios
             .get(`${LinkAPI}customers`, {
               headers: {
@@ -367,6 +385,7 @@ function Total({ totalPrice, products, tableID }) {
                   });
               }
             })
+
             .catch((error) => {
               console.error("Error fetching customer data:", error);
             });
@@ -437,7 +456,10 @@ function Total({ totalPrice, products, tableID }) {
   };
   const handleShowModal = () => {
     if (totalPrice <= 0) {
-      return alert("Không thể thanh toán khi không có sản phẩm");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Không thể thanh toán khi không có sản phẩm`);
+      return;
     }
     setShowModal(true);
   };
@@ -467,6 +489,12 @@ function Total({ totalPrice, products, tableID }) {
         Thanh toán
       </Button>
 
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       {/* Modal hiển thị hoá đơn */}
       <Modal
         className="modalInvoice"

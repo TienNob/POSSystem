@@ -13,10 +13,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "./login.css";
+import Notification from "../../notification/Notification";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const navigate = useNavigate();
   const API_BASE_URL = "http://localhost:8080/auth/";
@@ -39,7 +43,9 @@ function Login() {
         localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
         localStorage.setItem("userName", loginData.username);
-        console.log("Token đã được lưu trong localStorage:", token);
+        setShowAlert(true);
+        setAlertSeverity("success");
+        setAlertMessage("Đăng nhập thành công!");
 
         if (loginData.username === "admin") {
           navigate("/adminHome");
@@ -48,7 +54,11 @@ function Login() {
         }
       })
       .catch((loginError) => {
-        alert("Tên đăng nhập hoặc mật khẩu chưa đúng, vui lòng nhập lại");
+        setShowAlert(true);
+        setAlertSeverity("warning");
+        setAlertMessage(
+          "Tên đăng nhập hoặc mật khẩu chưa đúng, vui lòng nhập lại!"
+        );
         console.error("Lỗi khi đăng nhập:", loginError);
       });
     const token = localStorage.getItem("authToken");
@@ -79,7 +89,6 @@ function Login() {
   };
 
   return (
-    // <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
       <Box
         className="login-form"
@@ -136,8 +145,13 @@ function Login() {
           </Button>
         </Box>
       </Box>
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
     </Container>
-    // </ThemeProvider>
   );
 }
 

@@ -19,6 +19,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 import TotalOder from "../total/TotalOder";
+import Notification from "../../notification/Notification";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
@@ -31,7 +32,9 @@ function Nav() {
 
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = React.useState(false);
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
@@ -85,7 +88,9 @@ function Nav() {
     })
       .then((response) => {
         if (response.ok) {
-          console.log(response);
+          setShowAlert(true);
+          setAlertSeverity("success");
+          setAlertMessage(`Xuất báo cáo thành công!`);
           return response.blob();
         }
         throw new Error("Network response was not ok.");
@@ -109,6 +114,9 @@ function Nav() {
       })
       .catch((error) => {
         console.error("Error exporting Excel:", error);
+        setShowAlert(true);
+        setAlertSeverity("error");
+        setAlertMessage(`Xuất báo cáo không thành công!`);
       });
   };
   const handleLogout = () => {
@@ -243,6 +251,12 @@ function Nav() {
           Logout
         </MenuItem>
       </Menu>
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
     </div>
   );
 }

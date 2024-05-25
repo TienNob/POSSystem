@@ -10,6 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import OrderContent from "./OrderContent";
 import "./Oder.css";
 import { LinkAPI } from "../../LinkAPI";
+import Notification from "../../notification/Notification";
 
 function TotalOder({ openDrawer }) {
   const [tableID, setTableID] = useState(null);
@@ -21,6 +22,9 @@ function TotalOder({ openDrawer }) {
   const [newTable, setNewTable] = useState("");
   const [showFormModal, setShowFormModal] = useState(false);
   const [mergeTable, setMergeTable] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
   const totalOderClass = openDrawer ? "totalOder show" : "totalOder";
 
@@ -122,7 +126,9 @@ function TotalOder({ openDrawer }) {
     });
     console.log(tableExists);
     if (!tableExists) {
-      alert("Bàn mới không tồn tại trong danh sách!");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Bàn mới không tồn tại trong danh sách!`);
       return;
     }
 
@@ -131,15 +137,21 @@ function TotalOder({ openDrawer }) {
       customerInfoArray[parseInt(newTable)].length > 0;
 
     if (isTableOccupied && !mergeTable) {
-      alert("Không thể chuyển bàn khi bàn đang có khách!");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Không thể chuyển bàn khi bàn đang có khách!`);
       return;
     }
     if (!isTableOccupied && mergeTable) {
-      alert("Không thể gộp bàn khi bàn chưa có khách");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Không thể gộp bàn khi bàn chưa có khách`);
       return;
     }
     if (mergeTable && tableID === newTable) {
-      alert("Không thể gộp với bàn hiện tại");
+      setShowAlert(true);
+      setAlertSeverity("warning");
+      setAlertMessage(`Không thể gộp với bàn hiện tại`);
       return;
     }
     const storedProductsByTable =
@@ -281,7 +293,12 @@ function TotalOder({ openDrawer }) {
       )}
 
       <OrderContent tableID={tableID} />
-
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       <Modal centered show={showFormModal} onHide={handleCloseFormModal}>
         <Modal.Header className="justify-content-center">
           <Modal.Title className="blackColor ">

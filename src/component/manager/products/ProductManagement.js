@@ -4,11 +4,15 @@ import "../admin.css";
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../../LinkAPI";
+import Notification from "../../../notification/Notification";
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
   const [products, setProducts] = useState([]);
   const token = localStorage.getItem("authToken");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const [newProduct, setNewProduct] = useState({
     productName: "",
@@ -76,9 +80,14 @@ function Admin() {
           price: "",
           linkImage: "",
         });
+        setShowAlert(true);
+        setAlertSeverity("success");
+        setAlertMessage("Thêm sản phẩm thành công!");
         setShowAddProduct(false);
       } catch (error) {
         console.error("Error adding product:", error);
+        setAlertSeverity("error");
+        setAlertMessage("xảy ra lỗi khi thêm sản phẩm sửa sản phẩm!");
       }
     }
   };
@@ -111,8 +120,13 @@ function Admin() {
         linkLocal: "",
       });
       setShowEditProduct(false);
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Chỉnh sửa sản phẩm thành công!");
     } catch (error) {
       console.error("Error editing product:", error);
+      setAlertSeverity("error");
+      setAlertMessage("Xảy ra lỗi khi xoá sản phẩm!");
     }
   };
 
@@ -124,8 +138,14 @@ function Admin() {
         },
       });
       setProducts(products.filter((product) => product.id !== productId));
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Xoá sản phẩm thành công!");
     } catch (error) {
       console.error("Error deleting product:", error);
+      setShowAlert(true);
+      setAlertSeverity("error");
+      setAlertMessage("Xảy ra lỗi khi xoá sản phẩm!");
     }
   };
 
@@ -191,7 +211,12 @@ function Admin() {
           ))}
         </Row>
       </Container>
-
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       <Modal
         show={showAddProduct}
         onHide={() => setShowAddProduct(false)}

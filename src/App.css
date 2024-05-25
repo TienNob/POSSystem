@@ -44,3 +44,9 @@
     display: block;
   }
 }
+.alert-custom {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 5000 !important;
+}

@@ -9,6 +9,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import Notification from "../../../../notification/Notification";
+
 const API_BASE_URL = "http://localhost:8080/auth/";
 
 const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
@@ -17,6 +19,9 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
     password: "",
     roles: "ROLE_USER", // Default role
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +34,6 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Submit successfully", userData);
       axios.post(`${API_BASE_URL}addNewUser`, userData);
       setUserData({
         username: "",
@@ -37,10 +41,15 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
         roles: "ROLE_USER",
       });
       setPermissionUserData(userData);
-
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Cấp tài khoản thành công!");
       onClose();
     } catch (error) {
       console.error("Error adding new user:", error);
+      setShowAlert(true);
+      setAlertSeverity("error");
+      setAlertMessage("Xảy ra lỗi khi cấp tài khoản!");
     }
   };
 
@@ -85,6 +94,12 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
           </DialogActions>
         </form>
       </DialogContent>
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
     </Dialog>
   );
 };

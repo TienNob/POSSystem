@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../admin.css";
-
+import Notification from "../../../notification/Notification";
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../../LinkAPI";
@@ -9,6 +9,9 @@ import { LinkAPI } from "../../../LinkAPI";
 function TableManagement() {
   const [showAddTable, setShowAddTable] = useState(false);
   const [tables, setTables] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
   const token = localStorage.getItem("authToken");
 
   const [newTable, setNewTable] = useState({
@@ -45,7 +48,10 @@ function TableManagement() {
 
       console.log(filterTable);
       if (filterTable.length >= 1) {
-        return alert("Bàn đã tồn tại");
+        setShowAlert(true);
+        setAlertSeverity("warning");
+        setAlertMessage("Bàn đã tồn tại!");
+        return;
       }
       console.log(newTable.id);
       const response = await axios.post(
@@ -62,8 +68,15 @@ function TableManagement() {
       setTables([...tables, newTable]);
       setNewTable({ id: "", status: true });
       setShowAddTable(false);
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Thêm bàn thành công!");
     } catch (error) {
       console.error("Error adding table:", error);
+      setShowAlert(true);
+
+      setAlertSeverity("error");
+      setAlertMessage("xảy ra lỗi khi thêm bàn!");
     }
   };
 
@@ -75,8 +88,14 @@ function TableManagement() {
         },
       });
       setTables(tables.filter((table) => table.id !== tableId));
+      setShowAlert(true);
+      setAlertSeverity("success");
+      setAlertMessage("Xoá bàn thành công!");
     } catch (error) {
       console.error("Error deleting table:", error);
+      setShowAlert(true);
+      setAlertSeverity("error");
+      setAlertMessage("xảy ra lỗi khi xoá bàn!");
     }
   };
 
@@ -114,14 +133,19 @@ function TableManagement() {
           ))}
         </Row>
       </Container>
-
+      <Notification
+        open={showAlert}
+        severity={alertSeverity}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
       <Modal show={showAddTable} onHide={() => setShowAddTable(false)} centered>
         <Modal.Body>
           <div className="form-container">
             <h2>Thêm số bàn</h2>
             <form onSubmit={handleSubmit}>
               <input
-                type="number"
+                type="phone"
                 value={newTable.id}
                 placeholder="Số bàn"
                 onChange={handleInputChange}
