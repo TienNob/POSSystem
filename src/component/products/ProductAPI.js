@@ -10,6 +10,7 @@ import "../../App.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+
   const navigate = useNavigate();
   const importAll = (r) => {
     let images = [];

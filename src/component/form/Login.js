@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-
-// import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "./login.css";
 import Notification from "../../notification/Notification";
+import Loadding from "../../loadding/Loadding";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -21,12 +20,14 @@ function Login() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const API_BASE_URL = "http://localhost:8080/auth/";
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoading(true);
 
     // Sau khi tạo người dùng thành công, gửi yêu cầu đăng nhập
     const loginData = {
@@ -36,8 +37,6 @@ function Login() {
     axios
       .post(`${API_BASE_URL}Token`, loginData)
       .then((loginResponse) => {
-        console.log("Đăng nhập thành công:", loginResponse.data);
-
         // Lưu token vào localStorage
         const token = loginResponse.data;
         localStorage.removeItem("authToken");
@@ -46,12 +45,14 @@ function Login() {
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Đăng nhập thành công!");
-
-        if (loginData.username === "admin") {
-          navigate("/adminHome");
-        } else {
-          navigate("/tableList");
-        }
+        setTimeout(() => {
+          setLoading(false);
+          if (loginData.username === "admin") {
+            navigate("/adminHome");
+          } else {
+            navigate("/tableList");
+          }
+        }, 500);
       })
       .catch((loginError) => {
         setShowAlert(true);
@@ -60,6 +61,7 @@ function Login() {
           "Tên đăng nhập hoặc mật khẩu chưa đúng, vui lòng nhập lại!"
         );
         console.error("Lỗi khi đăng nhập:", loginError);
+        setLoading(false);
       });
     const token = localStorage.getItem("authToken");
     // Lấy token từ localStorage
@@ -143,6 +145,7 @@ function Login() {
           >
             Đăng nhập
           </Button>
+          {loading && <Loadding />}
         </Box>
       </Box>
       <Notification

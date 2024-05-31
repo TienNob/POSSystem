@@ -4,7 +4,9 @@ import "../admin.css";
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../../LinkAPI";
+import Loadding from "../../../loadding/Loadding";
 import Notification from "../../../notification/Notification";
+
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -13,6 +15,7 @@ function Admin() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
     productName: "",
@@ -58,13 +61,14 @@ function Admin() {
       await handleSaveEdit();
     } else {
       try {
+        setLoading(true);
+
         const newProductWithImage = {
           ...newProduct,
 
           linkImage: newProduct.linkImage || "default_image_url.jpg",
         };
 
-        console.log(newProductWithImage);
         const response = await axios.post(
           `${LinkAPI}products`,
           newProductWithImage,
@@ -74,16 +78,22 @@ function Admin() {
             },
           }
         );
-        setProducts([...products, response.data]);
-        setNewProduct({
-          productName: "",
-          price: "",
-          linkImage: "",
+
+        setTimeout(() => {
+          setLoading(false);
+
+          setProducts([...products, response.data]);
+          setNewProduct({
+            productName: "",
+            price: "",
+            linkImage: "",
+          });
+
+          setShowAddProduct(false);
+          setShowAlert(true);
+          setAlertSeverity("success");
+          setAlertMessage("Thêm sản phẩm thành công!");
         });
-        setShowAlert(true);
-        setAlertSeverity("success");
-        setAlertMessage("Thêm sản phẩm thành công!");
-        setShowAddProduct(false);
       } catch (error) {
         console.error("Error adding product:", error);
         setAlertSeverity("error");
@@ -99,6 +109,8 @@ function Admin() {
   };
 
   const handleSaveEdit = async () => {
+    setLoading(true);
+
     try {
       await axios.put(
         `${LinkAPI}products/${editingProduct.id}`,
@@ -112,17 +124,20 @@ function Admin() {
       const updatedProducts = products.map((product) =>
         product.id === editingProduct.id ? editingProduct : product
       );
-      setProducts(updatedProducts);
-      setEditingProduct({
-        productName: "",
-        price: "",
-        // linkImage: "",
-        linkLocal: "",
+      setTimeout(() => {
+        setLoading(false);
+
+        setProducts(updatedProducts);
+        setEditingProduct({
+          productName: "",
+          price: "",
+          linkLocal: "",
+        });
+        setShowEditProduct(false);
+        setShowAlert(true);
+        setAlertSeverity("success");
+        setAlertMessage("Chỉnh sửa sản phẩm thành công!");
       });
-      setShowEditProduct(false);
-      setShowAlert(true);
-      setAlertSeverity("success");
-      setAlertMessage("Chỉnh sửa sản phẩm thành công!");
     } catch (error) {
       console.error("Error editing product:", error);
       setAlertSeverity("error");
@@ -211,6 +226,8 @@ function Admin() {
           ))}
         </Row>
       </Container>
+      {loading && <Loadding />}
+
       <Notification
         open={showAlert}
         severity={alertSeverity}

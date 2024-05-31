@@ -66,6 +66,19 @@ const headCells = [
     disablePadding: false,
     label: "Họ tên",
   },
+
+  {
+    id: "gender",
+    numeric: false,
+    disablePadding: false,
+    label: "Giới tính",
+  },
+  {
+    id: "address",
+    numeric: false,
+    disablePadding: false,
+    label: "Địa chỉ",
+  },
   {
     id: "cccd",
     numeric: false,
@@ -255,7 +268,6 @@ export default function EnhancedTable() {
     }
     fetchData();
   }, []);
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -272,10 +284,10 @@ export default function EnhancedTable() {
   };
 
   const handleAddEmployee = () => {
-    setIsModalOpen(true); // Open the modal when adding employee
+    setIsModalOpen(true);
   };
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   const handleClick = (event, id) => {
@@ -386,45 +398,49 @@ export default function EnhancedTable() {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.employeeId)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.employeeId}
-                    selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
+                  row.account !== "admin" && (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.employeeId)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.employeeId}
+                      selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
                     >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>{row.fullName}</TableCell>
-                    <TableCell>{row.cccd}</TableCell>
-                    <TableCell>{row.phoneNumber}</TableCell>
-                    <TableCell>{row.position}</TableCell>
-                    <TableCell>{row.account}</TableCell>
-                    <TableCell>{row.dob}</TableCell>
-                  </TableRow>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {index + 1}
+                      </TableCell>
+                      <TableCell>{row.fullName}</TableCell>
+                      <TableCell>{row.gender}</TableCell>
+                      <TableCell>
+                        {row.address ? row.address.slice(0, 10) + "..." : ""}
+                      </TableCell>
+                      <TableCell>{row.cccd}</TableCell>
+                      <TableCell>{row.phoneNumber}</TableCell>
+                      <TableCell>{row.position}</TableCell>
+                      <TableCell>{row.account}</TableCell>
+                      <TableCell>{row.dob}</TableCell>
+                    </TableRow>
+                  )
                 );
               })}
               {emptyRows > 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} />
+                  <TableCell colSpan={10}>Không có dữ liệu</TableCell>
                 </TableRow>
               )}
             </TableBody>

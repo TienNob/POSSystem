@@ -1,3 +1,13 @@
+.button-scan {
+  background-color: #634fbb !important;
+  border-radius: 50px !important;
+  padding: 6px 18px !important;
+  transition: all ease 0.3s !important;
+}
+.button-scan:hover {
+  opacity: 0.7;
+  background-color: #634fbb;
+}
 .heading {
   display: flex;
   justify-content: center;
@@ -395,4 +405,7 @@
 }
 div > div > div > div > .chart-product > .recharts-wrapper {
   max-height: 376px !important;
+}
+.MuiDateRangeCalendar-root > div:first-child {
+  display: none;
 }

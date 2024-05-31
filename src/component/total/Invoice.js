@@ -5,7 +5,13 @@ import "./Oder.css";
 import { useNavigate } from "react-router-dom";
 import { LinkAPI } from "../../LinkAPI";
 
-function Invoice({ totalPrice, products, tableID, phoneNumber }) {
+function Invoice({
+  totalPrice,
+  products,
+  tableID,
+  phoneNumber,
+  paymentMethods,
+}) {
   const userName = localStorage.getItem("userName");
   const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
@@ -37,6 +43,7 @@ function Invoice({ totalPrice, products, tableID, phoneNumber }) {
       <p className="blackColor">Số bàn: {tableID}</p>
       <p className="blackColor">SĐT: {phoneNumber} </p>
       <p className="blackColor">Nhân viên: {fullName} </p>
+      <p className="blackColor">Phương thức thanh toán: {paymentMethods} </p>
       <table className="table table-bordered">
         <thead>
           <tr>

@@ -8,6 +8,7 @@
   right: 0;
   bottom: 0;
   min-width: 23%;
+
   background-color: #090e28;
   border: 1px solid #000;
 }
@@ -84,4 +85,9 @@
 .orderContent-inputChange {
   background-color: transparent;
   border: none;
+}
+/* ghi đè material */
+
+label > .css-ahj2mt-MuiTypography-root {
+  font-size: 12px;
 }

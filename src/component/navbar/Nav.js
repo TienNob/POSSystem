@@ -20,6 +20,7 @@ import "./Nav.css";
 import { LinkAPI } from "../../LinkAPI";
 import TotalOder from "../total/TotalOder";
 import Notification from "../../notification/Notification";
+import Loadding from "../../loadding/Loadding";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
@@ -35,6 +36,8 @@ function Nav() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
@@ -61,6 +64,7 @@ function Nav() {
   }, [navigate, userName]);
 
   const handleGetHTML = () => {
+    setLoading(true);
     fetch(`${LinkAPI}orders/xuatHTML`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -68,7 +72,11 @@ function Nav() {
     })
       .then((response) => {
         if (response.ok) {
-          return response.text();
+          setTimeout(() => {
+            setLoading(false);
+
+            return response.text();
+          });
         }
         throw new Error("Network response was not ok.");
       })
@@ -81,6 +89,7 @@ function Nav() {
       });
   };
   const handleExportPDF = () => {
+    setLoading(true);
     fetch(`${LinkAPI}orders/xuatPDF`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,10 +97,13 @@ function Nav() {
     })
       .then((response) => {
         if (response.ok) {
-          setShowAlert(true);
-          setAlertSeverity("success");
-          setAlertMessage(`Xuất báo cáo thành công!`);
-          return response.blob();
+          setTimeout(() => {
+            setLoading(false);
+            setShowAlert(true);
+            setAlertSeverity("success");
+            setAlertMessage(`Xuất báo cáo thành công!`);
+            return response.blob();
+          });
         }
         throw new Error("Network response was not ok.");
       })
@@ -251,6 +263,8 @@ function Nav() {
           Logout
         </MenuItem>
       </Menu>
+      {loading && <Loadding />}
+
       <Notification
         open={showAlert}
         severity={alertSeverity}

@@ -49,7 +49,7 @@ function App() {
           {(!isAdmin || !isLogin) && isStaf && <Nab />}
 
           {!isAdmin && (
-            <Row className="margin-space">
+            <Row className="ms-0 me-0 margin-space">
               <Col lg="9" md="9" xs="12">
                 <Routes>
                   <Route path="/tableList" element={<TableList />} />

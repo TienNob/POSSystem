@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import Notification from "../../../../notification/Notification";
+import Loadding from "../../../../loadding/Loadding";
 
 const API_BASE_URL = "http://localhost:8080/auth/";
 
@@ -22,6 +23,7 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +35,8 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       axios.post(`${API_BASE_URL}addNewUser`, userData);
       setUserData({
@@ -40,11 +44,15 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
         password: "",
         roles: "ROLE_USER",
       });
-      setPermissionUserData(userData);
-      setShowAlert(true);
-      setAlertSeverity("success");
-      setAlertMessage("Cấp tài khoản thành công!");
-      onClose();
+      setTimeout(() => {
+        setLoading(false);
+
+        setPermissionUserData(userData);
+        setShowAlert(true);
+        setAlertSeverity("success");
+        setAlertMessage("Cấp tài khoản thành công!");
+        onClose();
+      });
     } catch (error) {
       console.error("Error adding new user:", error);
       setShowAlert(true);
@@ -94,6 +102,8 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
           </DialogActions>
         </form>
       </DialogContent>
+      {loading && <Loadding />}
+
       <Notification
         open={showAlert}
         severity={alertSeverity}

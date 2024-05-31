@@ -4,6 +4,7 @@ import "../admin.css";
 import Notification from "../../../notification/Notification";
 import { Container, Card, Row, Button, Col, Modal } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
+import Loadding from "../../../loadding/Loadding";
 import { LinkAPI } from "../../../LinkAPI";
 
 function TableManagement() {
@@ -13,6 +14,7 @@ function TableManagement() {
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const token = localStorage.getItem("authToken");
+  const [loading, setLoading] = useState(false);
 
   const [newTable, setNewTable] = useState({
     id: "",
@@ -42,6 +44,7 @@ function TableManagement() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const filterTable = tables.filter((table) => table.id === newTable.id);
@@ -63,14 +66,17 @@ function TableManagement() {
           },
         }
       );
-      console.log(response);
 
-      setTables([...tables, newTable]);
-      setNewTable({ id: "", status: true });
-      setShowAddTable(false);
-      setShowAlert(true);
-      setAlertSeverity("success");
-      setAlertMessage("Thêm bàn thành công!");
+      setTimeout(() => {
+        setLoading(false);
+
+        setTables([...tables, newTable]);
+        setNewTable({ id: "", status: true });
+        setShowAddTable(false);
+        setShowAlert(true);
+        setAlertSeverity("success");
+        setAlertMessage("Thêm bàn thành công!");
+      });
     } catch (error) {
       console.error("Error adding table:", error);
       setShowAlert(true);
@@ -132,6 +138,7 @@ function TableManagement() {
             </Col>
           ))}
         </Row>
+        {loading && <Loadding />}
       </Container>
       <Notification
         open={showAlert}

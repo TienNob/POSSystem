@@ -6,8 +6,12 @@ import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import Invoice from "./Invoice";
 import "./Oder.css";
 import axios from "axios";
-import { LinkAPI } from "../../LinkAPI";
+import { LinkAPI, LinkPayment } from "../../LinkAPI";
 import Notification from "../../notification/Notification";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Loadding from "../../loadding/Loadding";
 
 function Total({ totalPrice, products, tableID }) {
   const [showModal, setShowModal] = useState(false);
@@ -25,6 +29,8 @@ function Total({ totalPrice, products, tableID }) {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
+  const [radioValue, setRadioValue] = useState("Tiền mặt");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -153,6 +159,7 @@ function Total({ totalPrice, products, tableID }) {
   };
 
   const handlePayment = () => {
+    setLoading(true);
     const storedProductsByTable =
       JSON.parse(localStorage.getItem("selectedProductsByTable")) || {};
     const productsForTable = storedProductsByTable[tableID];
@@ -184,9 +191,12 @@ function Total({ totalPrice, products, tableID }) {
           }
         )
         .then((response) => {
-          setShowAlert(true);
-          setAlertSeverity("success");
-          setAlertMessage(`Thanh toán thành công!`);
+          setTimeout(() => {
+            setLoading(false);
+            setShowAlert(true);
+            setAlertSeverity("success");
+            setAlertMessage(`Thanh toán thành công!`);
+          });
           axios
             .get(`${LinkAPI}customers`, {
               headers: {
@@ -297,7 +307,15 @@ function Total({ totalPrice, products, tableID }) {
               );
 
               setShowModal(false);
-              console.log(currentPath);
+              const presentURL = window.location.href;
+              window.history.pushState(
+                "object or string",
+                "Title",
+                "/" +
+                  presentURL
+                    .substring(presentURL.lastIndexOf("/") + 1)
+                    .split("?")[0]
+              );
               if (currentPath === "/tableList") {
                 window.location.reload();
               } else {
@@ -326,10 +344,12 @@ function Total({ totalPrice, products, tableID }) {
           },
         })
         .then((response) => {
-          console.log(response);
-          setShowAlert(true);
-          setAlertSeverity("success");
-          setAlertMessage(`Thanh toán thành công!`);
+          setTimeout(() => {
+            setLoading(false);
+            setShowAlert(true);
+            setAlertSeverity("success");
+            setAlertMessage(`Thanh toán thành công!`);
+          });
           axios
             .get(`${LinkAPI}customers`, {
               headers: {
@@ -445,32 +465,51 @@ function Total({ totalPrice, products, tableID }) {
           JSON.stringify(storedInfoByTable)
         );
         setShowModal(false);
-
+        const presentURL = window.location.href;
+        window.history.pushState(
+          "object or string",
+          "Title",
+          "/" +
+            presentURL.substring(presentURL.lastIndexOf("/") + 1).split("?")[0]
+        );
         if (currentPath === "/tableList") {
-          window.location.reload();
+          // window.location.reload();
         } else {
           navigate("/tableList");
         }
       }
     }
   };
+
   const handleShowModal = () => {
     if (totalPrice <= 0) {
       setShowAlert(true);
       setAlertSeverity("warning");
       setAlertMessage(`Không thể thanh toán khi không có sản phẩm`);
       return;
+    } else if (radioValue === "Chuyển khoản") {
+      const paymentUrl = `${LinkPayment}?tongTien=${totalPrice}000`;
+      window.location.href = paymentUrl;
+    } else {
+      setShowModal(true);
     }
-    setShowModal(true);
   };
   const handleCloseModal = () => {
     setShowModal(false);
   };
+  const handleRadioChange = (e) => {
+    setRadioValue(e.target.value);
+  };
 
+  useEffect(() => {
+    if (window.location.href.includes("status=PAID")) {
+      setShowModal(true);
+    }
+  }, []);
   return (
     <Container className="total pt-3 pb-3">
-      <div className="d-flex justify-content-between mb-2">
-        <p>Tổng cộng: {totalPrice} K</p>
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <p className="mb-0">Tổng cộng: {totalPrice} K</p>
         <div className=" total-divideIcon d-flex justify-content-center align-items-center">
           <Tooltip title="Tách hoá đơn" placement="top" arrow>
             <SafetyDividerIcon
@@ -480,7 +519,26 @@ function Total({ totalPrice, products, tableID }) {
           </Tooltip>
         </div>
       </div>
-
+      <RadioGroup
+        className="mb-2 radio-total_form"
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+        defaultValue="Tiền mặt"
+        onChange={handleRadioChange}
+      >
+        <FormControlLabel
+          value="Tiền mặt"
+          control={<Radio size="small" />}
+          label="Tiền mặt"
+        />
+        <FormControlLabel
+          className="me-0"
+          value="Chuyển khoản"
+          control={<Radio size="small" />}
+          label="Chuyển khoản"
+        />
+      </RadioGroup>
       <Button
         variant="primary"
         style={{ width: "100%" }}
@@ -488,6 +546,7 @@ function Total({ totalPrice, products, tableID }) {
       >
         Thanh toán
       </Button>
+      {loading && <Loadding />}
 
       <Notification
         open={showAlert}
@@ -513,6 +572,7 @@ function Total({ totalPrice, products, tableID }) {
             products={splitInvoice ? splitInvoice.products : products}
             tableID={tableID}
             phoneNumber={phoneNumber}
+            paymentMethods={radioValue}
           />
         </Modal.Body>
         <Modal.Footer>
