@@ -209,7 +209,7 @@ function Admin() {
                     Giá: {product.price}k
                   </Card.Text>
                   <Button
-                    className="me-2 mt-1"
+                    className="me-2 mt-1 "
                     onClick={() => handleDeleteProduct(product.id)}
                   >
                     Xoá
@@ -265,7 +265,11 @@ function Admin() {
                 onChange={handleInputChange}
               />
               <div className="btn-form">
-                <button type="button" onClick={() => setShowAddProduct(false)}>
+                <button
+                  type="button"
+                  className="buttonDisible"
+                  onClick={() => setShowAddProduct(false)}
+                >
                   Huỷ
                 </button>
                 <button className="ms-2" type="submit">
@@ -308,7 +312,11 @@ function Admin() {
                 onChange={handleInputChange}
               />
               <div className="btn-form">
-                <button type="button" onClick={() => setShowEditProduct(false)}>
+                <button
+                  type="button"
+                  className="buttonDisible"
+                  onClick={() => setShowEditProduct(false)}
+                >
                   Huỷ
                 </button>
                 <button className="ms-2" type="submit">

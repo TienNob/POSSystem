@@ -182,6 +182,7 @@ function Total({ totalPrice, products, tableID }) {
             phoneNumber: phoneNumber,
             products: splitInvoice.products,
             employee: { employeeId: userId },
+            typePayment: radioValue,
           },
 
           {
@@ -336,6 +337,7 @@ function Total({ totalPrice, products, tableID }) {
         totalAmount: totalPrice,
         phoneNumber: phoneNumber,
         employee: { employeeId: userId },
+        typePayment: radioValue,
       };
       axios
         .post(`${LinkAPI}orders`, invoiceData, {
@@ -349,135 +351,141 @@ function Total({ totalPrice, products, tableID }) {
             setShowAlert(true);
             setAlertSeverity("success");
             setAlertMessage(`Thanh toán thành công!`);
+            axios
+              .get(`${LinkAPI}customers`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              })
+              .then((response) => {
+                const filteredCustomers = response.data.filter(
+                  (customer) => customer.phoneNumber === phoneNumber
+                );
+                if (filteredCustomers.length > 0) {
+                  // Nếu khách hàng đã tồn tại, lấy thông tin về điểm hiện tại của họ
+                  const currentCustomer = filteredCustomers[0];
+                  const currentPoints = currentCustomer.point || 0;
+
+                  // Tính toán điểm mới dựa trên tổng cộng của hoá đơn hiện tại
+                  const newPoints =
+                    currentPoints + Math.floor((totalPrice * 10) / 100);
+                  customers.point = newPoints;
+
+                  // Cập nhật lại điểm của khách hàng
+                  axios
+                    .put(
+                      `${LinkAPI}customers/${currentCustomer.id}`,
+                      customers,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(
+                        "Customer points updated successfully:",
+                        response.data
+                      );
+                    })
+                    .catch((error) => {
+                      console.error("Error updating customer points:", error);
+                    });
+                } else {
+                  // Nếu khách hàng chưa tồn tại, thêm mới thông tin khách hàng
+                  axios
+                    .post(`${LinkAPI}customers`, customers, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    })
+                    .then((response) => {
+                      console.log(
+                        "New customer added successfully:",
+                        response.data
+                      );
+                    })
+                    .catch((error) => {
+                      console.error("Error adding new customer:", error);
+                    });
+                }
+              })
+
+              .catch((error) => {
+                console.error("Error fetching customer data:", error);
+              });
+
+            axios
+              .get(`${LinkAPI}orders/max`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              })
+              .then((response) => {
+                const maxOrderId = response.data;
+                for (let i = 0; i < products.length; i++) {
+                  const orderItem = {
+                    order: { id: maxOrderId },
+                    product: { id: products[i].id },
+                    quantity: products[i].quantity,
+                  };
+                  // Gửi dữ liệu order item
+                  axios
+                    .post(`${LinkAPI}order-items`, orderItem, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    })
+                    .then((response) => {
+                      console.log(
+                        "Order item data sent successfully:",
+                        response.data
+                      );
+                    })
+                    .catch((error) => {
+                      console.error("Error sending order item data:", error);
+                    });
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching max order id:", error);
+              });
           });
-          axios
-            .get(`${LinkAPI}customers`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              const filteredCustomers = response.data.filter(
-                (customer) => customer.phoneNumber === phoneNumber
-              );
-              if (filteredCustomers.length > 0) {
-                // Nếu khách hàng đã tồn tại, lấy thông tin về điểm hiện tại của họ
-                const currentCustomer = filteredCustomers[0];
-                const currentPoints = currentCustomer.point || 0;
 
-                // Tính toán điểm mới dựa trên tổng cộng của hoá đơn hiện tại
-                const newPoints =
-                  currentPoints + Math.floor((totalPrice * 10) / 100);
-                customers.point = newPoints;
+          if (productsForTable) {
+            const updatedProducts = [];
+            const updatedInfo = [];
+            // Cập nhật mảng trong local storage
+            storedProductsByTable[tableID] = updatedProducts;
+            localStorage.setItem(
+              "selectedProductsByTable",
+              JSON.stringify(storedProductsByTable)
+            );
 
-                // Cập nhật lại điểm của khách hàng
-                axios
-                  .put(`${LinkAPI}customers/${currentCustomer.id}`, customers, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then((response) => {
-                    console.log(
-                      "Customer points updated successfully:",
-                      response.data
-                    );
-                  })
-                  .catch((error) => {
-                    console.error("Error updating customer points:", error);
-                  });
-              } else {
-                // Nếu khách hàng chưa tồn tại, thêm mới thông tin khách hàng
-                axios
-                  .post(`${LinkAPI}customers`, customers, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then((response) => {
-                    console.log(
-                      "New customer added successfully:",
-                      response.data
-                    );
-                  })
-                  .catch((error) => {
-                    console.error("Error adding new customer:", error);
-                  });
-              }
-            })
-
-            .catch((error) => {
-              console.error("Error fetching customer data:", error);
-            });
-
-          axios
-            .get(`${LinkAPI}orders/max`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            })
-            .then((response) => {
-              const maxOrderId = response.data;
-              for (let i = 0; i < products.length; i++) {
-                const orderItem = {
-                  order: { id: maxOrderId },
-                  product: { id: products[i].id },
-                  quantity: products[i].quantity,
-                };
-                // Gửi dữ liệu order item
-                axios
-                  .post(`${LinkAPI}order-items`, orderItem, {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then((response) => {
-                    console.log(
-                      "Order item data sent successfully:",
-                      response.data
-                    );
-                  })
-                  .catch((error) => {
-                    console.error("Error sending order item data:", error);
-                  });
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching max order id:", error);
-            });
+            const storedInfoByTable =
+              JSON.parse(localStorage.getItem("customerInfoArray")) || {};
+            storedInfoByTable[tableID] = updatedInfo;
+            localStorage.setItem(
+              "customerInfoArray",
+              JSON.stringify(storedInfoByTable)
+            );
+            setShowModal(false);
+            const presentURL = window.location.href;
+            window.history.pushState(
+              "object or string",
+              "Title",
+              "/" +
+                presentURL
+                  .substring(presentURL.lastIndexOf("/") + 1)
+                  .split("?")[0]
+            );
+            if (currentPath === "/tableList") {
+              // window.location.reload();
+            } else {
+              navigate("/tableList");
+            }
+          }
         });
-
-      if (productsForTable) {
-        const updatedProducts = [];
-        const updatedInfo = [];
-        // Cập nhật mảng trong local storage
-        storedProductsByTable[tableID] = updatedProducts;
-        localStorage.setItem(
-          "selectedProductsByTable",
-          JSON.stringify(storedProductsByTable)
-        );
-
-        const storedInfoByTable =
-          JSON.parse(localStorage.getItem("customerInfoArray")) || {};
-        storedInfoByTable[tableID] = updatedInfo;
-        localStorage.setItem(
-          "customerInfoArray",
-          JSON.stringify(storedInfoByTable)
-        );
-        setShowModal(false);
-        const presentURL = window.location.href;
-        window.history.pushState(
-          "object or string",
-          "Title",
-          "/" +
-            presentURL.substring(presentURL.lastIndexOf("/") + 1).split("?")[0]
-        );
-        if (currentPath === "/tableList") {
-          // window.location.reload();
-        } else {
-          navigate("/tableList");
-        }
-      }
     }
   };
 

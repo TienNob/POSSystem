@@ -52,6 +52,7 @@ function OrderDetail() {
               <td className="setHistoryColor">{product.productName}</td>
               <td className="setHistoryColor">{product.price} K</td>
               <td className="setHistoryColor">{product.quantity}</td>
+
               <td className="setHistoryColor">
                 {product.quantity * product.price} K
               </td>

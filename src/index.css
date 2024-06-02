@@ -17,8 +17,10 @@ html {
   background-color: #090e28;
 }
 
-
-button:not(.history-pagination > ul > li > button,.alert-custom > div > button) {
+button:not(
+    .history-pagination > ul > li > button,
+    .alert-custom > div > button
+  ) {
   background-color: #634fbb;
   border-radius: 50px !important;
   padding: 6px 18px !important;
@@ -45,6 +47,7 @@ body > .modalInvoice,
 body > .modal {
   z-index: 2000;
 }
+
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;

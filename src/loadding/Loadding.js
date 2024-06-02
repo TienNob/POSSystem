@@ -6,8 +6,6 @@ function Loadding() {
   return (
     <Modal
       className="loadding"
-      disablePortal
-      disableEnforceFocus
       disableAutoFocus
       open
       aria-labelledby="server-modal-title"

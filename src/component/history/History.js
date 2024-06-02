@@ -27,15 +27,12 @@ function History() {
     // Lấy token từ localStorage
     const token = localStorage.getItem("authToken");
 
-    // Kiểm tra xem token có tồn tại không
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
-      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       navigate("/login");
       return;
     }
 
-    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
       .get(`${LinkAPI}orders?page=${currentPage}&size=${pageSize}`, {
         headers: {
@@ -68,6 +65,7 @@ function History() {
             <th className="setHistoryColor">Số điện thoại</th>
             <th className="setHistoryColor">Ngày thanh toán</th>
             <th className="setHistoryColor">Tổng thành tiền</th>
+            <th className="setHistoryColor">Thanh toán</th>
             <th className="setHistoryColor">Nhân viên</th>
             <th className="setHistoryColor">Chi tiết hoá đơn</th>
           </tr>
@@ -85,6 +83,7 @@ function History() {
                 {new Date(item.orderDate).toLocaleString()}
               </td>
               <td className="setHistoryColor">{item.totalAmount} K</td>
+              <td className="setHistoryColor">{item.typePayment}</td>
               <td className="setHistoryColor">
                 {item.employee ? item.employee.fullName : ""}
               </td>
@@ -97,6 +96,7 @@ function History() {
           ))}
         </tbody>
       </Table>
+
       <div className="button-container mt-4">
         <Stack spacing={2}>
           <Pagination

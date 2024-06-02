@@ -53,8 +53,8 @@
   position: fixed;
   bottom: 5px;
   right: 5px;
-  z-index: 5000 !important;
+  z-index: 4900 !important;
 }
 .loadding {
-  z-index: 4000 !important;
+  z-index: 5000 !important;
 }

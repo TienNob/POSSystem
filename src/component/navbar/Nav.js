@@ -64,19 +64,15 @@ function Nav() {
   }, [navigate, userName]);
 
   const handleGetHTML = () => {
-    setLoading(true);
     fetch(`${LinkAPI}orders/xuatHTML`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
+        console.log(response.ok);
         if (response.ok) {
-          setTimeout(() => {
-            setLoading(false);
-
-            return response.text();
-          });
+          return response.text();
         }
         throw new Error("Network response was not ok.");
       })
@@ -90,46 +86,91 @@ function Nav() {
   };
   const handleExportPDF = () => {
     setLoading(true);
-    fetch(`${LinkAPI}orders/xuatPDF`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          setTimeout(() => {
-            setLoading(false);
-            setShowAlert(true);
-            setAlertSeverity("success");
-            setAlertMessage(`Xuất báo cáo thành công!`);
+    if (userName === "admin") {
+      fetch(`${LinkAPI}orders/xuatExcel`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            setTimeout(() => {
+              setLoading(false);
+              setShowAlert(true);
+              setAlertSeverity("success");
+              setAlertMessage(`Xuất báo cáo thành công!`);
+            });
             return response.blob();
-          });
-        }
-        throw new Error("Network response was not ok.");
+          }
+          throw new Error("Network response was not ok.");
+        })
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          const currentDate = new Date(Date.now());
+          const year = currentDate.getFullYear();
+          const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+          const day = ("0" + currentDate.getDate()).slice(-2);
+          const hours = ("0" + currentDate.getHours()).slice(-2);
+          const minutes = ("0" + currentDate.getMinutes()).slice(-2);
+          const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
+          a.download = "DoanhThu_" + formattedDate + ".xlsx";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          setModalIsOpen(false);
+        })
+        .catch((error) => {
+          console.error("Error exporting Excel:", error);
+          setShowAlert(true);
+          setAlertSeverity("error");
+          setAlertMessage(`Xuất báo cáo không thành công!`);
+        });
+    } else {
+      fetch(`${LinkAPI}orders/xuatPDF`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        const currentDate = new Date(Date.now());
-        const year = currentDate.getFullYear();
-        const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
-        const day = ("0" + currentDate.getDate()).slice(-2);
-        const hours = ("0" + currentDate.getHours()).slice(-2);
-        const minutes = ("0" + currentDate.getMinutes()).slice(-2);
-        const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
-        a.download = "DoanhThu_" + formattedDate + ".pdf";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        console.error("Error exporting Excel:", error);
-        setShowAlert(true);
-        setAlertSeverity("error");
-        setAlertMessage(`Xuất báo cáo không thành công!`);
-      });
+        .then((response) => {
+          if (response.ok) {
+            setTimeout(() => {
+              setLoading(false);
+              setShowAlert(true);
+              setAlertSeverity("success");
+              setAlertMessage(`Xuất báo cáo thành công!`);
+            });
+            return response.blob();
+          }
+          throw new Error("Network response was not ok.");
+        })
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          const currentDate = new Date(Date.now());
+          const year = currentDate.getFullYear();
+          const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+          const day = ("0" + currentDate.getDate()).slice(-2);
+          const hours = ("0" + currentDate.getHours()).slice(-2);
+          const minutes = ("0" + currentDate.getMinutes()).slice(-2);
+          const formattedDate = `${year}-${month}-${day}_${hours}-${minutes}`;
+          a.download = "DoanhThu_" + formattedDate + ".pdf";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          setModalIsOpen(false);
+        })
+        .catch((error) => {
+          console.error("Error exporting Excel:", error);
+          setShowAlert(true);
+          setAlertSeverity("error");
+          setAlertMessage(`Xuất báo cáo không thành công!`);
+        });
+    }
   };
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -185,7 +226,6 @@ function Nav() {
               <Button onClick={handleOpenModal}>Xuất báo cáo ngày</Button>
               <Dialog open={modalIsOpen} onClose={() => setModalIsOpen(false)}>
                 <DialogContent>
-                  {/* Render the HTML content inside a div */}
                   <div dangerouslySetInnerHTML={{ __html: htmlData }} />
                 </DialogContent>
                 <DialogActions>

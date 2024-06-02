@@ -70,7 +70,7 @@ function App() {
         <div
           className="grid-container"
           style={{
-            display: !isStaf ? "grid" : "none",
+            display: !isStaf && !isLogin ? "grid" : "none",
           }}
         >
           {isAdmin && (

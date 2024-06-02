@@ -128,7 +128,7 @@ function TableManagement() {
                   <Card.Title>Số bàn: {table.id}</Card.Title>
 
                   <Button
-                    className="me-2 mt-4"
+                    className="me-2 mt-4 "
                     onClick={() => handleDeleteTable(table.id)}
                   >
                     Xoá
@@ -149,7 +149,7 @@ function TableManagement() {
       <Modal show={showAddTable} onHide={() => setShowAddTable(false)} centered>
         <Modal.Body>
           <div className="form-container">
-            <h2>Thêm số bàn</h2>
+            <h2>Thêm bàn</h2>
             <form onSubmit={handleSubmit}>
               <input
                 type="phone"
@@ -158,12 +158,16 @@ function TableManagement() {
                 onChange={handleInputChange}
               />
 
-              <div className="btn-form">
-                <button className="me-2" type="submit">
-                  Thêm số bàn
-                </button>
-                <button type="button" onClick={() => setShowAddTable(false)}>
+              <div className="btn-form mt-2">
+                <button
+                  type="button"
+                  className="buttonDisible"
+                  onClick={() => setShowAddTable(false)}
+                >
                   Hủy
+                </button>
+                <button className="ms-2" type="submit">
+                  Thêm bàn
                 </button>
               </div>
             </form>

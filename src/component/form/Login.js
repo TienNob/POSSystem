@@ -135,7 +135,7 @@ function Login() {
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Nhớ tên tài khoản"
+            label="Ghi nhớ tài khoản"
           />
           <Button
             type="submit"

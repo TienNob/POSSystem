@@ -40,7 +40,7 @@ function AdminHome() {
   const token = localStorage.getItem("authToken");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  console.log(dateRange);
+
   // Lấy dữ liệu tổng quan
   useEffect(() => {
     fetch(`${LinkAPI}orders`, {
