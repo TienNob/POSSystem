@@ -16,6 +16,7 @@ import History from "./component/history/History.js";
 import Login from "./component/form/Login.js";
 import EmployeeManagement from "./component/manager/emloyee/EmployeeManagement";
 import CustomerManagement from "./component/manager/customer/CustomerManagement";
+import BranchManagerment from "./component/manager/branchManagerment/BranchManagerment";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -27,6 +28,7 @@ function App() {
     currentPath === "/customerManagement" ||
     currentPath === "/tableManagement" ||
     currentPath === "/employeeManagement";
+
   const isStaf =
     currentPath === "/tableList" ||
     currentPath === "/productlist" ||

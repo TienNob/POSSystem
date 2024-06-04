@@ -10,43 +10,68 @@ import "../../App.css";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const [productDrink, setProductDrink] = useState([]);
 
   const navigate = useNavigate();
   const importAll = (r) => {
     let images = [];
-    r.keys().map((item) => {
+    r.keys().forEach((item) => {
       images.push(r(item));
     });
     return images;
   };
 
-  const imageFiles = require.context(
-    "../../../APIPOS/images",
+  const foodImageFiles = require.context(
+    "../../../APIPOS/images/food",
     false,
     /\.(png|jpe?g|svg)$/
   );
-  const imageArray = importAll(imageFiles);
-  useEffect(() => {
-    // Lấy token từ localStorage
-    const token = localStorage.getItem("authToken");
+  const drinkImageFiles = require.context(
+    "../../../APIPOS/images/drink",
+    false,
+    /\.(png|jpe?g|svg)$/
+  );
 
-    // Kiểm tra xem token có tồn tại không
+  const foodImages = importAll(foodImageFiles);
+  const drinkImages = importAll(drinkImageFiles);
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
-      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       navigate("/");
       return;
     }
 
-    // Thực hiện yêu cầu dữ liệu sản phẩm với tiêu đề Authorization
     axios
-      .get(`${LinkAPI}products`, {
+      .get(`${LinkAPI}products/do-an`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         setProducts(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+      });
+  }, [navigate]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("Token không tồn tại trong localStorage");
+      navigate("/");
+      return;
+    }
+
+    axios
+      .get(`${LinkAPI}products/nuoc`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setProductDrink(res.data);
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
@@ -86,15 +111,43 @@ function ProductList() {
   return (
     <Container className="mb-5">
       <TotalOder />
+      <h3 className="mb-0 mt-4">Thức ăn</h3>
+
       <Row>
         {products.map((product, i) => (
-          <Col key={product.id} lg="4" md="4" xs="6" className="mt-4">
+          <Col key={product.id} lg="3" md="4" xs="6" className="mt-4">
             <Card
               onClick={() => addProductToTotal(product)}
               style={{
                 width: "100%",
                 height: "12rem",
-                backgroundImage: `url('${imageArray[i]}')`,
+                backgroundImage: `url('${foodImages[i]}')`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                color: "white",
+              }}
+            >
+              <Card.Body className="fillter d-flex flex-column justify-content-between">
+                <Card.Title>{product.productName}</Card.Title>
+                <Card.Text className="d-flex justify-content-between ">
+                  <AddCircleIcon className="ms-1" size={"18px"} />
+                  <p className="mb-0">{product.price} K</p>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+      <h3 className="mb-0 mt-5">Thức uống</h3>
+      <Row>
+        {productDrink.map((product, i) => (
+          <Col key={product.id} lg="3" md="4" xs="6" className="mt-4">
+            <Card
+              onClick={() => addProductToTotal(product)}
+              style={{
+                width: "100%",
+                height: "12rem",
+                backgroundImage: `url('${drinkImages[i]}')`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 color: "white",

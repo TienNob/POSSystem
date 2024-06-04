@@ -6,6 +6,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import Box from "@mui/material/Box";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useNavigate } from "react-router-dom";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
@@ -30,12 +32,47 @@ function AdminHome({ OpenSidebar }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [branch, setBranch] = useState(null);
+  const openBranch = Boolean(branch);
+  const handleShowBranch = (event) => {
+    setBranch(event.currentTarget);
+  };
+  const handleCloseBranch = () => {
+    setBranch(null);
+  };
+
   return (
     <header className="header">
       <div className="menu-icon">
         <FormatAlignJustifyIcon className="icon" onClick={OpenSidebar} />
       </div>
-      <div className="header-right">
+
+      <div className="header-right d-flex">
+        <div className="d-flex align-items-center choise-branch">
+          <Box
+            id="basic-button"
+            aria-controls={openBranch ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={openBranch ? "true" : undefined}
+            onClick={handleShowBranch}
+          >
+            <span>Cần Thơ</span> <ArrowDropDownIcon />
+          </Box>
+          <Menu
+            id="basic-menu"
+            anchorEl={branch}
+            open={openBranch}
+            onClose={handleCloseBranch}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleCloseBranch}>Cần Thơ</MenuItem>
+            <MenuItem onClick={handleCloseBranch}>Vĩnh Long</MenuItem>
+            <MenuItem onClick={handleCloseBranch}>Tiền Giang</MenuItem>
+          </Menu>
+        </div>
         <Avatar
           className="ms-4 nav-avatar"
           onClick={handleClick}

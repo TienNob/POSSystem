@@ -92,6 +92,15 @@
   cursor: pointer;
 }
 
+.catelory-form > label {
+  color: rgba(355, 355, 355, 0.7);
+}
+.catelory-form > div {
+  color: #fff;
+}
+.catelory-form > div > fieldset {
+  border-color: #ccc;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -168,6 +177,13 @@
 }
 .menu-icon {
   display: none;
+}
+.choise-branch {
+  cursor: pointer;
+  transition: all linear 0.3s;
+}
+.choise-branch:hover {
+  opacity: 0.7;
 }
 /* End Header  */
 

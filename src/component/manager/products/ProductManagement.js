@@ -6,6 +6,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../../LinkAPI";
 import Loadding from "../../../loadding/Loadding";
 import Notification from "../../../notification/Notification";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -16,11 +20,13 @@ function Admin() {
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState("");
 
   const [newProduct, setNewProduct] = useState({
     productName: "",
     price: "",
     linkImage: "",
+    codeDM: "",
   });
 
   const [editingProduct, setEditingProduct] = useState({
@@ -28,12 +34,19 @@ function Admin() {
     price: "",
     linkImage: "",
     linkLocal: "",
+    codeDM: "",
   });
 
+  console.log(products);
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await axios.get(`${LinkAPI}products`, {
+        const endpoint =
+          category === "nuoc"
+            ? `${LinkAPI}products/nuoc`
+            : `${LinkAPI}products/do-an`;
+
+        const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,8 +56,10 @@ function Admin() {
         console.error("Error fetching products:", error);
       }
     }
-    fetchProducts();
-  }, [token]);
+    if (category) {
+      fetchProducts();
+    }
+  }, [category, token]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,6 +72,12 @@ function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!category) {
+      setAlertSeverity("error");
+      setAlertMessage("Vui lòng chọn danh mục trước khi thêm sản phẩm!");
+      setShowAlert(true);
+      return;
+    }
     if (showEditProduct) {
       await handleSaveEdit();
     } else {
@@ -65,8 +86,8 @@ function Admin() {
 
         const newProductWithImage = {
           ...newProduct,
-
           linkImage: newProduct.linkImage || "default_image_url.jpg",
+          codeDM: category === "nuoc" ? "NUOC_UONG" : "DO_AN",
         };
 
         const response = await axios.post(
@@ -87,6 +108,7 @@ function Admin() {
             productName: "",
             price: "",
             linkImage: "",
+            codeDM: "",
           });
 
           setShowAddProduct(false);
@@ -97,7 +119,7 @@ function Admin() {
       } catch (error) {
         console.error("Error adding product:", error);
         setAlertSeverity("error");
-        setAlertMessage("xảy ra lỗi khi thêm sản phẩm sửa sản phẩm!");
+        setAlertMessage("Xảy ra lỗi khi thêm sản phẩm!");
       }
     }
   };
@@ -132,6 +154,7 @@ function Admin() {
           productName: "",
           price: "",
           linkLocal: "",
+          codeDM: "",
         });
         setShowEditProduct(false);
         setShowAlert(true);
@@ -141,10 +164,9 @@ function Admin() {
     } catch (error) {
       console.error("Error editing product:", error);
       setAlertSeverity("error");
-      setAlertMessage("Xảy ra lỗi khi xoá sản phẩm!");
+      setAlertMessage("Xảy ra lỗi khi sửa sản phẩm!");
     }
   };
-
   const handleDeleteProduct = async (productId) => {
     try {
       await axios.delete(`${LinkAPI}products/${productId}`, {
@@ -172,12 +194,29 @@ function Admin() {
     return images;
   };
 
-  const imageFiles = require.context(
-    "../../../../APIPOS/images",
-    false,
-    /\.(png|jpe?g|svg)$/
+  const foodImages = importAll(
+    require.context(
+      "../../../../APIPOS/images/food",
+      false,
+      /\.(png|jpe?g|svg)$/
+    )
   );
-  const imageArray = importAll(imageFiles);
+
+  const drinkImages = importAll(
+    require.context(
+      "../../../../APIPOS/images/drink",
+      false,
+      /\.(png|jpe?g|svg)$/
+    )
+  );
+
+  const getImageArray = (category) => {
+    return category === "nuoc" ? drinkImages : foodImages;
+  };
+  const handleChange = (event) => {
+    setCategory(event.target.value);
+    console.log(category);
+  };
 
   return (
     <div className="d-flex flex-column align-items-center main-container">
@@ -192,6 +231,23 @@ function Admin() {
           Thêm sản phẩm
         </Button>
       </div>
+
+      <div className="w-100 mt-2">
+        <FormControl className="w-25 catelory-form">
+          <InputLabel id="demo-simple-select-label">Danh mục</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={category}
+            label="Danh mục"
+            onChange={handleChange}
+          >
+            <MenuItem value="nuoc">Thức uống</MenuItem>
+            <MenuItem value="do-an">Thức ăn</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+
       <Container>
         <Row>
           {products.map((product, i) => (
@@ -201,7 +257,7 @@ function Admin() {
                   className="admin-card_product"
                   height=""
                   variant="top"
-                  src={imageArray[i]}
+                  src={getImageArray(category)[i]}
                 />
                 <Card.Body className="card-body_fix">
                   <Card.Title>{product.productName}</Card.Title>
@@ -264,6 +320,14 @@ function Admin() {
                 placeholder="Đường dẫn hình ảnh"
                 onChange={handleInputChange}
               />
+              <input
+                type="text"
+                name="codeDM"
+                value={category === "nuoc" ? "Thức uống" : "Thức ăn"}
+                placeholder=""
+                onChange={handleInputChange}
+              />
+
               <div className="btn-form">
                 <button
                   type="button"
@@ -311,6 +375,7 @@ function Admin() {
                 placeholder="Đường dẫn hình ảnh"
                 onChange={handleInputChange}
               />
+
               <div className="btn-form">
                 <button
                   type="button"

@@ -197,17 +197,25 @@ const Modal = ({ open, onClose }) => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField
-                  InputLabelProps={dataSelectScan.sex ? { shrink: true } : {}}
-                  fullWidth
-                  label="Giới tính"
-                  variant="outlined"
-                  name="gender"
-                  value={employeeData.gender}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
+                <FormControl fullWidth variant="outlined" margin="normal">
+                  <InputLabel>Giới tính</InputLabel>
+                  <Select
+                    InputLabelProps={dataSelectScan.sex ? { shrink: true } : {}}
+                    value={employeeData.gender}
+                    onChange={handleChange}
+                    label="Gender"
+                    name="gender"
+                    sx={{ color: "black" }}
+                    required
+                  >
+                    <MenuItem value="Nhân viên" sx={{ color: "black" }}>
+                      NAM
+                    </MenuItem>
+                    <MenuItem value="Thu Ngân" sx={{ color: "black" }}>
+                      NỮ
+                    </MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
 
               <Grid item xs={8}>
@@ -275,6 +283,9 @@ const Modal = ({ open, onClose }) => {
                   >
                     <MenuItem value="Nhân viên" sx={{ color: "black" }}>
                       Nhân viên
+                    </MenuItem>
+                    <MenuItem value="Thu Ngân" sx={{ color: "black" }}>
+                      Thu Ngân
                     </MenuItem>
                   </Select>
                 </FormControl>
