@@ -4,12 +4,14 @@ import "../admin.css";
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import { LinkAPI } from "../../../LinkAPI";
+import { Link } from "react-router-dom";
 import Loadding from "../../../loadding/Loadding";
 import Notification from "../../../notification/Notification";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -20,7 +22,7 @@ function Admin() {
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("nuoc");
 
   const [newProduct, setNewProduct] = useState({
     productName: "",
@@ -72,12 +74,7 @@ function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!category) {
-      setAlertSeverity("error");
-      setAlertMessage("Vui lòng chọn danh mục trước khi thêm sản phẩm!");
-      setShowAlert(true);
-      return;
-    }
+
     if (showEditProduct) {
       await handleSaveEdit();
     } else {
@@ -218,6 +215,15 @@ function Admin() {
     console.log(category);
   };
 
+  const handleShowAdd = () => {
+    if (!category) {
+      setAlertSeverity("error");
+      setAlertMessage("Vui lòng chọn danh mục trước khi thêm sản phẩm!");
+      setShowAlert(true);
+      return;
+    } else setShowAddProduct(true);
+  };
+
   return (
     <div className="d-flex flex-column align-items-center main-container">
       <div
@@ -226,13 +232,13 @@ function Admin() {
       >
         <h3 style={{ color: "white" }}>Quản lý sản phẩm</h3>
 
-        <Button onClick={() => setShowAddProduct(true)}>
+        <Button onClick={handleShowAdd}>
           <AddIcon className="me-1" />
           Thêm sản phẩm
         </Button>
       </div>
 
-      <div className="w-100 mt-2">
+      <div className="w-100 mt-2 d-flex justify-content-between align-items-center">
         <FormControl className="w-25 catelory-form">
           <InputLabel id="demo-simple-select-label">Danh mục</InputLabel>
           <Select
@@ -246,6 +252,11 @@ function Admin() {
             <MenuItem value="do-an">Thức ăn</MenuItem>
           </Select>
         </FormControl>
+        <Link to="binProduct">
+          <Button className="buttonDisible ">
+            <AutoDeleteIcon />
+          </Button>
+        </Link>
       </div>
 
       <Container>

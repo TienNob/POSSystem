@@ -16,6 +16,8 @@ import History from "./component/history/History.js";
 import Login from "./component/form/Login.js";
 import EmployeeManagement from "./component/manager/emloyee/EmployeeManagement";
 import CustomerManagement from "./component/manager/customer/CustomerManagement";
+import SuggestCombo from "./component/manager/sugsgestCombo/SuggestCombo.js";
+import BinProduct from "./component/manager/products/BinProduct.js";
 import BranchManagerment from "./component/manager/branchManagerment/BranchManagerment";
 function App() {
   const location = useLocation();
@@ -27,7 +29,9 @@ function App() {
     currentPath === "/productManagement" ||
     currentPath === "/customerManagement" ||
     currentPath === "/tableManagement" ||
-    currentPath === "/employeeManagement";
+    currentPath === "/employeeManagement" ||
+    currentPath === "/suggestCombo" ||
+    currentPath === "/productManagement/binProduct";
 
   const isStaf =
     currentPath === "/tableList" ||
@@ -95,6 +99,11 @@ function App() {
               path="/customerManagement"
               element={<CustomerManagement />}
             />
+            <Route
+              path="/productManagement/binProduct"
+              element={<BinProduct />}
+            />
+            <Route path="/suggestCombo" element={<SuggestCombo />} />
           </Routes>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import TableBarIcon from "@mui/icons-material/TableBar";
 import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
@@ -47,6 +48,11 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
         <Link className="sidebar-link" to="/customerManagement">
           <li className="sidebar-list-item">
             <MoodIcon className="icon" /> Khách hàng
+          </li>
+        </Link>
+        <Link className="sidebar-link" to="/suggestCombo">
+          <li className="sidebar-list-item">
+            <LocalOfferIcon className="icon" /> Gợi ý
           </li>
         </Link>
       </ul>

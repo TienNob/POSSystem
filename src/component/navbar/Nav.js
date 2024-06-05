@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { pink } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -21,6 +21,7 @@ import { LinkAPI } from "../../LinkAPI";
 import TotalOder from "../total/TotalOder";
 import Notification from "../../notification/Notification";
 import Loadding from "../../loadding/Loadding";
+import Webcam from "react-webcam";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
@@ -200,6 +201,14 @@ function Nav() {
     setModalIsOpen(true);
   }, [setModalIsOpen]);
 
+  // const webcamRef = useRef(null);
+  // const [imgSrc, setImgSrc] = useState(null);
+
+  // const capture = useCallback(() => {
+  //   const imageSrc = webcamRef.current.getScreenshot();
+  //   setImgSrc(imageSrc);
+  // }, [webcamRef, setImgSrc]);
+  // console.log(imgSrc);
   return (
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
@@ -218,6 +227,9 @@ function Nav() {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text className="d-flex">
+              {/* <Button className="me-2" onClick={capture}>
+                Capture photo
+              </Button> */}
               <Link className="nav-order" to="/history">
                 <Button className="me-2" variant="primary">
                   Hoá đơn
@@ -304,7 +316,7 @@ function Nav() {
         </MenuItem>
       </Menu>
       {loading && <Loadding />}
-
+      {/* <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" /> */}
       <Notification
         open={showAlert}
         severity={alertSeverity}
