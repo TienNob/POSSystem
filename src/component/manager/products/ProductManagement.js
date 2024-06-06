@@ -12,7 +12,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
-
 function Admin() {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [showEditProduct, setShowEditProduct] = useState(false);
@@ -183,32 +182,12 @@ function Admin() {
     }
   };
 
-  const importAll = (r) => {
-    let images = [];
-    r.keys().map((item) => {
-      images.push(r(item));
-    });
-    return images;
-  };
-
-  const foodImages = importAll(
-    require.context(
-      "../../../../APIPOS/images/food",
-      false,
-      /\.(png|jpe?g|svg)$/
-    )
-  );
-
-  const drinkImages = importAll(
-    require.context(
-      "../../../../APIPOS/images/drink",
-      false,
-      /\.(png|jpe?g|svg)$/
-    )
-  );
-
-  const getImageArray = (category) => {
-    return category === "nuoc" ? drinkImages : foodImages;
+  const getLocalImageUrl = (localPath) => {
+    try {
+      return require(`../../../images${localPath.split("images")[1]}`);
+    } catch (error) {
+      console.error("Error loading local image:", error);
+    }
   };
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -268,7 +247,7 @@ function Admin() {
                   className="admin-card_product"
                   height=""
                   variant="top"
-                  src={getImageArray(category)[i]}
+                  src={getLocalImageUrl(product.linkLocal)}
                 />
                 <Card.Body className="card-body_fix">
                   <Card.Title>{product.productName}</Card.Title>

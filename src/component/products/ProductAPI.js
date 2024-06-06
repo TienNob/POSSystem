@@ -13,27 +13,14 @@ function ProductList() {
   const [productDrink, setProductDrink] = useState([]);
 
   const navigate = useNavigate();
-  const importAll = (r) => {
-    let images = [];
-    r.keys().forEach((item) => {
-      images.push(r(item));
-    });
-    return images;
+  const getLocalImageUrl = (localPath) => {
+    try {
+      return require(`../../images${localPath.split("images")[1]}`);
+    } catch (error) {
+      console.error("Error loading local image:", error);
+    }
   };
 
-  const foodImageFiles = require.context(
-    "../../../APIPOS/images/food",
-    false,
-    /\.(png|jpe?g|svg)$/
-  );
-  const drinkImageFiles = require.context(
-    "../../../APIPOS/images/drink",
-    false,
-    /\.(png|jpe?g|svg)$/
-  );
-
-  const foodImages = importAll(foodImageFiles);
-  const drinkImages = importAll(drinkImageFiles);
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -121,7 +108,9 @@ function ProductList() {
               style={{
                 width: "100%",
                 height: "12rem",
-                backgroundImage: `url('${foodImages[i]}')`,
+                backgroundImage: `url('${getLocalImageUrl(
+                  product.linkLocal
+                )}')`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 color: "white",
@@ -147,7 +136,9 @@ function ProductList() {
               style={{
                 width: "100%",
                 height: "12rem",
-                backgroundImage: `url('${drinkImages[i]}')`,
+                backgroundImage: `url('${getLocalImageUrl(
+                  product.linkLocal
+                )}')`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 color: "white",
