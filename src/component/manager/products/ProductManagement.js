@@ -3,6 +3,7 @@ import axios from "axios";
 import "../admin.css";
 import { Container, Modal, Card, Row, Button, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
+import Tooltip from "@mui/material/Tooltip";
 import { LinkAPI } from "../../../LinkAPI";
 import { Link } from "react-router-dom";
 import Loadding from "../../../loadding/Loadding";
@@ -232,9 +233,11 @@ function Admin() {
           </Select>
         </FormControl>
         <Link to="binProduct">
-          <Button className="buttonDisible ">
-            <AutoDeleteIcon />
-          </Button>
+          <Tooltip title="Thùng rác" arrow>
+            <Button className="buttonDisible ">
+              <AutoDeleteIcon />
+            </Button>
+          </Tooltip>
         </Link>
       </div>
 

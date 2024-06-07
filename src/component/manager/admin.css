@@ -227,11 +227,11 @@
 .sidebar-list-item {
   padding: 20px 20px 20px 20px;
   font-size: 18px;
-  transition: all ease-in-out 0.2s;
+  transition: all ease-in 0.3s;
 }
 
 .sidebar-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #090e28;
   cursor: pointer;
 }
 
@@ -243,13 +243,33 @@
 .sidebar-responsive {
   display: inline !important;
   position: absolute;
-
-  /*
-  we want the z-index of the sidebar higher so that
-  the charts are not showing over the sidebar 
-  on small screens
-  */
   z-index: 12 !important;
+}
+.active {
+  position: relative;
+}
+.active .sidebar-list-item {
+  background-color: #090e28;
+}
+.active::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 0px;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid #090e28;
+  border-right: 10px solid #090e28;
+}
+.active::before {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: 0px;
+  border-left: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-top: 10px solid #090e28;
+  border-right: 10px solid #090e28;
 }
 .close_icon {
   margin-top: 15px;

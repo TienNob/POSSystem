@@ -28,6 +28,7 @@ const Modal = ({ open, onClose }) => {
     cccd: "",
     phoneNumber: "",
     position: "",
+    salary: "",
     account: "",
     dob: null,
     address: "",
@@ -101,6 +102,7 @@ const Modal = ({ open, onClose }) => {
           cccd: "",
           phoneNumber: "",
           position: "",
+          salary: "",
           account: "",
           dob: null,
           address: "",
@@ -243,7 +245,7 @@ const Modal = ({ open, onClose }) => {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={9}>
                 <TextField
                   InputLabelProps={
                     dataSelectScan.address ? { shrink: true } : {}
@@ -258,19 +260,7 @@ const Modal = ({ open, onClose }) => {
                   required
                 />
               </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  label="Số điện thoại"
-                  variant="outlined"
-                  name="phoneNumber"
-                  value={employeeData.phoneNumber}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
-              </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <FormControl fullWidth variant="outlined" margin="normal">
                   <InputLabel>Vị trí</InputLabel>
                   <Select
@@ -289,6 +279,31 @@ const Modal = ({ open, onClose }) => {
                     </MenuItem>
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  label="Số điện thoại"
+                  variant="outlined"
+                  name="phoneNumber"
+                  value={employeeData.phoneNumber}
+                  onChange={handleChange}
+                  margin="normal"
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  label="Mức lương"
+                  variant="outlined"
+                  name="salary"
+                  value={employeeData.salary}
+                  onChange={handleChange}
+                  margin="normal"
+                  required
+                />
               </Grid>
               <Grid item xs={4}>
                 <TextField

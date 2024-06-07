@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import TableBarIcon from "@mui/icons-material/TableBar";
@@ -25,36 +25,60 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
       </div>
 
       <ul className="sidebar-list">
-        <Link className="sidebar-link" to="/adminHome">
+        <NavLink
+          className="sidebar-link"
+          to="/adminHome"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <DashboardIcon className="icon" /> Tổng quan
           </li>
-        </Link>
-        <Link className="sidebar-link" to="/productManagement">
+        </NavLink>
+        <NavLink
+          className="sidebar-link"
+          to="/productManagement"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <LocalCafeIcon className="icon" /> Sản Phẩm
           </li>
-        </Link>
-        <Link className="sidebar-link" to="/tableManagement">
+        </NavLink>
+        <NavLink
+          className="sidebar-link"
+          to="/tableManagement"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <TableBarIcon className="icon" /> Bàn
           </li>
-        </Link>
-        <Link className="sidebar-link" to="/employeeManagement">
+        </NavLink>
+        <NavLink
+          className="sidebar-link"
+          to="/employeeManagement"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <SupervisorAccountIcon className="icon" /> Nhân Viên
           </li>
-        </Link>
-        <Link className="sidebar-link" to="/customerManagement">
+        </NavLink>
+        <NavLink
+          className="sidebar-link"
+          to="/customerManagement"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <MoodIcon className="icon" /> Khách hàng
           </li>
-        </Link>
-        <Link className="sidebar-link" to="/suggestCombo">
+        </NavLink>
+        <NavLink
+          className="sidebar-link"
+          to="/suggestCombo"
+          activeClassName="active-link"
+        >
           <li className="sidebar-list-item">
             <LocalOfferIcon className="icon" /> Gợi ý
           </li>
-        </Link>
+        </NavLink>
       </ul>
     </aside>
   );

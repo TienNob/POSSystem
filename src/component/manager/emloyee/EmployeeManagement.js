@@ -98,6 +98,12 @@ const headCells = [
     label: "Vị trí công việc",
   },
   {
+    id: "salary",
+    numeric: false,
+    disablePadding: false,
+    label: "Mức lương",
+  },
+  {
     id: "account",
     numeric: false,
     disablePadding: false,
@@ -422,7 +428,7 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {index + 1}
+                        {index}
                       </TableCell>
                       <TableCell>{row.fullName}</TableCell>
                       <TableCell>{row.gender}</TableCell>
@@ -432,6 +438,7 @@ export default function EnhancedTable() {
                       <TableCell>{row.cccd}</TableCell>
                       <TableCell>{row.phoneNumber}</TableCell>
                       <TableCell>{row.position}</TableCell>
+                      <TableCell>{row.salary}k</TableCell>
                       <TableCell>{row.account}</TableCell>
                       <TableCell>{row.dob}</TableCell>
                     </TableRow>
