@@ -21,7 +21,8 @@ import { LinkAPI } from "../../LinkAPI";
 import TotalOder from "../total/TotalOder";
 import Notification from "../../notification/Notification";
 import Loadding from "../../loadding/Loadding";
-import Webcam from "react-webcam";
+import Attendance from "./attendance/Attendance";
+import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
@@ -31,13 +32,13 @@ function Nav() {
   const [fullName, setFullName] = useState("");
   const [htmlData, setHtmlData] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cameraModalIsOpen, setCameraModalIsOpen] = useState(false);
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
@@ -201,14 +202,14 @@ function Nav() {
     setModalIsOpen(true);
   }, [setModalIsOpen]);
 
-  // const webcamRef = useRef(null);
-  // const [imgSrc, setImgSrc] = useState(null);
+  const handleOpenCameraModal = () => {
+    setCameraModalIsOpen(true);
+  };
 
-  // const capture = useCallback(() => {
-  //   const imageSrc = webcamRef.current.getScreenshot();
-  //   setImgSrc(imageSrc);
-  // }, [webcamRef, setImgSrc]);
-  // console.log(imgSrc);
+  const handleCloseCameraModal = () => {
+    setCameraModalIsOpen(false);
+  };
+
   return (
     <div className="navBar">
       <Navbar className="bg-body-tertiary Nav">
@@ -227,9 +228,10 @@ function Nav() {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text className="d-flex">
-              {/* <Button className="me-2" onClick={capture}>
-                Capture photo
-              </Button> */}
+              <Button className="me-2 d-flex" onClick={handleOpenCameraModal}>
+                <PhotoCameraFrontIcon className="me-1" />
+                Điểm danh
+              </Button>
               <Link className="nav-order" to="/history">
                 <Button className="me-2" variant="primary">
                   Hoá đơn
@@ -316,7 +318,11 @@ function Nav() {
         </MenuItem>
       </Menu>
       {loading && <Loadding />}
-      {/* <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" /> */}
+      <Attendance
+        token={token}
+        open={cameraModalIsOpen}
+        onClose={handleCloseCameraModal}
+      />{" "}
       <Notification
         open={showAlert}
         severity={alertSeverity}

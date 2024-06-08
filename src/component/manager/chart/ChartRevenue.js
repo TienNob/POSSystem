@@ -71,7 +71,7 @@ class ChartRevenue extends Component {
                 `Tổng Danh Thu`,
               ]}
             />
-            <Bar dataKey="tongDoanhThu" fill="#8884d8" />
+            <Bar dataKey="tongDoanhThu" fill="#1a1776" />
           </BarChart>
         </ResponsiveContainer>
       </div>

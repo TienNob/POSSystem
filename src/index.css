@@ -21,7 +21,7 @@ button:not(
     .history-pagination > ul > li > button,
     .alert-custom > div > button
   ) {
-  background-color: #634fbb;
+  background-color: #2b32b2;
   border-radius: 50px !important;
   padding: 6px 18px !important;
   border: none !important;
@@ -30,10 +30,10 @@ button:not(
 
 button:not(.history-pagination > ul > li > button):hover {
   opacity: 0.7;
-  background-color: #634fbb;
+  background-color: #2b32b2;
 }
 .buttonDisible {
-  background-color: #7d769c !important;
+  background-color: #61779d !important;
   border-radius: 50px !important;
   padding: 6px 18px !important;
   border: none !important;

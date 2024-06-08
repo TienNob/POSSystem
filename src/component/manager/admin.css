@@ -1,12 +1,12 @@
 .button-scan {
-  background-color: #634fbb !important;
+  background-color: #2b32b2 !important;
   border-radius: 50px !important;
   padding: 6px 18px !important;
   transition: all ease 0.3s !important;
 }
 .button-scan:hover {
   opacity: 0.7;
-  background-color: #634fbb;
+  background-color: #2b32b2;
 }
 .heading {
   display: flex;
@@ -355,7 +355,7 @@
   height: 450px;
 }
 .recharts-default-tooltip {
-  background-color: #212a75 !important;
+  background-color: #1a1776 !important;
 }
 
 /* susgest */
@@ -426,18 +426,18 @@
   background-color: transparent !important;
 }
 .MuiCheckbox-root > .MuiSvgIcon-fontSizeMedium > path {
-  color: #7d769c;
+  color: #46587b;
 }
 .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar > p {
-  color: #7d769c;
+  color: #46587b;
   margin-bottom: 0;
 }
 .css-16c50h-MuiInputBase-root-MuiTablePagination-select > div {
-  color: #7d769c;
+  color: #46587b;
   background-color: #f4f2f2;
 }
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper > ul {
-  color: #7d769c;
+  color: #46587b;
 }
 .adminHome_pagination > div {
   background-color: white;
