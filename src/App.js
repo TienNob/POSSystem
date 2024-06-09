@@ -18,7 +18,7 @@ import EmployeeManagement from "./component/manager/emloyee/EmployeeManagement";
 import CustomerManagement from "./component/manager/customer/CustomerManagement";
 import SuggestCombo from "./component/manager/sugsgestCombo/SuggestCombo.js";
 import BinProduct from "./component/manager/products/BinProduct.js";
-import BranchManagerment from "./component/manager/branchManagerment/BranchManagerment";
+import BranchManagerment from "./component/branchManagerment/BranchManagerment.js";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -32,7 +32,7 @@ function App() {
     currentPath === "/employeeManagement" ||
     currentPath === "/suggestCombo" ||
     currentPath === "/productManagement/binProduct";
-
+  const isSuperAdmin = currentPath === "/branchManagerment";
   const isStaf =
     currentPath === "/tableList" ||
     currentPath === "/productlist" ||
@@ -47,6 +47,11 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Login />} />
+        </Routes>
+      </div>
+      <div>
+        <Routes>
+          <Route path="/branchManagerment" element={<BranchManagerment />} />
         </Routes>
       </div>
 
@@ -76,7 +81,7 @@ function App() {
         <div
           className="grid-container"
           style={{
-            display: !isStaf && !isLogin ? "grid" : "none",
+            display: !isStaf && !isLogin && !isSuperAdmin ? "grid" : "none",
           }}
         >
           {isAdmin && (

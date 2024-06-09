@@ -31,6 +31,10 @@
 .author-footer > p {
   font-size: 13px;
 }
+.logout-btn,
+.logout-btn > path {
+  color: #ff5630 !important;
+}
 
 @media (max-width: 767px) {
   .totalOder {

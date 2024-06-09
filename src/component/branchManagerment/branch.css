@@ -1,0 +1,11 @@
+#long-button > path {
+  color: #637382;
+}
+#long-button {
+  cursor: pointer;
+  transition: all ease-in 0.3s;
+  width: 24px;
+}
+#long-button:hover {
+  opacity: 0.7;
+}

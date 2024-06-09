@@ -123,8 +123,8 @@ function AdminHome({ OpenSidebar }) {
           <StorefrontIcon className="blackColor me-2" fontSize="small" />
           Bán hàng
         </MenuItem>
-        <MenuItem onClick={handleLogout} className="blackColor" sx={{ pr: 8 }}>
-          <Logout className="blackColor me-2" fontSize="small" />
+        <MenuItem onClick={handleLogout} className="logout-btn" sx={{ pr: 8 }}>
+          <Logout className=" logout-btn me-2" fontSize="small" />
           Logout
         </MenuItem>
       </Menu>
