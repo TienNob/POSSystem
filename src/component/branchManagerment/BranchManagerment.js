@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { LinkAPI } from "../../LinkAPI";
 import {
   Table,
@@ -11,18 +11,26 @@ import {
   TableRow,
   Paper,
   TablePagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./branch.css";
+
 function BranchManagement() {
   const [branches, setBranches] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [newBranch, setNewBranch] = useState({
+  const [isEditing, setIsEditing] = useState(false);
+  const [formBranch, setFormBranch] = useState({
+    id: "",
     nameDepartment: "",
     fullAddress: "",
   });
@@ -48,18 +56,50 @@ function BranchManagement() {
     fetchBranches();
   }, []);
 
+  const handleSaveBranch = async () => {
+    if (isEditing) {
+      await handleEditBranch();
+    } else {
+      await handleAddBranch();
+    }
+  };
+
   const handleAddBranch = async () => {
     try {
-      const response = await axios.post(`${LinkAPI}department`, newBranch, {
+      const response = await axios.post(`${LinkAPI}department`, formBranch, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setBranches([...branches, response.data]);
       setShowModal(false);
-      setNewBranch({ nameDepartment: "", fullAddress: "" });
+      setFormBranch({ id: "", nameDepartment: "", fullAddress: "" });
     } catch (error) {
       console.error("Error adding branch:", error);
+    }
+  };
+
+  const handleEditBranch = async () => {
+    try {
+      const response = await axios.put(
+        `${LinkAPI}department/${formBranch.id}`,
+        formBranch,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setBranches(
+        branches.map((branch) =>
+          branch.id === formBranch.id ? response.data : branch
+        )
+      );
+      setShowModal(false);
+      setFormBranch({ id: "", nameDepartment: "", fullAddress: "" });
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error editing branch:", error);
     }
   };
 
@@ -97,6 +137,19 @@ function BranchManagement() {
     setAnchorEl(null);
   };
 
+  const handleEditClick = (branch) => {
+    setFormBranch(branch);
+    setIsEditing(true);
+    setShowModal(true);
+    handleClose();
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setIsEditing(false);
+    setFormBranch({ id: "", nameDepartment: "", fullAddress: "" });
+  };
+
   return (
     <div className="container mt-4">
       <div
@@ -116,8 +169,8 @@ function BranchManagement() {
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Id</TableCell>
+                <TableRow className="custom-colorRow">
+                  <TableCell>ID</TableCell>
                   <TableCell>Tên chi nhánh</TableCell>
                   <TableCell>Địa chỉ</TableCell>
                   <TableCell> </TableCell>
@@ -144,7 +197,7 @@ function BranchManagement() {
                           open={open}
                           onClose={handleClose}
                         >
-                          <MenuItem onClick={handleClose}>
+                          <MenuItem onClick={() => handleEditClick(branch)}>
                             <EditIcon className="blackColor me-2" />
                             Chỉnh sửa
                           </MenuItem>
@@ -176,45 +229,57 @@ function BranchManagement() {
         </div>
       )}
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Thêm chi nhánh mới</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <Dialog open={showModal} onClose={handleModalClose}>
+        <DialogTitle>
+          {isEditing ? "Chỉnh sửa chi nhánh" : "Thêm chi nhánh mới"}
+        </DialogTitle>
+        <DialogContent>
           <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Tên chi nhánh</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Nhập tên chi nhánh"
-                value={newBranch.nameDepartment}
+            <Form.Group className="mb-3 mt-3">
+              <TextField
+                id="outlined-basic"
+                label="Tên chi nhánh"
+                fullWidth
+                variant="outlined"
+                value={formBranch.nameDepartment}
                 onChange={(e) =>
-                  setNewBranch({ ...newBranch, nameDepartment: e.target.value })
+                  setFormBranch({
+                    ...formBranch,
+                    nameDepartment: e.target.value,
+                  })
                 }
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Địa chỉ chi nhánh</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Nhập địa chỉ chi nhánh"
-                value={newBranch.fullAddress}
+            <Form.Group className="mb-3 w-100">
+              <TextField
+                fullWidth
+                label="Địa chỉ chi nhánh"
+                variant="outlined"
+                value={formBranch.fullAddress}
                 onChange={(e) =>
-                  setNewBranch({ ...newBranch, fullAddress: e.target.value })
+                  setFormBranch({ ...formBranch, fullAddress: e.target.value })
                 }
               />
             </Form.Group>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleModalClose}
+          >
             Hủy
           </Button>
-          <Button variant="primary" onClick={handleAddBranch}>
-            Thêm
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveBranch}
+          >
+            {isEditing ? "Lưu" : "Thêm"}
           </Button>
-        </Modal.Footer>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

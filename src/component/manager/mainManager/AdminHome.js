@@ -235,7 +235,7 @@ function AdminHome() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Id</TableCell>
+                  <TableCell>ID</TableCell>
                   <TableCell>Số điện thoại</TableCell>
                   <TableCell>Ngày thanh toán</TableCell>
                   <TableCell>Thành Tiền</TableCell>

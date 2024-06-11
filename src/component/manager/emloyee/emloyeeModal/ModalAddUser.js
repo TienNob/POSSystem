@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import { styled } from "@mui/material/styles";
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import {
   Dialog,
   DialogTitle,
@@ -17,6 +18,7 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
+import dayjs from "dayjs";
 import { LinkAPI } from "../../../../LinkAPI";
 import PermissionModal from "./PermissionModal";
 import Loadding from "../../../../loadding/Loadding";
@@ -61,6 +63,12 @@ const Modal = ({ open, onClose }) => {
       [name]: value,
     }));
   };
+  const handleDateChange = (date) => {
+    setEmployeeData((prevData) => ({
+      ...prevData,
+      dob: date,
+    }));
+  };
 
   useEffect(() => {
     if (dataSelectScan) {
@@ -88,8 +96,13 @@ const Modal = ({ open, onClose }) => {
     setLoading(true);
 
     try {
-      console.log("Submit successfully", employeeData);
-      await axios.post(`${LinkAPI}employees`, employeeData, {
+      const formattedData = {
+        ...employeeData,
+        dob: employeeData.dob
+          ? dayjs(employeeData.dob).format("DD-MM-YYYY")
+          : null,
+      };
+      await axios.post(`${LinkAPI}employees`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -233,17 +246,24 @@ const Modal = ({ open, onClose }) => {
                   required
                 />
               </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  type="date"
-                  variant="outlined"
-                  name="dob"
-                  value={employeeData.dob}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
+              <Grid item xs={4} className="mt-3">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    className="blackColor"
+                    label="Ngày sinh"
+                    value={employeeData.dob}
+                    onChange={handleDateChange}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        variant="outlined"
+                        margin="normal"
+                        required
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={9}>
                 <TextField

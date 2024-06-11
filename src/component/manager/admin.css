@@ -448,3 +448,13 @@ div > div > div > div > .chart-product > .recharts-wrapper {
 .MuiDateRangeCalendar-root > div:first-child {
   display: none;
 }
+.css-dplwbx-MuiPickersCalendarHeader-label {
+  color: #333;
+}
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root
+  > .MuiSvgIcon-fontSizeMedium
+  > path,
+.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon > path,
+.css-1vooibu-MuiSvgIcon-root > path {
+  color: #898989;
+}
