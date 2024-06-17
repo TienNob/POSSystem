@@ -72,13 +72,18 @@ const Modal = ({ open, onClose }) => {
 
   useEffect(() => {
     if (dataSelectScan) {
+      const formattedDOB = dataSelectScan.dob
+        ? dayjs(dataSelectScan.dob, "DD/MM/YYYY").isValid()
+          ? dayjs(dataSelectScan.dob, "DD/MM/YYYY")
+          : null
+        : null;
       setEmployeeData((prevData) => ({
         ...prevData,
         cccd: dataSelectScan.id || prevData.cccd,
         fullName: dataSelectScan.name || prevData.fullName,
         gender: dataSelectScan.sex || prevData.gender,
         address: dataSelectScan.address || prevData.address,
-        dob: dataSelectScan.dob || prevData.dob,
+        dob: formattedDOB || prevData.dob,
       }));
     }
   }, [dataSelectScan]);
@@ -122,7 +127,8 @@ const Modal = ({ open, onClose }) => {
           gender: "",
         });
         onClose();
-        window.location.reload();
+        // window.location.reload();
+        console.log(employeeData);
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Thêm nhân viên thành công!");
@@ -159,9 +165,10 @@ const Modal = ({ open, onClose }) => {
         const scannedData = response.data.data[0];
         if (scannedData.dob) {
           const [day, month, year] = scannedData.dob.split("/");
-          scannedData.dob = `${year}-${month}-${day}`;
+          scannedData.dob = `${day}-${month}-${year}`;
         }
         setDataSelectScan(scannedData);
+        console.log(scannedData);
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Quét CCCD thành công!");
@@ -217,16 +224,16 @@ const Modal = ({ open, onClose }) => {
                   <Select
                     InputLabelProps={dataSelectScan.sex ? { shrink: true } : {}}
                     value={employeeData.gender}
-                    onChange={handleChange}
                     label="Gender"
+                    onChange={handleChange}
                     name="gender"
                     sx={{ color: "black" }}
                     required
                   >
-                    <MenuItem value="Nhân viên" sx={{ color: "black" }}>
+                    <MenuItem value="NAM" sx={{ color: "black" }}>
                       NAM
                     </MenuItem>
-                    <MenuItem value="Thu Ngân" sx={{ color: "black" }}>
+                    <MenuItem value="NỮ" sx={{ color: "black" }}>
                       NỮ
                     </MenuItem>
                   </Select>

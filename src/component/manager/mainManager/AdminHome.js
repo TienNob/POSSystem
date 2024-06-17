@@ -34,6 +34,7 @@ function AdminHome() {
   const [numberOfOrders, setNumberOfOrders] = useState(0);
   const [numberOfTables, setNumberOfTables] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const [numberOfDrink, setNumberOfDrink] = useState(0);
   const [numberOfCustomers, setNumberOfCustomers] = useState(0);
   const [dataByDate, setDataByDate] = useState([]);
   const [dateRange, setDateRange] = useState([null, null]);
@@ -65,7 +66,17 @@ function AdminHome() {
       })
       .catch((error) => console.error("Error fetching tables:", error));
 
-    fetch(`${LinkAPI}products`, {
+    fetch(`${LinkAPI}products/nuoc`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setNumberOfDrink(data.length);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+    fetch(`${LinkAPI}products/do-an`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -167,7 +178,7 @@ function AdminHome() {
             <h5 className="mt-3 mb-3">SẢN PHẨM</h5>
             <LocalCafeIcon className="card_icon" />
           </div>
-          <h2 className="mt-3 mb-3">{numberOfProducts}</h2>
+          <h2 className="mt-3 mb-3">{numberOfProducts + numberOfDrink}</h2>
         </Link>
         <Link to="/tableManagement" className="admin-card">
           <div className="card-inner">
