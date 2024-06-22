@@ -11,6 +11,10 @@ import {
 } from "@mui/material";
 import Notification from "../../../../notification/Notification";
 import Loadding from "../../../../loadding/Loadding";
+import { LinkAPI } from "../../../../LinkAPI";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../../chat/FirebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const API_BASE_URL = "http://localhost:8080/auth/";
 
@@ -24,6 +28,8 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const token = localStorage.getItem("authToken");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +37,26 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "password" && value.length < 6) {
+      setPasswordError(true);
+    } else {
+      setPasswordError(false);
+    }
+  };
+
+  const checkUserExists = async (username) => {
+    try {
+      const response = await axios.get(`${LinkAPI}employees`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const employees = response.data;
+      return employees.some((employee) => employee.account === username);
+    } catch (error) {
+      console.error("Error checking user existence:", error);
+      return false;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -38,6 +64,28 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
     setLoading(true);
 
     try {
+      const userExists = await checkUserExists(userData.username);
+      if (userExists) {
+        setLoading(false);
+        setShowAlert(true);
+        setAlertSeverity("error");
+        setAlertMessage("Tài khoản đã tồn tại!");
+        return;
+      }
+
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        `${userData.username}@gmail.com`,
+        userData.password
+      );
+      console.log(res);
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        username: userData.username,
+      });
+
+      // create empty user chats on firestore
+      await setDoc(doc(db, "userChats", res.user.uid), {});
       axios.post(`${API_BASE_URL}addNewUser`, userData);
       setUserData({
         username: "",
@@ -86,6 +134,10 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
             onChange={handleChange}
             margin="normal"
             required
+            error={passwordError}
+            helperText={
+              passwordError ? "Mật khẩu phải có ít nhất 6 ký tự!" : ""
+            }
           />
 
           <DialogActions>

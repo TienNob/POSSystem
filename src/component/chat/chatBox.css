@@ -1,0 +1,89 @@
+.chat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* Adjust height as needed */
+}
+
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.chat-list {
+  max-height: 100%;
+}
+
+.chat-input {
+  margin-top: 10px; /* Adjust margin as needed */
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-close-button {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+.chat-close-button > svg > path,
+.btn-send > .css-i4bv87-MuiSvgIcon-root > path {
+  color: #2b32b2;
+}
+
+.userName-chat > .css-10hburv-MuiTypography-root {
+  color: #333;
+}
+
+.userName-chat {
+  margin: 0 16px;
+}
+
+.chat-item-right {
+  display: flex;
+  justify-content: flex-end !important;
+  text-align: right !important;
+  margin-right: 16px;
+}
+
+.chat-item-left {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.message-container-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 75%; /* Adjust as needed */
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+}
+
+.message-container-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 75%; /* Adjust as needed */
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+}
+
+.message-container-left > .css-1e9lk82-MuiListItemAvatar-root,
+.message-container-right > .css-1e9lk82-MuiListItemAvatar-root {
+  min-width: 0;
+}
+
+/* Ensure messages wrap correctly */
+.MuiListItemText-root {
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+}
+
+.MuiListItemText-primary,
+.MuiListItemText-secondary {
+  white-space: pre-wrap; /* Preserve whitespace and allow wrapping */
+  word-wrap: break-word; /* Ensure long words wrap correctly */
+}

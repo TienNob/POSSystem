@@ -62,3 +62,6 @@
 .loadding {
   z-index: 5000 !important;
 }
+.css-1ytlwq5-MuiAlert-icon > .css-1vooibu-MuiSvgIcon-root > path {
+  color: #fff;
+}

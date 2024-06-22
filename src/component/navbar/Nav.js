@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { pink } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -13,6 +13,7 @@ import { Drawer } from "@mui/material";
 import { Dialog, DialogContent, DialogActions } from "@mui/material";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -23,6 +24,7 @@ import Notification from "../../notification/Notification";
 import Loadding from "../../loadding/Loadding";
 import Attendance from "./attendance/Attendance";
 import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
+import ChatBox from "../chat/ChatBox";
 
 function Nav() {
   const token = localStorage.getItem("authToken");
@@ -39,6 +41,7 @@ function Nav() {
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [cameraModalIsOpen, setCameraModalIsOpen] = useState(false);
+  const [chatBoxOpen, setChatBoxOpen] = useState(false); // State to control chat box modal
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
@@ -209,6 +212,13 @@ function Nav() {
   const handleCloseCameraModal = () => {
     setCameraModalIsOpen(false);
   };
+  const handleChatBoxOpen = () => {
+    setChatBoxOpen(true);
+  };
+
+  const handleChatBoxClose = () => {
+    setChatBoxOpen(false);
+  };
 
   return (
     <div className="navBar">
@@ -312,12 +322,21 @@ function Nav() {
         ) : (
           ""
         )}
+        <MenuItem
+          className="blackColor"
+          sx={{ pr: 8 }}
+          onClick={handleChatBoxOpen}
+        >
+          <ChatBubbleIcon className="blackColor me-2" fontSize="small" />
+          Trò chuyện
+        </MenuItem>
         <MenuItem onClick={handleLogout} className="logout-btn" sx={{ pr: 8 }}>
           <Logout className="logout-btn logout-btn me-2" fontSize="small" />
           Logout
         </MenuItem>
       </Menu>
       {loading && <Loadding />}
+      <ChatBox open={chatBoxOpen} onClose={handleChatBoxClose} />
       <Attendance
         token={token}
         open={cameraModalIsOpen}

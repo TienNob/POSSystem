@@ -43,6 +43,10 @@ const Modal = ({ open, onClose }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [dataSelectScan, setDataSelectScan] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    cccd: false,
+    phoneNumber: false,
+  });
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -55,6 +59,15 @@ const Modal = ({ open, onClose }) => {
     width: 1,
   });
 
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^\d{10,11}$/;
+    return phoneRegex.test(phoneNumber);
+  };
+  const validateCCCD = (cccd) => {
+    const cccdRegex = /^\d{9,12}$/;
+    return cccdRegex.test(cccd);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -62,6 +75,18 @@ const Modal = ({ open, onClose }) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "cccd") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        cccd: !validateCCCD(value),
+      }));
+    }
+    if (name === "phoneNumber") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        phoneNumber: !validatePhoneNumber(value),
+      }));
+    }
   };
   const handleDateChange = (date) => {
     setEmployeeData((prevData) => ({
@@ -99,6 +124,17 @@ const Modal = ({ open, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (
+      !validateCCCD(employeeData.cccd) ||
+      !validatePhoneNumber(employeeData.phoneNumber)
+    ) {
+      setShowAlert(true);
+      setAlertSeverity("error");
+      setAlertMessage("CCCD hoặc số điện thoại không hợp lệ!");
+      setLoading(false);
+      return;
+    }
 
     try {
       const formattedData = {
@@ -250,6 +286,12 @@ const Modal = ({ open, onClose }) => {
                   value={employeeData.cccd}
                   onChange={handleChange}
                   margin="normal"
+                  error={errors.cccd}
+                  helperText={
+                    errors.cccd
+                      ? "Vui lòng nhập CCCD đủ 12 hoặc 9 (nếu là CMND) số !"
+                      : ""
+                  }
                   required
                 />
               </Grid>
@@ -307,7 +349,7 @@ const Modal = ({ open, onClose }) => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={5}>
                 <TextField
                   fullWidth
                   label="Số điện thoại"
@@ -316,11 +358,17 @@ const Modal = ({ open, onClose }) => {
                   value={employeeData.phoneNumber}
                   onChange={handleChange}
                   margin="normal"
+                  error={errors.phoneNumber}
+                  helperText={
+                    errors.phoneNumber
+                      ? "Vui lòng nhập số điện thoại đủ 10 số!"
+                      : ""
+                  }
                   required
                 />
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <TextField
                   fullWidth
                   label="Mức lương"

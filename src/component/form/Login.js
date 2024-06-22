@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../chat/FirebaseConfig";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -42,6 +44,12 @@ function Login() {
         localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
         localStorage.setItem("userName", loginData.username);
+        signInWithEmailAndPassword(
+          auth,
+          `${loginData.username}@gmail.com`,
+          loginData.password
+        );
+
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Đăng nhập thành công!");
@@ -64,12 +72,9 @@ function Login() {
         setLoading(false);
       });
     const token = localStorage.getItem("authToken");
-    // Lấy token từ localStorage
 
-    // Kiểm tra xem token có tồn tại không
     if (!token) {
       console.error("Token không tồn tại trong localStorage");
-      // Điều hướng người dùng đến trang đăng nhập hoặc xử lý lỗi khác
       navigate("/");
     }
     axios.interceptors.request.use(

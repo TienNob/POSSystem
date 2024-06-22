@@ -94,7 +94,10 @@ function AdminHome() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setNumberOfCustomers(data.length);
+        const customerFilter = data.filter((customer) => {
+          return customer.name !== "Khách lẻ";
+        });
+        setNumberOfCustomers(customerFilter.length);
       })
       .catch((error) => console.error("Error fetching customers:", error));
   }, [token]);
@@ -123,15 +126,11 @@ function AdminHome() {
     let apiLink;
     console.log(apiLink);
     if (formattedStartDate && formattedEndDate) {
-      // Use the provided start and end dates for a date range query
       apiLink = `${LinkAPI}orders/thongke?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
     } else {
-      // Handle cases where either start or end date is missing
       if (formattedStartDate) {
-        // Use start date for a "from date" query (assuming supported by API)
         apiLink = `${LinkAPI}orders/thongke?startDate=${formattedStartDate}`;
       } else if (formattedEndDate) {
-        // Use end date for a "to date" query (assuming supported by API)
         apiLink = `${LinkAPI}orders/thongke?endDate=${formattedEndDate}`;
       }
     }

@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   color: white;
+  font-family: "Public Sans", sans-serif !important;
 }
 
 body {
@@ -18,6 +19,7 @@ html {
 }
 
 button:not(
+    .chat-close-button,
     .history-pagination > ul > li > button,
     .alert-custom > div > button,
     .MuiPickersCalendarHeader-switchViewButton,
@@ -32,6 +34,7 @@ button:not(
   transition: all ease 0.3s !important;
 }
 button:not(
+    .chat-close-button,
     .history-pagination > ul > li > button,
     .MuiPickersCalendarHeader-switchViewButton,
     .MuiPickersDay-root,

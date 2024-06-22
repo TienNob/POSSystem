@@ -18,7 +18,7 @@ import EmployeeManagement from "./component/manager/emloyee/EmployeeManagement";
 import CustomerManagement from "./component/manager/customer/CustomerManagement";
 import SuggestCombo from "./component/manager/sugsgestCombo/SuggestCombo.js";
 import BinProduct from "./component/manager/products/BinProduct.js";
-import BranchManagerment from "./component/branchManagerment/BranchManagerment.js";
+import ChatBox from "./component/chat/ChatBox.js";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -51,7 +51,7 @@ function App() {
       </div>
       <div>
         <Routes>
-          <Route path="/branchManagerment" element={<BranchManagerment />} />
+          <Route path="/chatbox" element={<ChatBox />} />
         </Routes>
       </div>
 
