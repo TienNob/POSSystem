@@ -19,6 +19,13 @@
   background-color: #1a1776 !important;
   color: white !important;
 }
+.card-combo {
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+.card-combo:hover {
+  filter: brightness(90%);
+}
 .fillter {
   backdrop-filter: brightness(0.7);
 }

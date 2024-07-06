@@ -136,7 +136,7 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
             required
             error={passwordError}
             helperText={
-              passwordError ? "Mật khẩu phải có ít nhất 6 ký tự!" : ""
+              passwordError ? "Vui lòng nhập mật khẩu có ít nhất 6 ký tự!" : ""
             }
           />
 

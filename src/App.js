@@ -18,7 +18,7 @@ import EmployeeManagement from "./component/manager/emloyee/EmployeeManagement";
 import CustomerManagement from "./component/manager/customer/CustomerManagement";
 import SuggestCombo from "./component/manager/sugsgestCombo/SuggestCombo.js";
 import BinProduct from "./component/manager/products/BinProduct.js";
-import ChatBox from "./component/chat/ChatBox.js";
+import Shifts from "./component/shifts/Shifts.js";
 function App() {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -32,7 +32,6 @@ function App() {
     currentPath === "/employeeManagement" ||
     currentPath === "/suggestCombo" ||
     currentPath === "/productManagement/binProduct";
-  const isSuperAdmin = currentPath === "/branchManagerment";
   const isStaf =
     currentPath === "/tableList" ||
     currentPath === "/productlist" ||
@@ -51,7 +50,7 @@ function App() {
       </div>
       <div>
         <Routes>
-          <Route path="/chatbox" element={<ChatBox />} />
+          <Route path="/shifts" element={<Shifts />} />
         </Routes>
       </div>
 
@@ -81,7 +80,7 @@ function App() {
         <div
           className="grid-container"
           style={{
-            display: !isStaf && !isLogin && !isSuperAdmin ? "grid" : "none",
+            display: !isStaf && !isLogin ? "grid" : "none",
           }}
         >
           {isAdmin && (
