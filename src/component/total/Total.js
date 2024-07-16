@@ -180,7 +180,6 @@ function Total({ totalPrice, products, tableID }) {
             orderDate: new Date(),
             totalAmount: splitInvoice.totalPrice,
             phoneNumber: phoneNumber,
-            products: splitInvoice.products,
             employee: { employeeId: userId },
             typePayment: radioValue,
           },
@@ -480,7 +479,7 @@ function Total({ totalPrice, products, tableID }) {
                   .split("?")[0]
             );
             if (currentPath === "/tableList") {
-              // window.location.reload();
+              window.location.reload();
             } else {
               navigate("/tableList");
             }

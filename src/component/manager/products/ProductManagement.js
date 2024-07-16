@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import Loadding from "../../../loadding/Loadding";
 import Notification from "../../../notification/Notification";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 function Admin() {
@@ -192,7 +192,6 @@ function Admin() {
   };
   const handleChange = (event) => {
     setCategory(event.target.value);
-    console.log(category);
   };
 
   const handleShowAdd = () => {
